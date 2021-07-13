@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="3ea06079e80343a397d5b5462b493025" Name="Diagram1">
+        <EntityTypeShape EntityType="DMPModels.BasePrice" Width="1.5" PointX="3" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DMPModels.BillDetail" Width="1.5" PointX="3" PointY="9.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DMPModels.Bill" Width="1.5" PointX="0.75" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DMPModels.GPAMember" Width="1.5" PointX="6" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DMPModels.Member" Width="1.5" PointX="3.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DMPModels.ProductDetail" Width="1.5" PointX="6" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DMPModels.Product" Width="1.5" PointX="0.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DMPModels.Rank" Width="1.5" PointX="1.5" PointY="2.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DMPModels.SalesPoint" Width="1.5" PointX="3" PointY="15" IsExpanded="true" />
+        <EntityTypeShape EntityType="DMPModels.SellPrice" Width="1.5" PointX="3" PointY="18" IsExpanded="true" />
+        <EntityTypeShape EntityType="DMPModels.sysdiagram" Width="1.5" PointX="8.75" PointY="2" IsExpanded="true" />
+        <AssociationConnector Association="DMPModels.FK_BasePrices_Products" ManuallyRouted="false" />
+        <AssociationConnector Association="DMPModels.FK_BillDetails_Bills" ManuallyRouted="false" />
+        <AssociationConnector Association="DMPModels.FK_BillDetails_Products" ManuallyRouted="false" />
+        <AssociationConnector Association="DMPModels.FK_Bills_Members" ManuallyRouted="false" />
+        <AssociationConnector Association="DMPModels.FK_GPAMembers_Bills" ManuallyRouted="false" />
+        <AssociationConnector Association="DMPModels.FK_GPAMembers_Members" ManuallyRouted="false" />
+        <AssociationConnector Association="DMPModels.FK_Members_Ranks" ManuallyRouted="false" />
+        <AssociationConnector Association="DMPModels.FK_ProductDetails_Members" ManuallyRouted="false" />
+        <AssociationConnector Association="DMPModels.FK_ProductDetails_Products" ManuallyRouted="false" />
+        <AssociationConnector Association="DMPModels.FK_SalesPoint_Products" ManuallyRouted="false" />
+        <AssociationConnector Association="DMPModels.FK_SellPrices_Products" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
