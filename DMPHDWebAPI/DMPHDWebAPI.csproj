@@ -203,6 +203,7 @@
     <Compile Include="Models\Member.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\OwnerProductResult.cs" />
     <Compile Include="Models\Product.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
