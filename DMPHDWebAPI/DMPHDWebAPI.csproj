@@ -168,6 +168,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ProductsController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -208,6 +209,7 @@
     <Compile Include="Models\ProductDetail.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ProductResult.cs" />
     <Compile Include="Models\Rank.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
@@ -215,15 +217,6 @@
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SellPrice.cs">
-      <DependentUpon>DMPModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
-      <DependentUpon>DMPModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\sp_helpdiagrams_Result.cs">
-      <DependentUpon>DMPModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\sysdiagram.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -239,8 +232,8 @@
     <Content Include="Global.asax" />
     <Content Include="Models\DMPModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>DMPModel.Context.cs</LastGenOutput>
       <DependentUpon>DMPModel.edmx</DependentUpon>
+      <LastGenOutput>DMPModel.Context.cs</LastGenOutput>
     </Content>
     <Content Include="Models\DMPModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
