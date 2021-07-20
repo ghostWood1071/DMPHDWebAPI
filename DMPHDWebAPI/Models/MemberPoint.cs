@@ -12,14 +12,17 @@ namespace DMPHDWebAPI.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ProductDetail
+    public partial class MemberPoint
     {
-        public int ProductDetailID { get; set; }
         public string MemberID { get; set; }
-        public int Quantity { get; set; }
-        public string ProductID { get; set; }
+        public int Month { get; set; }
+        public int Year { get; set; }
+        public Nullable<double> MediateMark { get; set; }
+        public Nullable<double> ImmediateMark { get; set; }
+        public Nullable<double> AccumulatedMark { get; set; }
+        public Nullable<double> UsedMark { get; set; }
+        public Nullable<double> TotalMark { get; set; }
     
         public virtual Member Member { get; set; }
-        public virtual Product Product { get; set; }
     }
 }

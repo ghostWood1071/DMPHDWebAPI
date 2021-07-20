@@ -12,14 +12,18 @@ namespace DMPHDWebAPI.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class BasePrice
+    public partial class Role
     {
-        public int BasePriceID { get; set; }
-        public string ProductID { get; set; }
-        public Nullable<System.DateTime> EndDate { get; set; }
-        public Nullable<System.DateTime> BeginDate { get; set; }
-        public Nullable<double> Price { get; set; }
+        public Role()
+        {
+            this.Members = new HashSet<Member>();
+            this.UserFunctions = new HashSet<UserFunction>();
+        }
     
-        public virtual Product Product { get; set; }
+        public int RoleID { get; set; }
+        public string RoleName { get; set; }
+    
+        public virtual ICollection<Member> Members { get; set; }
+        public virtual ICollection<UserFunction> UserFunctions { get; set; }
     }
 }

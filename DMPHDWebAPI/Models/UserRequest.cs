@@ -12,16 +12,12 @@ namespace DMPHDWebAPI.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class BillDetail
+    public partial class UserRequest
     {
-        public int BillDetailID { get; set; }
-        public string BillID { get; set; }
-        public Nullable<int> Quantity { get; set; }
-        public Nullable<double> UnitPrice { get; set; }
-        public Nullable<double> Discount { get; set; }
-        public string ProductID { get; set; }
-    
-        public virtual Bill Bill { get; set; }
-        public virtual Product Product { get; set; }
+        public int RequestID { get; set; }
+        public System.Guid Code { get; set; }
+        public string Email { get; set; }
+        public System.DateTime RequestTime { get; set; }
+        public bool IsHandled { get; set; }
     }
 }

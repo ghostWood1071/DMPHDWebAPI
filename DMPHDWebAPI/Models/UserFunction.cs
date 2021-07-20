@@ -12,20 +12,16 @@ namespace DMPHDWebAPI.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Bill
+    public partial class UserFunction
     {
-        public Bill()
+        public UserFunction()
         {
-            this.BillDetails = new HashSet<BillDetail>();
-            this.GPAMembers = new HashSet<GPAMember>();
+            this.Roles = new HashSet<Role>();
         }
     
-        public string BillID { get; set; }
-        public string MemberID { get; set; }
-        public Nullable<System.DateTime> BillDate { get; set; }
+        public int FunctionID { get; set; }
+        public string FunctionName { get; set; }
     
-        public virtual ICollection<BillDetail> BillDetails { get; set; }
-        public virtual Member Member { get; set; }
-        public virtual ICollection<GPAMember> GPAMembers { get; set; }
+        public virtual ICollection<Role> Roles { get; set; }
     }
 }

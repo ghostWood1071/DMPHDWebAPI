@@ -12,14 +12,18 @@ namespace DMPHDWebAPI.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ProductDetail
+    public partial class Position
     {
-        public int ProductDetailID { get; set; }
-        public string MemberID { get; set; }
-        public int Quantity { get; set; }
-        public string ProductID { get; set; }
+        public Position()
+        {
+            this.Members = new HashSet<Member>();
+        }
     
-        public virtual Member Member { get; set; }
-        public virtual Product Product { get; set; }
+        public int PositionID { get; set; }
+        public string PositionName { get; set; }
+        public Nullable<double> Discount { get; set; }
+        public string Description { get; set; }
+    
+        public virtual ICollection<Member> Members { get; set; }
     }
 }

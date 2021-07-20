@@ -16,28 +16,34 @@ namespace DMPHDWebAPI.Models
     {
         public Member()
         {
-            this.Bills = new HashSet<Bill>();
-            this.GPAMembers = new HashSet<GPAMember>();
+            this.MemberPoints = new HashSet<MemberPoint>();
+            this.Orders = new HashSet<Order>();
             this.ProductDetails = new HashSet<ProductDetail>();
+            this.SalePoints = new HashSet<SalePoint>();
         }
     
         public string MemberID { get; set; }
-        public string MemberName { get; set; }
-        public string MemberAvatar { get; set; }
+        public string FullName { get; set; }
+        public string Avatar { get; set; }
         public string Address { get; set; }
-        public Nullable<System.DateTime> DateOfBirth { get; set; }
-        public Nullable<int> Gender { get; set; }
-        public string CMND { get; set; }
-        public System.DateTime CMND_Date { get; set; }
+        public Nullable<System.DateTime> Birthday { get; set; }
+        public Nullable<bool> Gender { get; set; }
+        public string IDCard { get; set; }
+        public string IDCard_PlaceIssue { get; set; }
+        public System.DateTime IDCard_DateIssue { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
         public string Password { get; set; }
-        public string PresenteeID { get; set; }
-        public string RankID { get; set; }
+        public string ReferralID { get; set; }
+        public Nullable<int> PositionID { get; set; }
+        public Nullable<bool> IsActive { get; set; }
+        public int RoleID { get; set; }
     
-        public virtual ICollection<Bill> Bills { get; set; }
-        public virtual ICollection<GPAMember> GPAMembers { get; set; }
-        public virtual Rank Rank { get; set; }
+        public virtual ICollection<MemberPoint> MemberPoints { get; set; }
+        public virtual Position Position { get; set; }
+        public virtual Role Role { get; set; }
+        public virtual ICollection<Order> Orders { get; set; }
         public virtual ICollection<ProductDetail> ProductDetails { get; set; }
+        public virtual ICollection<SalePoint> SalePoints { get; set; }
     }
 }

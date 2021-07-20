@@ -5,7 +5,81 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
       <Schema Namespace="DMPModels.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="BasePrices">
+        <EntityType Name="Configs">
+          <Key>
+            <PropertyRef Name="ParameterID" />
+          </Key>
+          <Property Name="ParameterID" Type="char" MaxLength="50" Nullable="false" />
+          <Property Name="Value" Type="nvarchar" MaxLength="100" />
+          <Property Name="Description" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="MemberPoints">
+          <Key>
+            <PropertyRef Name="MemberID" />
+            <PropertyRef Name="Month" />
+            <PropertyRef Name="Year" />
+          </Key>
+          <Property Name="MemberID" Type="char" MaxLength="8" Nullable="false" />
+          <Property Name="Month" Type="int" Nullable="false" />
+          <Property Name="Year" Type="int" Nullable="false" />
+          <Property Name="MediateMark" Type="float" />
+          <Property Name="ImmediateMark" Type="float" />
+          <Property Name="AccumulatedMark" Type="float" />
+          <Property Name="UsedMark" Type="float" />
+          <Property Name="TotalMark" Type="float" />
+        </EntityType>
+        <EntityType Name="Members">
+          <Key>
+            <PropertyRef Name="MemberID" />
+          </Key>
+          <Property Name="MemberID" Type="char" MaxLength="8" Nullable="false" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Avatar" Type="char" MaxLength="200" />
+          <Property Name="Address" Type="nvarchar" MaxLength="100" />
+          <Property Name="Birthday" Type="datetime" />
+          <Property Name="Gender" Type="bit" />
+          <Property Name="IDCard" Type="char" MaxLength="13" Nullable="false" />
+          <Property Name="IDCard_PlaceIssue" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="IDCard_DateIssue" Type="datetime" Nullable="false" />
+          <Property Name="Email" Type="char" MaxLength="50" Nullable="false" />
+          <Property Name="Phone" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="Password" Type="char" MaxLength="50" />
+          <Property Name="ReferralID" Type="char" MaxLength="8" Nullable="false" />
+          <Property Name="PositionID" Type="int" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="RoleID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OrderDetails">
+          <Key>
+            <PropertyRef Name="OrderDetailID" />
+            <PropertyRef Name="OrderID" />
+          </Key>
+          <Property Name="OrderDetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderID" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="UnitPrice" Type="float" />
+          <Property Name="Discount" Type="float" />
+          <Property Name="ProductID" Type="char" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="Orders">
+          <Key>
+            <PropertyRef Name="OrderID" />
+          </Key>
+          <Property Name="OrderID" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="MemberID" Type="char" MaxLength="8" Nullable="false" />
+          <Property Name="OrderDate" Type="datetime" />
+          <Property Name="UsedMark" Type="float" />
+        </EntityType>
+        <EntityType Name="Positions">
+          <Key>
+            <PropertyRef Name="PositionID" />
+          </Key>
+          <Property Name="PositionID" Type="int" Nullable="false" />
+          <Property Name="PositionName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Discount" Type="float" />
+          <Property Name="Description" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Prices">
           <Key>
             <PropertyRef Name="BasePriceID" />
           </Key>
@@ -13,64 +87,16 @@
           <Property Name="ProductID" Type="char" MaxLength="10" Nullable="false" />
           <Property Name="EndDate" Type="datetime" />
           <Property Name="BeginDate" Type="datetime" />
-          <Property Name="Price" Type="float" />
-        </EntityType>
-        <EntityType Name="BillDetails">
-          <Key>
-            <PropertyRef Name="BillDetailID" />
-            <PropertyRef Name="BillID" />
-          </Key>
-          <Property Name="BillDetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="BillID" Type="char" MaxLength="10" Nullable="false" />
-          <Property Name="Quantity" Type="int" />
-          <Property Name="UnitPrice" Type="float" />
-          <Property Name="Discount" Type="float" />
-          <Property Name="ProductID" Type="char" MaxLength="10" />
-        </EntityType>
-        <EntityType Name="Bills">
-          <Key>
-            <PropertyRef Name="BillID" />
-          </Key>
-          <Property Name="BillID" Type="char" MaxLength="10" Nullable="false" />
-          <Property Name="MemberID" Type="char" MaxLength="10" Nullable="false" />
-          <Property Name="BillDate" Type="datetime" />
-        </EntityType>
-        <EntityType Name="GPAMembers">
-          <Key>
-            <PropertyRef Name="GPAMemberID" />
-            <PropertyRef Name="MemberID" />
-          </Key>
-          <Property Name="GPAMemberID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="MemberID" Type="char" MaxLength="10" Nullable="false" />
-          <Property Name="GradePointAverage" Type="float" />
-          <Property Name="BillID" Type="char" MaxLength="10" />
-          <Property Name="Presentee" Type="char" MaxLength="250" />
-          <Property Name="LastDateUpdate" Type="datetime" />
-        </EntityType>
-        <EntityType Name="Members">
-          <Key>
-            <PropertyRef Name="MemberID" />
-          </Key>
-          <Property Name="MemberID" Type="char" MaxLength="10" Nullable="false" />
-          <Property Name="MemberName" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="MemberAvatar" Type="char" MaxLength="200" />
-          <Property Name="Address" Type="nvarchar" MaxLength="100" />
-          <Property Name="DateOfBirth" Type="datetime" />
-          <Property Name="Gender" Type="int" />
-          <Property Name="CMND" Type="char" MaxLength="13" Nullable="false" />
-          <Property Name="CMND_Date" Type="datetime" Nullable="false" />
-          <Property Name="Email" Type="char" MaxLength="50" />
-          <Property Name="Phone" Type="char" MaxLength="10" Nullable="false" />
-          <Property Name="Password" Type="char" MaxLength="50" />
-          <Property Name="PresenteeID" Type="char" MaxLength="10" />
-          <Property Name="RankID" Type="char" MaxLength="10" />
+          <Property Name="BasePrice" Type="float" />
+          <Property Name="OriginPrice" Type="float" />
         </EntityType>
         <EntityType Name="ProductDetails">
           <Key>
-            <PropertyRef Name="ProductDetailsID" />
+            <PropertyRef Name="ProductDetailID" />
+            <PropertyRef Name="ProductID" />
           </Key>
-          <Property Name="ProductDetailsID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="MemberID" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="ProductDetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MemberID" Type="char" MaxLength="8" Nullable="false" />
           <Property Name="Quantity" Type="int" Nullable="false" />
           <Property Name="ProductID" Type="char" MaxLength="10" Nullable="false" />
         </EntityType>
@@ -80,117 +106,132 @@
           </Key>
           <Property Name="ProductID" Type="char" MaxLength="10" Nullable="false" />
           <Property Name="ProductName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
         </EntityType>
-        <EntityType Name="Ranks">
+        <EntityType Name="Roles">
           <Key>
-            <PropertyRef Name="RankID" />
+            <PropertyRef Name="RoleID" />
           </Key>
-          <Property Name="RankID" Type="char" MaxLength="10" Nullable="false" />
-          <Property Name="RankName" Type="nvarchar" MaxLength="50" />
-          <Property Name="Discount" Type="float" />
-          <Property Name="Description" Type="nvarchar" MaxLength="50" />
+          <Property Name="RoleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleName" Type="nvarchar" MaxLength="250" />
         </EntityType>
-        <EntityType Name="SalesPoint">
+        <EntityType Name="SalePoints">
           <Key>
-            <PropertyRef Name="SalesPointID" />
+            <PropertyRef Name="SalePointID" />
           </Key>
-          <Property Name="SalesPointID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ProductID" Type="char" MaxLength="10" Nullable="false" />
-          <Property Name="Point" Type="float" />
-          <Property Name="EndDate" Type="datetime" />
-          <Property Name="BeginDate" Type="datetime" />
+          <Property Name="SalePointID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MemberID" Type="char" MaxLength="8" Nullable="false" />
+          <Property Name="Mark" Type="float" />
+          <Property Name="OrderID" Type="char" MaxLength="10" />
+          <Property Name="SaleMonth" Type="int" />
+          <Property Name="SaleYear" Type="int" />
         </EntityType>
-        <EntityType Name="SellPrices">
+        <EntityType Name="UserFunctions">
           <Key>
-            <PropertyRef Name="SellPriceID" />
+            <PropertyRef Name="FunctionID" />
           </Key>
-          <Property Name="SellPriceID" Type="int" Nullable="false" />
-          <Property Name="ProductID" Type="char" MaxLength="10" Nullable="false" />
-          <Property Name="EndDate" Type="datetime" />
-          <Property Name="BeginDate" Type="datetime" />
-          <Property Name="Price" Type="float" />
+          <Property Name="FunctionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FunctionName" Type="nvarchar" MaxLength="255" />
         </EntityType>
-        <Association Name="FK_BasePrices_Products">
-          <End Role="Products" Type="Self.Products" Multiplicity="1" />
-          <End Role="BasePrices" Type="Self.BasePrices" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Products">
-              <PropertyRef Name="ProductID" />
-            </Principal>
-            <Dependent Role="BasePrices">
-              <PropertyRef Name="ProductID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_BillDetails_Bills">
-          <End Role="Bills" Type="Self.Bills" Multiplicity="1" />
-          <End Role="BillDetails" Type="Self.BillDetails" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Bills">
-              <PropertyRef Name="BillID" />
-            </Principal>
-            <Dependent Role="BillDetails">
-              <PropertyRef Name="BillID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_BillDetails_Products">
-          <End Role="Products" Type="Self.Products" Multiplicity="0..1" />
-          <End Role="BillDetails" Type="Self.BillDetails" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Products">
-              <PropertyRef Name="ProductID" />
-            </Principal>
-            <Dependent Role="BillDetails">
-              <PropertyRef Name="ProductID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Bills_Members">
+        <EntityType Name="UserPermissions">
+          <Key>
+            <PropertyRef Name="RoleID" />
+            <PropertyRef Name="FunctionID" />
+          </Key>
+          <Property Name="RoleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FunctionID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserRequests">
+          <Key>
+            <PropertyRef Name="RequestID" />
+          </Key>
+          <Property Name="RequestID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Code" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="RequestTime" Type="datetime" Nullable="false" />
+          <Property Name="IsHandled" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_MemberPoints_Members">
           <End Role="Members" Type="Self.Members" Multiplicity="1" />
-          <End Role="Bills" Type="Self.Bills" Multiplicity="*" />
+          <End Role="MemberPoints" Type="Self.MemberPoints" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Members">
               <PropertyRef Name="MemberID" />
             </Principal>
-            <Dependent Role="Bills">
+            <Dependent Role="MemberPoints">
               <PropertyRef Name="MemberID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_GPAMembers_Bills">
-          <End Role="Bills" Type="Self.Bills" Multiplicity="0..1" />
-          <End Role="GPAMembers" Type="Self.GPAMembers" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Bills">
-              <PropertyRef Name="BillID" />
-            </Principal>
-            <Dependent Role="GPAMembers">
-              <PropertyRef Name="BillID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GPAMembers_Members">
-          <End Role="Members" Type="Self.Members" Multiplicity="1" />
-          <End Role="GPAMembers" Type="Self.GPAMembers" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Members">
-              <PropertyRef Name="MemberID" />
-            </Principal>
-            <Dependent Role="GPAMembers">
-              <PropertyRef Name="MemberID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Members_Ranks">
-          <End Role="Ranks" Type="Self.Ranks" Multiplicity="0..1" />
+        <Association Name="FK_Members_Positions">
+          <End Role="Positions" Type="Self.Positions" Multiplicity="0..1" />
           <End Role="Members" Type="Self.Members" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Ranks">
-              <PropertyRef Name="RankID" />
+            <Principal Role="Positions">
+              <PropertyRef Name="PositionID" />
             </Principal>
             <Dependent Role="Members">
-              <PropertyRef Name="RankID" />
+              <PropertyRef Name="PositionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Members_Roles">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+          <End Role="Members" Type="Self.Members" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="Members">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetails_Orders">
+          <End Role="Orders" Type="Self.Orders" Multiplicity="1" />
+          <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="OrderID" />
+            </Principal>
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetails_Products">
+          <End Role="Products" Type="Self.Products" Multiplicity="0..1" />
+          <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Members">
+          <End Role="Members" Type="Self.Members" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Members">
+              <PropertyRef Name="MemberID" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="MemberID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Prices_Products">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="Prices" Type="Self.Prices" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="Prices">
+              <PropertyRef Name="ProductID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -218,68 +259,96 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_SalesPoint_Products">
-          <End Role="Products" Type="Self.Products" Multiplicity="1" />
-          <End Role="SalesPoint" Type="Self.SalesPoint" Multiplicity="*" />
+        <Association Name="FK_SalePoints_Members">
+          <End Role="Members" Type="Self.Members" Multiplicity="1" />
+          <End Role="SalePoints" Type="Self.SalePoints" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Products">
-              <PropertyRef Name="ProductID" />
+            <Principal Role="Members">
+              <PropertyRef Name="MemberID" />
             </Principal>
-            <Dependent Role="SalesPoint">
-              <PropertyRef Name="ProductID" />
+            <Dependent Role="SalePoints">
+              <PropertyRef Name="MemberID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_SellPrices_Products">
-          <End Role="Products" Type="Self.Products" Multiplicity="1" />
-          <End Role="SellPrices" Type="Self.SellPrices" Multiplicity="*" />
+        <Association Name="FK_SalePoints_Orders">
+          <End Role="Orders" Type="Self.Orders" Multiplicity="0..1" />
+          <End Role="SalePoints" Type="Self.SalePoints" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Products">
-              <PropertyRef Name="ProductID" />
+            <Principal Role="Orders">
+              <PropertyRef Name="OrderID" />
             </Principal>
-            <Dependent Role="SellPrices">
-              <PropertyRef Name="ProductID" />
+            <Dependent Role="SalePoints">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserPermissions_Roles">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+          <End Role="UserPermissions" Type="Self.UserPermissions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="UserPermissions">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserPermissions_UserFunctions">
+          <End Role="UserFunctions" Type="Self.UserFunctions" Multiplicity="1" />
+          <End Role="UserPermissions" Type="Self.UserPermissions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserFunctions">
+              <PropertyRef Name="FunctionID" />
+            </Principal>
+            <Dependent Role="UserPermissions">
+              <PropertyRef Name="FunctionID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="DMPModelsStoreContainer">
-          <EntitySet Name="BasePrices" EntityType="Self.BasePrices" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="BillDetails" EntityType="Self.BillDetails" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Bills" EntityType="Self.Bills" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="GPAMembers" EntityType="Self.GPAMembers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Configs" EntityType="Self.Configs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MemberPoints" EntityType="Self.MemberPoints" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Members" EntityType="Self.Members" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderDetails" EntityType="Self.OrderDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Positions" EntityType="Self.Positions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Prices" EntityType="Self.Prices" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductDetails" EntityType="Self.ProductDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Ranks" EntityType="Self.Ranks" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="SalesPoint" EntityType="Self.SalesPoint" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="SellPrices" EntityType="Self.SellPrices" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_BasePrices_Products" Association="Self.FK_BasePrices_Products">
+          <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SalePoints" EntityType="Self.SalePoints" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserFunctions" EntityType="Self.UserFunctions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserPermissions" EntityType="Self.UserPermissions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserRequests" EntityType="Self.UserRequests" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_MemberPoints_Members" Association="Self.FK_MemberPoints_Members">
+            <End Role="Members" EntitySet="Members" />
+            <End Role="MemberPoints" EntitySet="MemberPoints" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Members_Positions" Association="Self.FK_Members_Positions">
+            <End Role="Positions" EntitySet="Positions" />
+            <End Role="Members" EntitySet="Members" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Members_Roles" Association="Self.FK_Members_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Members" EntitySet="Members" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetails_Orders" Association="Self.FK_OrderDetails_Orders">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetails_Products" Association="Self.FK_OrderDetails_Products">
             <End Role="Products" EntitySet="Products" />
-            <End Role="BasePrices" EntitySet="BasePrices" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
           </AssociationSet>
-          <AssociationSet Name="FK_BillDetails_Bills" Association="Self.FK_BillDetails_Bills">
-            <End Role="Bills" EntitySet="Bills" />
-            <End Role="BillDetails" EntitySet="BillDetails" />
+          <AssociationSet Name="FK_Orders_Members" Association="Self.FK_Orders_Members">
+            <End Role="Members" EntitySet="Members" />
+            <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
-          <AssociationSet Name="FK_BillDetails_Products" Association="Self.FK_BillDetails_Products">
+          <AssociationSet Name="FK_Prices_Products" Association="Self.FK_Prices_Products">
             <End Role="Products" EntitySet="Products" />
-            <End Role="BillDetails" EntitySet="BillDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Bills_Members" Association="Self.FK_Bills_Members">
-            <End Role="Members" EntitySet="Members" />
-            <End Role="Bills" EntitySet="Bills" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GPAMembers_Bills" Association="Self.FK_GPAMembers_Bills">
-            <End Role="Bills" EntitySet="Bills" />
-            <End Role="GPAMembers" EntitySet="GPAMembers" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GPAMembers_Members" Association="Self.FK_GPAMembers_Members">
-            <End Role="Members" EntitySet="Members" />
-            <End Role="GPAMembers" EntitySet="GPAMembers" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Members_Ranks" Association="Self.FK_Members_Ranks">
-            <End Role="Ranks" EntitySet="Ranks" />
-            <End Role="Members" EntitySet="Members" />
+            <End Role="Prices" EntitySet="Prices" />
           </AssociationSet>
           <AssociationSet Name="FK_ProductDetails_Members" Association="Self.FK_ProductDetails_Members">
             <End Role="Members" EntitySet="Members" />
@@ -289,13 +358,21 @@
             <End Role="Products" EntitySet="Products" />
             <End Role="ProductDetails" EntitySet="ProductDetails" />
           </AssociationSet>
-          <AssociationSet Name="FK_SalesPoint_Products" Association="Self.FK_SalesPoint_Products">
-            <End Role="Products" EntitySet="Products" />
-            <End Role="SalesPoint" EntitySet="SalesPoint" />
+          <AssociationSet Name="FK_SalePoints_Members" Association="Self.FK_SalePoints_Members">
+            <End Role="Members" EntitySet="Members" />
+            <End Role="SalePoints" EntitySet="SalePoints" />
           </AssociationSet>
-          <AssociationSet Name="FK_SellPrices_Products" Association="Self.FK_SellPrices_Products">
-            <End Role="Products" EntitySet="Products" />
-            <End Role="SellPrices" EntitySet="SellPrices" />
+          <AssociationSet Name="FK_SalePoints_Orders" Association="Self.FK_SalePoints_Orders">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="SalePoints" EntitySet="SalePoints" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserPermissions_Roles" Association="Self.FK_UserPermissions_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="UserPermissions" EntitySet="UserPermissions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserPermissions_UserFunctions" Association="Self.FK_UserPermissions_UserFunctions">
+            <End Role="UserFunctions" EntitySet="UserFunctions" />
+            <End Role="UserPermissions" EntitySet="UserPermissions" />
           </AssociationSet>
         </EntityContainer>
       </Schema>
@@ -303,7 +380,94 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DMPModels" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="BasePrice">
+        <EntityType Name="Config">
+          <Key>
+            <PropertyRef Name="ParameterID" />
+          </Key>
+          <Property Name="ParameterID" Type="String" MaxLength="50" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="Value" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="MemberPoint">
+          <Key>
+            <PropertyRef Name="MemberID" />
+            <PropertyRef Name="Month" />
+            <PropertyRef Name="Year" />
+          </Key>
+          <Property Name="MemberID" Type="String" MaxLength="8" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="Month" Type="Int32" Nullable="false" />
+          <Property Name="Year" Type="Int32" Nullable="false" />
+          <Property Name="MediateMark" Type="Double" />
+          <Property Name="ImmediateMark" Type="Double" />
+          <Property Name="AccumulatedMark" Type="Double" />
+          <Property Name="UsedMark" Type="Double" />
+          <Property Name="TotalMark" Type="Double" />
+          <NavigationProperty Name="Member" Relationship="Self.FK_MemberPoints_Members" FromRole="MemberPoints" ToRole="Members" />
+        </EntityType>
+        <EntityType Name="Member">
+          <Key>
+            <PropertyRef Name="MemberID" />
+          </Key>
+          <Property Name="MemberID" Type="String" MaxLength="8" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="FullName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Avatar" Type="String" MaxLength="200" FixedLength="true" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Birthday" Type="DateTime" Precision="3" />
+          <Property Name="Gender" Type="Boolean" />
+          <Property Name="IDCard" Type="String" MaxLength="13" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="IDCard_PlaceIssue" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="IDCard_DateIssue" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="Phone" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="true" Unicode="false" />
+          <Property Name="ReferralID" Type="String" MaxLength="8" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="PositionID" Type="Int32" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="RoleID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="MemberPoints" Relationship="Self.FK_MemberPoints_Members" FromRole="Members" ToRole="MemberPoints" />
+          <NavigationProperty Name="Position" Relationship="Self.FK_Members_Positions" FromRole="Members" ToRole="Positions" />
+          <NavigationProperty Name="Role" Relationship="Self.FK_Members_Roles" FromRole="Members" ToRole="Roles" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Members" FromRole="Members" ToRole="Orders" />
+          <NavigationProperty Name="ProductDetails" Relationship="Self.FK_ProductDetails_Members" FromRole="Members" ToRole="ProductDetails" />
+          <NavigationProperty Name="SalePoints" Relationship="Self.FK_SalePoints_Members" FromRole="Members" ToRole="SalePoints" />
+        </EntityType>
+        <EntityType Name="OrderDetail">
+          <Key>
+            <PropertyRef Name="OrderDetailID" />
+            <PropertyRef Name="OrderID" />
+          </Key>
+          <Property Name="OrderDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="UnitPrice" Type="Double" />
+          <Property Name="Discount" Type="Double" />
+          <Property Name="ProductID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="Order" Relationship="Self.FK_OrderDetails_Orders" FromRole="OrderDetails" ToRole="Orders" />
+          <NavigationProperty Name="Product" Relationship="Self.FK_OrderDetails_Products" FromRole="OrderDetails" ToRole="Products" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="OrderID" />
+          </Key>
+          <Property Name="OrderID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="MemberID" Type="String" MaxLength="8" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="OrderDate" Type="DateTime" Precision="3" />
+          <Property Name="UsedMark" Type="Double" />
+          <NavigationProperty Name="Member" Relationship="Self.FK_Orders_Members" FromRole="Orders" ToRole="Members" />
+          <NavigationProperty Name="OrderDetails" Relationship="Self.FK_OrderDetails_Orders" FromRole="Orders" ToRole="OrderDetails" />
+          <NavigationProperty Name="SalePoints" Relationship="Self.FK_SalePoints_Orders" FromRole="Orders" ToRole="SalePoints" />
+        </EntityType>
+        <EntityType Name="Position">
+          <Key>
+            <PropertyRef Name="PositionID" />
+          </Key>
+          <Property Name="PositionID" Type="Int32" Nullable="false" />
+          <Property Name="PositionName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Discount" Type="Double" />
+          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Members" Relationship="Self.FK_Members_Positions" FromRole="Positions" ToRole="Members" />
+        </EntityType>
+        <EntityType Name="Price">
           <Key>
             <PropertyRef Name="BasePriceID" />
           </Key>
@@ -311,76 +475,17 @@
           <Property Name="ProductID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
           <Property Name="EndDate" Type="DateTime" Precision="3" />
           <Property Name="BeginDate" Type="DateTime" Precision="3" />
-          <Property Name="Price" Type="Double" />
-          <NavigationProperty Name="Product" Relationship="Self.FK_BasePrices_Products" FromRole="BasePrices" ToRole="Products" />
-        </EntityType>
-        <EntityType Name="BillDetail">
-          <Key>
-            <PropertyRef Name="BillDetailID" />
-            <PropertyRef Name="BillID" />
-          </Key>
-          <Property Name="BillDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="BillID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="Quantity" Type="Int32" />
-          <Property Name="UnitPrice" Type="Double" />
-          <Property Name="Discount" Type="Double" />
-          <Property Name="ProductID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
-          <NavigationProperty Name="Bill" Relationship="Self.FK_BillDetails_Bills" FromRole="BillDetails" ToRole="Bills" />
-          <NavigationProperty Name="Product" Relationship="Self.FK_BillDetails_Products" FromRole="BillDetails" ToRole="Products" />
-        </EntityType>
-        <EntityType Name="Bill">
-          <Key>
-            <PropertyRef Name="BillID" />
-          </Key>
-          <Property Name="BillID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="MemberID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="BillDate" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="BillDetails" Relationship="Self.FK_BillDetails_Bills" FromRole="Bills" ToRole="BillDetails" />
-          <NavigationProperty Name="Member" Relationship="Self.FK_Bills_Members" FromRole="Bills" ToRole="Members" />
-          <NavigationProperty Name="GPAMembers" Relationship="Self.FK_GPAMembers_Bills" FromRole="Bills" ToRole="GPAMembers" />
-        </EntityType>
-        <EntityType Name="GPAMember">
-          <Key>
-            <PropertyRef Name="GPAMemberID" />
-            <PropertyRef Name="MemberID" />
-          </Key>
-          <Property Name="GPAMemberID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="MemberID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="GradePointAverage" Type="Double" />
-          <Property Name="BillID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
-          <Property Name="Presentee" Type="String" MaxLength="250" FixedLength="true" Unicode="false" />
-          <Property Name="LastDateUpdate" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="Bill" Relationship="Self.FK_GPAMembers_Bills" FromRole="GPAMembers" ToRole="Bills" />
-          <NavigationProperty Name="Member" Relationship="Self.FK_GPAMembers_Members" FromRole="GPAMembers" ToRole="Members" />
-        </EntityType>
-        <EntityType Name="Member">
-          <Key>
-            <PropertyRef Name="MemberID" />
-          </Key>
-          <Property Name="MemberID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="MemberName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="MemberAvatar" Type="String" MaxLength="200" FixedLength="true" Unicode="false" />
-          <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="DateOfBirth" Type="DateTime" Precision="3" />
-          <Property Name="Gender" Type="Int32" />
-          <Property Name="CMND" Type="String" MaxLength="13" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="CMND_Date" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Email" Type="String" MaxLength="50" FixedLength="true" Unicode="false" />
-          <Property Name="Phone" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="Password" Type="String" MaxLength="50" FixedLength="true" Unicode="false" />
-          <Property Name="PresenteeID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
-          <Property Name="RankID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
-          <NavigationProperty Name="Bills" Relationship="Self.FK_Bills_Members" FromRole="Members" ToRole="Bills" />
-          <NavigationProperty Name="GPAMembers" Relationship="Self.FK_GPAMembers_Members" FromRole="Members" ToRole="GPAMembers" />
-          <NavigationProperty Name="Rank" Relationship="Self.FK_Members_Ranks" FromRole="Members" ToRole="Ranks" />
-          <NavigationProperty Name="ProductDetails" Relationship="Self.FK_ProductDetails_Members" FromRole="Members" ToRole="ProductDetails" />
+          <Property Name="BasePrice" Type="Double" />
+          <Property Name="OriginPrice" Type="Double" />
+          <NavigationProperty Name="Product" Relationship="Self.FK_Prices_Products" FromRole="Prices" ToRole="Products" />
         </EntityType>
         <EntityType Name="ProductDetail">
           <Key>
-            <PropertyRef Name="ProductDetailsID" />
+            <PropertyRef Name="ProductDetailID" />
+            <PropertyRef Name="ProductID" />
           </Key>
-          <Property Name="ProductDetailsID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="MemberID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="ProductDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MemberID" Type="String" MaxLength="8" FixedLength="true" Unicode="false" Nullable="false" />
           <Property Name="Quantity" Type="Int32" Nullable="false" />
           <Property Name="ProductID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Member" Relationship="Self.FK_ProductDetails_Members" FromRole="ProductDetails" ToRole="Members" />
@@ -392,125 +497,96 @@
           </Key>
           <Property Name="ProductID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
           <Property Name="ProductName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="BasePrices" Relationship="Self.FK_BasePrices_Products" FromRole="Products" ToRole="BasePrices" />
-          <NavigationProperty Name="BillDetails" Relationship="Self.FK_BillDetails_Products" FromRole="Products" ToRole="BillDetails" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="OrderDetails" Relationship="Self.FK_OrderDetails_Products" FromRole="Products" ToRole="OrderDetails" />
+          <NavigationProperty Name="Prices" Relationship="Self.FK_Prices_Products" FromRole="Products" ToRole="Prices" />
           <NavigationProperty Name="ProductDetails" Relationship="Self.FK_ProductDetails_Products" FromRole="Products" ToRole="ProductDetails" />
-          <NavigationProperty Name="SalesPoints" Relationship="Self.FK_SalesPoint_Products" FromRole="Products" ToRole="SalesPoint" />
-          <NavigationProperty Name="SellPrices" Relationship="Self.FK_SellPrices_Products" FromRole="Products" ToRole="SellPrices" />
         </EntityType>
-        <EntityType Name="Rank">
+        <EntityType Name="Role">
           <Key>
-            <PropertyRef Name="RankID" />
+            <PropertyRef Name="RoleID" />
           </Key>
-          <Property Name="RankID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="RankName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Discount" Type="Double" />
-          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Members" Relationship="Self.FK_Members_Ranks" FromRole="Ranks" ToRole="Members" />
+          <Property Name="RoleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Members" Relationship="Self.FK_Members_Roles" FromRole="Roles" ToRole="Members" />
+          <NavigationProperty Name="UserFunctions" Relationship="Self.UserPermissions" FromRole="Roles" ToRole="UserFunctions" />
         </EntityType>
-        <EntityType Name="SalesPoint">
+        <EntityType Name="SalePoint">
           <Key>
-            <PropertyRef Name="SalesPointID" />
+            <PropertyRef Name="SalePointID" />
           </Key>
-          <Property Name="SalesPointID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ProductID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="Point" Type="Double" />
-          <Property Name="EndDate" Type="DateTime" Precision="3" />
-          <Property Name="BeginDate" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="Product" Relationship="Self.FK_SalesPoint_Products" FromRole="SalesPoint" ToRole="Products" />
+          <Property Name="SalePointID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MemberID" Type="String" MaxLength="8" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="Mark" Type="Double" />
+          <Property Name="OrderID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="SaleMonth" Type="Int32" />
+          <Property Name="SaleYear" Type="Int32" />
+          <NavigationProperty Name="Member" Relationship="Self.FK_SalePoints_Members" FromRole="SalePoints" ToRole="Members" />
+          <NavigationProperty Name="Order" Relationship="Self.FK_SalePoints_Orders" FromRole="SalePoints" ToRole="Orders" />
         </EntityType>
-        <EntityType Name="SellPrice">
+        <EntityType Name="UserFunction">
           <Key>
-            <PropertyRef Name="SellPriceID" />
+            <PropertyRef Name="FunctionID" />
           </Key>
-          <Property Name="SellPriceID" Type="Int32" Nullable="false" />
-          <Property Name="ProductID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="EndDate" Type="DateTime" Precision="3" />
-          <Property Name="BeginDate" Type="DateTime" Precision="3" />
-          <Property Name="Price" Type="Double" />
-          <NavigationProperty Name="Product" Relationship="Self.FK_SellPrices_Products" FromRole="SellPrices" ToRole="Products" />
+          <Property Name="FunctionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FunctionName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Roles" Relationship="Self.UserPermissions" FromRole="UserFunctions" ToRole="Roles" />
         </EntityType>
-        <Association Name="FK_BasePrices_Products">
-          <End Role="Products" Type="Self.Product" Multiplicity="1" />
-          <End Role="BasePrices" Type="Self.BasePrice" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Products">
-              <PropertyRef Name="ProductID" />
-            </Principal>
-            <Dependent Role="BasePrices">
-              <PropertyRef Name="ProductID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_BillDetails_Bills">
-          <End Role="Bills" Type="Self.Bill" Multiplicity="1" />
-          <End Role="BillDetails" Type="Self.BillDetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Bills">
-              <PropertyRef Name="BillID" />
-            </Principal>
-            <Dependent Role="BillDetails">
-              <PropertyRef Name="BillID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_BillDetails_Products">
-          <End Role="Products" Type="Self.Product" Multiplicity="0..1" />
-          <End Role="BillDetails" Type="Self.BillDetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Products">
-              <PropertyRef Name="ProductID" />
-            </Principal>
-            <Dependent Role="BillDetails">
-              <PropertyRef Name="ProductID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Bills_Members">
+        <EntityType Name="UserRequest">
+          <Key>
+            <PropertyRef Name="RequestID" />
+          </Key>
+          <Property Name="RequestID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="Guid" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="RequestTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsHandled" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_MemberPoints_Members">
           <End Role="Members" Type="Self.Member" Multiplicity="1" />
-          <End Role="Bills" Type="Self.Bill" Multiplicity="*" />
+          <End Role="MemberPoints" Type="Self.MemberPoint" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Members">
               <PropertyRef Name="MemberID" />
             </Principal>
-            <Dependent Role="Bills">
+            <Dependent Role="MemberPoints">
               <PropertyRef Name="MemberID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_GPAMembers_Bills">
-          <End Role="Bills" Type="Self.Bill" Multiplicity="0..1" />
-          <End Role="GPAMembers" Type="Self.GPAMember" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Bills">
-              <PropertyRef Name="BillID" />
-            </Principal>
-            <Dependent Role="GPAMembers">
-              <PropertyRef Name="BillID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GPAMembers_Members">
-          <End Role="Members" Type="Self.Member" Multiplicity="1" />
-          <End Role="GPAMembers" Type="Self.GPAMember" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Members">
-              <PropertyRef Name="MemberID" />
-            </Principal>
-            <Dependent Role="GPAMembers">
-              <PropertyRef Name="MemberID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Members_Ranks">
-          <End Role="Ranks" Type="Self.Rank" Multiplicity="0..1" />
+        <Association Name="FK_Members_Positions">
+          <End Role="Positions" Type="Self.Position" Multiplicity="0..1" />
           <End Role="Members" Type="Self.Member" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Ranks">
-              <PropertyRef Name="RankID" />
+            <Principal Role="Positions">
+              <PropertyRef Name="PositionID" />
             </Principal>
             <Dependent Role="Members">
-              <PropertyRef Name="RankID" />
+              <PropertyRef Name="PositionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Members_Roles">
+          <End Role="Roles" Type="Self.Role" Multiplicity="1" />
+          <End Role="Members" Type="Self.Member" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="Members">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Members">
+          <End Role="Members" Type="Self.Member" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Members">
+              <PropertyRef Name="MemberID" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="MemberID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -526,6 +602,66 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_SalePoints_Members">
+          <End Role="Members" Type="Self.Member" Multiplicity="1" />
+          <End Role="SalePoints" Type="Self.SalePoint" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Members">
+              <PropertyRef Name="MemberID" />
+            </Principal>
+            <Dependent Role="SalePoints">
+              <PropertyRef Name="MemberID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetails_Orders">
+          <End Role="Orders" Type="Self.Order" Multiplicity="1" />
+          <End Role="OrderDetails" Type="Self.OrderDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="OrderID" />
+            </Principal>
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetails_Products">
+          <End Role="Products" Type="Self.Product" Multiplicity="0..1" />
+          <End Role="OrderDetails" Type="Self.OrderDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SalePoints_Orders">
+          <End Role="Orders" Type="Self.Order" Multiplicity="0..1" />
+          <End Role="SalePoints" Type="Self.SalePoint" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="OrderID" />
+            </Principal>
+            <Dependent Role="SalePoints">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Prices_Products">
+          <End Role="Products" Type="Self.Product" Multiplicity="1" />
+          <End Role="Prices" Type="Self.Price" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="Prices">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ProductDetails_Products">
           <End Role="Products" Type="Self.Product" Multiplicity="1" />
           <End Role="ProductDetails" Type="Self.ProductDetail" Multiplicity="*" />
@@ -538,84 +674,71 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_SalesPoint_Products">
-          <End Role="Products" Type="Self.Product" Multiplicity="1" />
-          <End Role="SalesPoint" Type="Self.SalesPoint" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Products">
-              <PropertyRef Name="ProductID" />
-            </Principal>
-            <Dependent Role="SalesPoint">
-              <PropertyRef Name="ProductID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SellPrices_Products">
-          <End Role="Products" Type="Self.Product" Multiplicity="1" />
-          <End Role="SellPrices" Type="Self.SellPrice" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Products">
-              <PropertyRef Name="ProductID" />
-            </Principal>
-            <Dependent Role="SellPrices">
-              <PropertyRef Name="ProductID" />
-            </Dependent>
-          </ReferentialConstraint>
+        <Association Name="UserPermissions">
+          <End Role="Roles" Type="Self.Role" Multiplicity="*" />
+          <End Role="UserFunctions" Type="Self.UserFunction" Multiplicity="*" />
         </Association>
         <EntityContainer Name="DMPContext" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="BasePrices" EntityType="Self.BasePrice" />
-          <EntitySet Name="BillDetails" EntityType="Self.BillDetail" />
-          <EntitySet Name="Bills" EntityType="Self.Bill" />
-          <EntitySet Name="GPAMembers" EntityType="Self.GPAMember" />
+          <EntitySet Name="Configs" EntityType="Self.Config" />
+          <EntitySet Name="MemberPoints" EntityType="Self.MemberPoint" />
           <EntitySet Name="Members" EntityType="Self.Member" />
+          <EntitySet Name="OrderDetails" EntityType="Self.OrderDetail" />
+          <EntitySet Name="Orders" EntityType="Self.Order" />
+          <EntitySet Name="Positions" EntityType="Self.Position" />
+          <EntitySet Name="Prices" EntityType="Self.Price" />
           <EntitySet Name="ProductDetails" EntityType="Self.ProductDetail" />
           <EntitySet Name="Products" EntityType="Self.Product" />
-          <EntitySet Name="Ranks" EntityType="Self.Rank" />
-          <EntitySet Name="SalesPoints" EntityType="Self.SalesPoint" />
-          <EntitySet Name="SellPrices" EntityType="Self.SellPrice" />
-          <AssociationSet Name="FK_BasePrices_Products" Association="Self.FK_BasePrices_Products">
-            <End Role="Products" EntitySet="Products" />
-            <End Role="BasePrices" EntitySet="BasePrices" />
-          </AssociationSet>
-          <AssociationSet Name="FK_BillDetails_Bills" Association="Self.FK_BillDetails_Bills">
-            <End Role="Bills" EntitySet="Bills" />
-            <End Role="BillDetails" EntitySet="BillDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_BillDetails_Products" Association="Self.FK_BillDetails_Products">
-            <End Role="Products" EntitySet="Products" />
-            <End Role="BillDetails" EntitySet="BillDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Bills_Members" Association="Self.FK_Bills_Members">
+          <EntitySet Name="Roles" EntityType="Self.Role" />
+          <EntitySet Name="SalePoints" EntityType="Self.SalePoint" />
+          <EntitySet Name="UserFunctions" EntityType="Self.UserFunction" />
+          <EntitySet Name="UserRequests" EntityType="Self.UserRequest" />
+          <AssociationSet Name="FK_MemberPoints_Members" Association="Self.FK_MemberPoints_Members">
             <End Role="Members" EntitySet="Members" />
-            <End Role="Bills" EntitySet="Bills" />
+            <End Role="MemberPoints" EntitySet="MemberPoints" />
           </AssociationSet>
-          <AssociationSet Name="FK_GPAMembers_Bills" Association="Self.FK_GPAMembers_Bills">
-            <End Role="Bills" EntitySet="Bills" />
-            <End Role="GPAMembers" EntitySet="GPAMembers" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GPAMembers_Members" Association="Self.FK_GPAMembers_Members">
+          <AssociationSet Name="FK_Members_Positions" Association="Self.FK_Members_Positions">
+            <End Role="Positions" EntitySet="Positions" />
             <End Role="Members" EntitySet="Members" />
-            <End Role="GPAMembers" EntitySet="GPAMembers" />
           </AssociationSet>
-          <AssociationSet Name="FK_Members_Ranks" Association="Self.FK_Members_Ranks">
-            <End Role="Ranks" EntitySet="Ranks" />
+          <AssociationSet Name="FK_Members_Roles" Association="Self.FK_Members_Roles">
+            <End Role="Roles" EntitySet="Roles" />
             <End Role="Members" EntitySet="Members" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Members" Association="Self.FK_Orders_Members">
+            <End Role="Members" EntitySet="Members" />
+            <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
           <AssociationSet Name="FK_ProductDetails_Members" Association="Self.FK_ProductDetails_Members">
             <End Role="Members" EntitySet="Members" />
             <End Role="ProductDetails" EntitySet="ProductDetails" />
           </AssociationSet>
+          <AssociationSet Name="FK_SalePoints_Members" Association="Self.FK_SalePoints_Members">
+            <End Role="Members" EntitySet="Members" />
+            <End Role="SalePoints" EntitySet="SalePoints" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetails_Orders" Association="Self.FK_OrderDetails_Orders">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetails_Products" Association="Self.FK_OrderDetails_Products">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SalePoints_Orders" Association="Self.FK_SalePoints_Orders">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="SalePoints" EntitySet="SalePoints" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Prices_Products" Association="Self.FK_Prices_Products">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="Prices" EntitySet="Prices" />
+          </AssociationSet>
           <AssociationSet Name="FK_ProductDetails_Products" Association="Self.FK_ProductDetails_Products">
             <End Role="Products" EntitySet="Products" />
             <End Role="ProductDetails" EntitySet="ProductDetails" />
           </AssociationSet>
-          <AssociationSet Name="FK_SalesPoint_Products" Association="Self.FK_SalesPoint_Products">
-            <End Role="Products" EntitySet="Products" />
-            <End Role="SalesPoint" EntitySet="SalesPoints" />
-          </AssociationSet>
-          <AssociationSet Name="FK_SellPrices_Products" Association="Self.FK_SellPrices_Products">
-            <End Role="Products" EntitySet="Products" />
-            <End Role="SellPrices" EntitySet="SellPrices" />
+          <AssociationSet Name="UserPermissions" Association="Self.UserPermissions">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="UserFunctions" EntitySet="UserFunctions" />
           </AssociationSet>
         </EntityContainer>
       </Schema>
@@ -624,47 +747,26 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="DMPModelsStoreContainer" CdmEntityContainer="DMPContext">
-          <EntitySetMapping Name="BasePrices">
-            <EntityTypeMapping TypeName="DMPModels.BasePrice">
-              <MappingFragment StoreEntitySet="BasePrices">
-                <ScalarProperty Name="BasePriceID" ColumnName="BasePriceID" />
-                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
-                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
-                <ScalarProperty Name="BeginDate" ColumnName="BeginDate" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
+          <EntitySetMapping Name="Configs">
+            <EntityTypeMapping TypeName="DMPModels.Config">
+              <MappingFragment StoreEntitySet="Configs">
+                <ScalarProperty Name="ParameterID" ColumnName="ParameterID" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="BillDetails">
-            <EntityTypeMapping TypeName="DMPModels.BillDetail">
-              <MappingFragment StoreEntitySet="BillDetails">
-                <ScalarProperty Name="BillDetailID" ColumnName="BillDetailID" />
-                <ScalarProperty Name="BillID" ColumnName="BillID" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
-                <ScalarProperty Name="Discount" ColumnName="Discount" />
-                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Bills">
-            <EntityTypeMapping TypeName="DMPModels.Bill">
-              <MappingFragment StoreEntitySet="Bills">
-                <ScalarProperty Name="BillID" ColumnName="BillID" />
+          <EntitySetMapping Name="MemberPoints">
+            <EntityTypeMapping TypeName="DMPModels.MemberPoint">
+              <MappingFragment StoreEntitySet="MemberPoints">
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
-                <ScalarProperty Name="BillDate" ColumnName="BillDate" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="GPAMembers">
-            <EntityTypeMapping TypeName="DMPModels.GPAMember">
-              <MappingFragment StoreEntitySet="GPAMembers">
-                <ScalarProperty Name="GPAMemberID" ColumnName="GPAMemberID" />
-                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
-                <ScalarProperty Name="GradePointAverage" ColumnName="GradePointAverage" />
-                <ScalarProperty Name="BillID" ColumnName="BillID" />
-                <ScalarProperty Name="Presentee" ColumnName="Presentee" />
-                <ScalarProperty Name="LastDateUpdate" ColumnName="LastDateUpdate" />
+                <ScalarProperty Name="Month" ColumnName="Month" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="MediateMark" ColumnName="MediateMark" />
+                <ScalarProperty Name="ImmediateMark" ColumnName="ImmediateMark" />
+                <ScalarProperty Name="AccumulatedMark" ColumnName="AccumulatedMark" />
+                <ScalarProperty Name="UsedMark" ColumnName="UsedMark" />
+                <ScalarProperty Name="TotalMark" ColumnName="TotalMark" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -672,25 +774,72 @@
             <EntityTypeMapping TypeName="DMPModels.Member">
               <MappingFragment StoreEntitySet="Members">
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
-                <ScalarProperty Name="MemberName" ColumnName="MemberName" />
-                <ScalarProperty Name="MemberAvatar" ColumnName="MemberAvatar" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Avatar" ColumnName="Avatar" />
                 <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
+                <ScalarProperty Name="Birthday" ColumnName="Birthday" />
                 <ScalarProperty Name="Gender" ColumnName="Gender" />
-                <ScalarProperty Name="CMND" ColumnName="CMND" />
-                <ScalarProperty Name="CMND_Date" ColumnName="CMND_Date" />
+                <ScalarProperty Name="IDCard" ColumnName="IDCard" />
+                <ScalarProperty Name="IDCard_PlaceIssue" ColumnName="IDCard_PlaceIssue" />
+                <ScalarProperty Name="IDCard_DateIssue" ColumnName="IDCard_DateIssue" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Phone" ColumnName="Phone" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="PresenteeID" ColumnName="PresenteeID" />
-                <ScalarProperty Name="RankID" ColumnName="RankID" />
+                <ScalarProperty Name="ReferralID" ColumnName="ReferralID" />
+                <ScalarProperty Name="PositionID" ColumnName="PositionID" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderDetails">
+            <EntityTypeMapping TypeName="DMPModels.OrderDetail">
+              <MappingFragment StoreEntitySet="OrderDetails">
+                <ScalarProperty Name="OrderDetailID" ColumnName="OrderDetailID" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="DMPModels.Order">
+              <MappingFragment StoreEntitySet="Orders">
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ScalarProperty Name="UsedMark" ColumnName="UsedMark" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Positions">
+            <EntityTypeMapping TypeName="DMPModels.Position">
+              <MappingFragment StoreEntitySet="Positions">
+                <ScalarProperty Name="PositionID" ColumnName="PositionID" />
+                <ScalarProperty Name="PositionName" ColumnName="PositionName" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Prices">
+            <EntityTypeMapping TypeName="DMPModels.Price">
+              <MappingFragment StoreEntitySet="Prices">
+                <ScalarProperty Name="BasePriceID" ColumnName="BasePriceID" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="BeginDate" ColumnName="BeginDate" />
+                <ScalarProperty Name="BasePrice" ColumnName="BasePrice" />
+                <ScalarProperty Name="OriginPrice" ColumnName="OriginPrice" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ProductDetails">
             <EntityTypeMapping TypeName="DMPModels.ProductDetail">
               <MappingFragment StoreEntitySet="ProductDetails">
-                <ScalarProperty Name="ProductDetailsID" ColumnName="ProductDetailsID" />
+                <ScalarProperty Name="ProductDetailID" ColumnName="ProductDetailID" />
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
@@ -702,41 +851,57 @@
               <MappingFragment StoreEntitySet="Products">
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
                 <ScalarProperty Name="ProductName" ColumnName="ProductName" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Ranks">
-            <EntityTypeMapping TypeName="DMPModels.Rank">
-              <MappingFragment StoreEntitySet="Ranks">
-                <ScalarProperty Name="RankID" ColumnName="RankID" />
-                <ScalarProperty Name="RankName" ColumnName="RankName" />
-                <ScalarProperty Name="Discount" ColumnName="Discount" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="SalesPoints">
-            <EntityTypeMapping TypeName="DMPModels.SalesPoint">
-              <MappingFragment StoreEntitySet="SalesPoint">
-                <ScalarProperty Name="SalesPointID" ColumnName="SalesPointID" />
-                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
-                <ScalarProperty Name="Point" ColumnName="Point" />
-                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
-                <ScalarProperty Name="BeginDate" ColumnName="BeginDate" />
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="DMPModels.Role">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="SellPrices">
-            <EntityTypeMapping TypeName="DMPModels.SellPrice">
-              <MappingFragment StoreEntitySet="SellPrices">
-                <ScalarProperty Name="SellPriceID" ColumnName="SellPriceID" />
-                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
-                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
-                <ScalarProperty Name="BeginDate" ColumnName="BeginDate" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
+          <EntitySetMapping Name="SalePoints">
+            <EntityTypeMapping TypeName="DMPModels.SalePoint">
+              <MappingFragment StoreEntitySet="SalePoints">
+                <ScalarProperty Name="SalePointID" ColumnName="SalePointID" />
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="Mark" ColumnName="Mark" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="SaleMonth" ColumnName="SaleMonth" />
+                <ScalarProperty Name="SaleYear" ColumnName="SaleYear" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="UserFunctions">
+            <EntityTypeMapping TypeName="DMPModels.UserFunction">
+              <MappingFragment StoreEntitySet="UserFunctions">
+                <ScalarProperty Name="FunctionID" ColumnName="FunctionID" />
+                <ScalarProperty Name="FunctionName" ColumnName="FunctionName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserRequests">
+            <EntityTypeMapping TypeName="DMPModels.UserRequest">
+              <MappingFragment StoreEntitySet="UserRequests">
+                <ScalarProperty Name="RequestID" ColumnName="RequestID" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="RequestTime" ColumnName="RequestTime" />
+                <ScalarProperty Name="IsHandled" ColumnName="IsHandled" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="UserPermissions" TypeName="DMPModels.UserPermissions" StoreEntitySet="UserPermissions">
+            <EndProperty Name="Roles">
+              <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+            </EndProperty>
+            <EndProperty Name="UserFunctions">
+              <ScalarProperty Name="FunctionID" ColumnName="FunctionID" />
+            </EndProperty>
+          </AssociationSetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -12,18 +12,16 @@ namespace DMPHDWebAPI.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Rank
+    public partial class SalePoint
     {
-        public Rank()
-        {
-            this.Members = new HashSet<Member>();
-        }
+        public int SalePointID { get; set; }
+        public string MemberID { get; set; }
+        public Nullable<double> Mark { get; set; }
+        public string OrderID { get; set; }
+        public Nullable<int> SaleMonth { get; set; }
+        public Nullable<int> SaleYear { get; set; }
     
-        public string RankID { get; set; }
-        public string RankName { get; set; }
-        public Nullable<double> Discount { get; set; }
-        public string Description { get; set; }
-    
-        public virtual ICollection<Member> Members { get; set; }
+        public virtual Member Member { get; set; }
+        public virtual Order Order { get; set; }
     }
 }

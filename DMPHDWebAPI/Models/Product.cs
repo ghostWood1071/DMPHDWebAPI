@@ -16,20 +16,17 @@ namespace DMPHDWebAPI.Models
     {
         public Product()
         {
-            this.BasePrices = new HashSet<BasePrice>();
-            this.BillDetails = new HashSet<BillDetail>();
+            this.OrderDetails = new HashSet<OrderDetail>();
+            this.Prices = new HashSet<Price>();
             this.ProductDetails = new HashSet<ProductDetail>();
-            this.SalesPoints = new HashSet<SalesPoint>();
-            this.SellPrices = new HashSet<SellPrice>();
         }
     
         public string ProductID { get; set; }
         public string ProductName { get; set; }
+        public string Description { get; set; }
     
-        public virtual ICollection<BasePrice> BasePrices { get; set; }
-        public virtual ICollection<BillDetail> BillDetails { get; set; }
+        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
+        public virtual ICollection<Price> Prices { get; set; }
         public virtual ICollection<ProductDetail> ProductDetails { get; set; }
-        public virtual ICollection<SalesPoint> SalesPoints { get; set; }
-        public virtual ICollection<SellPrice> SellPrices { get; set; }
     }
 }

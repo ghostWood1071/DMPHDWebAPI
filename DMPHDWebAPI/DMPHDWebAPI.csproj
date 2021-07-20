@@ -173,13 +173,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\BasePrice.cs">
-      <DependentUpon>DMPModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Bill.cs">
-      <DependentUpon>DMPModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\BillDetail.cs">
+    <Compile Include="Models\Config.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DMPModel.Context.cs">
@@ -197,13 +191,25 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DMPModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Models\GPAMember.cs">
-      <DependentUpon>DMPModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Member.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\MemberPoint.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Order.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OrderDetail.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\OwnerProductResult.cs" />
+    <Compile Include="Models\Position.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Price.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Product.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
@@ -211,13 +217,16 @@
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ProductResult.cs" />
-    <Compile Include="Models\Rank.cs">
+    <Compile Include="Models\Role.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\SalesPoint.cs">
+    <Compile Include="Models\SalePoint.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\SellPrice.cs">
+    <Compile Include="Models\UserFunction.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UserRequest.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />

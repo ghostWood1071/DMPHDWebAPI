@@ -12,14 +12,16 @@ namespace DMPHDWebAPI.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class SalesPoint
+    public partial class OrderDetail
     {
-        public int SalesPointID { get; set; }
+        public int OrderDetailID { get; set; }
+        public string OrderID { get; set; }
+        public Nullable<int> Quantity { get; set; }
+        public Nullable<double> UnitPrice { get; set; }
+        public Nullable<double> Discount { get; set; }
         public string ProductID { get; set; }
-        public Nullable<double> Point { get; set; }
-        public Nullable<System.DateTime> EndDate { get; set; }
-        public Nullable<System.DateTime> BeginDate { get; set; }
     
+        public virtual Order Order { get; set; }
         public virtual Product Product { get; set; }
     }
 }

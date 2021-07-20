@@ -12,16 +12,21 @@ namespace DMPHDWebAPI.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class GPAMember
+    public partial class Order
     {
-        public int GPAMemberID { get; set; }
-        public string MemberID { get; set; }
-        public Nullable<double> GradePointAverage { get; set; }
-        public string BillID { get; set; }
-        public string Presentee { get; set; }
-        public Nullable<System.DateTime> LastDateUpdate { get; set; }
+        public Order()
+        {
+            this.OrderDetails = new HashSet<OrderDetail>();
+            this.SalePoints = new HashSet<SalePoint>();
+        }
     
-        public virtual Bill Bill { get; set; }
+        public string OrderID { get; set; }
+        public string MemberID { get; set; }
+        public Nullable<System.DateTime> OrderDate { get; set; }
+        public Nullable<double> UsedMark { get; set; }
+    
         public virtual Member Member { get; set; }
+        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
+        public virtual ICollection<SalePoint> SalePoints { get; set; }
     }
 }

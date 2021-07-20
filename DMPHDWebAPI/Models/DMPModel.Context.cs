@@ -25,15 +25,18 @@ namespace DMPHDWebAPI.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public DbSet<BasePrice> BasePrices { get; set; }
-        public DbSet<BillDetail> BillDetails { get; set; }
-        public DbSet<Bill> Bills { get; set; }
-        public DbSet<GPAMember> GPAMembers { get; set; }
+        public DbSet<Config> Configs { get; set; }
+        public DbSet<MemberPoint> MemberPoints { get; set; }
         public DbSet<Member> Members { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<Position> Positions { get; set; }
+        public DbSet<Price> Prices { get; set; }
         public DbSet<ProductDetail> ProductDetails { get; set; }
         public DbSet<Product> Products { get; set; }
-        public DbSet<Rank> Ranks { get; set; }
-        public DbSet<SalesPoint> SalesPoints { get; set; }
-        public DbSet<SellPrice> SellPrices { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<SalePoint> SalePoints { get; set; }
+        public DbSet<UserFunction> UserFunctions { get; set; }
+        public DbSet<UserRequest> UserRequests { get; set; }
     }
 }

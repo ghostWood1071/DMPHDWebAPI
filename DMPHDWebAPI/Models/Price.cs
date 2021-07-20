@@ -12,14 +12,15 @@ namespace DMPHDWebAPI.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ProductDetail
+    public partial class Price
     {
-        public int ProductDetailID { get; set; }
-        public string MemberID { get; set; }
-        public int Quantity { get; set; }
+        public int BasePriceID { get; set; }
         public string ProductID { get; set; }
+        public Nullable<System.DateTime> EndDate { get; set; }
+        public Nullable<System.DateTime> BeginDate { get; set; }
+        public Nullable<double> BasePrice { get; set; }
+        public Nullable<double> OriginPrice { get; set; }
     
-        public virtual Member Member { get; set; }
         public virtual Product Product { get; set; }
     }
 }
