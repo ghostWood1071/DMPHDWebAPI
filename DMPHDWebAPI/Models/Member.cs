@@ -38,6 +38,8 @@ namespace DMPHDWebAPI.Models
         public Nullable<int> PositionID { get; set; }
         public Nullable<bool> IsActive { get; set; }
         public int RoleID { get; set; }
+        public Nullable<int> DistrictID { get; set; }
+        public Nullable<int> ProvinceID { get; set; }
     
         public virtual ICollection<MemberPoint> MemberPoints { get; set; }
         public virtual Position Position { get; set; }
@@ -45,5 +47,7 @@ namespace DMPHDWebAPI.Models
         public virtual ICollection<Order> Orders { get; set; }
         public virtual ICollection<ProductDetail> ProductDetails { get; set; }
         public virtual ICollection<SalePoint> SalePoints { get; set; }
+        public virtual District District { get; set; }
+        public virtual Province Province { get; set; }
     }
 }

@@ -38,5 +38,7 @@ namespace DMPHDWebAPI.Models
         public DbSet<SalePoint> SalePoints { get; set; }
         public DbSet<UserFunction> UserFunctions { get; set; }
         public DbSet<UserRequest> UserRequests { get; set; }
+        public DbSet<District> Districts { get; set; }
+        public DbSet<Province> Provinces { get; set; }
     }
 }

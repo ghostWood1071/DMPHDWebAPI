@@ -12,16 +12,20 @@ namespace DMPHDWebAPI.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Price
+    public partial class District
     {
-        public string ProductID { get; set; }
-        public Nullable<System.DateTime> EndDate { get; set; }
-        public Nullable<System.DateTime> BeginDate { get; set; }
-        public Nullable<double> BasePrice { get; set; }
-        public Nullable<double> OriginPrice { get; set; }
-        public int PriceID { get; set; }
-        public Nullable<double> SalePoint { get; set; }
+        public District()
+        {
+            this.Members = new HashSet<Member>();
+        }
     
-        public virtual Product Product { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Type { get; set; }
+        public int ProvinceId { get; set; }
+        public Nullable<int> SortOrder { get; set; }
+    
+        public virtual Province Province { get; set; }
+        public virtual ICollection<Member> Members { get; set; }
     }
 }

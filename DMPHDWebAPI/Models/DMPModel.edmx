@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="DMPModels.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="DMPModels.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Configs">
           <Key>
             <PropertyRef Name="ParameterID" />
@@ -12,6 +12,16 @@
           <Property Name="ParameterID" Type="char" MaxLength="50" Nullable="false" />
           <Property Name="Value" Type="nvarchar" MaxLength="100" />
           <Property Name="Description" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="District">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="250" />
+          <Property Name="Type" Type="nvarchar" MaxLength="50" />
+          <Property Name="ProvinceId" Type="int" Nullable="false" />
+          <Property Name="SortOrder" Type="int" />
         </EntityType>
         <EntityType Name="MemberPoints">
           <Key>
@@ -48,6 +58,8 @@
           <Property Name="PositionID" Type="int" />
           <Property Name="IsActive" Type="bit" />
           <Property Name="RoleID" Type="int" Nullable="false" />
+          <Property Name="DistrictID" Type="int" />
+          <Property Name="ProvinceID" Type="int" />
         </EntityType>
         <EntityType Name="OrderDetails">
           <Key>
@@ -81,14 +93,15 @@
         </EntityType>
         <EntityType Name="Prices">
           <Key>
-            <PropertyRef Name="BasePriceID" />
+            <PropertyRef Name="PriceID" />
           </Key>
-          <Property Name="BasePriceID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PriceID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ProductID" Type="char" MaxLength="10" Nullable="false" />
           <Property Name="EndDate" Type="datetime" />
           <Property Name="BeginDate" Type="datetime" />
           <Property Name="BasePrice" Type="float" />
           <Property Name="OriginPrice" Type="float" />
+          <Property Name="SalePoint" Type="float" />
         </EntityType>
         <EntityType Name="ProductDetails">
           <Key>
@@ -107,6 +120,17 @@
           <Property Name="ProductID" Type="char" MaxLength="10" Nullable="false" />
           <Property Name="ProductName" Type="nvarchar" MaxLength="50" />
           <Property Name="Description" Type="nvarchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="Province">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="Type" Type="nvarchar" MaxLength="20" />
+          <Property Name="TelephoneCode" Type="int" />
+          <Property Name="ZipCode" Type="nvarchar" MaxLength="20" />
+          <Property Name="SortOrder" Type="int" />
         </EntityType>
         <EntityType Name="Roles">
           <Key>
@@ -151,6 +175,18 @@
           <Property Name="RequestTime" Type="datetime" Nullable="false" />
           <Property Name="IsHandled" Type="bit" Nullable="false" />
         </EntityType>
+        <Association Name="FK_District_Province">
+          <End Role="Province" Type="Self.Province" Multiplicity="1" />
+          <End Role="District" Type="Self.District" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Province">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="District">
+              <PropertyRef Name="ProvinceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_MemberPoints_Members">
           <End Role="Members" Type="Self.Members" Multiplicity="1" />
           <End Role="MemberPoints" Type="Self.MemberPoints" Multiplicity="*" />
@@ -163,6 +199,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Members_District">
+          <End Role="District" Type="Self.District" Multiplicity="0..1" />
+          <End Role="Members" Type="Self.Members" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="District">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Members">
+              <PropertyRef Name="DistrictID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Members_Positions">
           <End Role="Positions" Type="Self.Positions" Multiplicity="0..1" />
           <End Role="Members" Type="Self.Members" Multiplicity="*" />
@@ -172,6 +220,18 @@
             </Principal>
             <Dependent Role="Members">
               <PropertyRef Name="PositionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Members_Province">
+          <End Role="Province" Type="Self.Province" Multiplicity="0..1" />
+          <End Role="Members" Type="Self.Members" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Province">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Members">
+              <PropertyRef Name="ProvinceID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -309,6 +369,7 @@
         </Association>
         <EntityContainer Name="DMPModelsStoreContainer">
           <EntitySet Name="Configs" EntityType="Self.Configs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="District" EntityType="Self.District" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MemberPoints" EntityType="Self.MemberPoints" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Members" EntityType="Self.Members" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrderDetails" EntityType="Self.OrderDetails" Schema="dbo" store:Type="Tables" />
@@ -317,17 +378,30 @@
           <EntitySet Name="Prices" EntityType="Self.Prices" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductDetails" EntityType="Self.ProductDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Province" EntityType="Self.Province" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SalePoints" EntityType="Self.SalePoints" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserFunctions" EntityType="Self.UserFunctions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserPermissions" EntityType="Self.UserPermissions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserRequests" EntityType="Self.UserRequests" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_District_Province" Association="Self.FK_District_Province">
+            <End Role="Province" EntitySet="Province" />
+            <End Role="District" EntitySet="District" />
+          </AssociationSet>
           <AssociationSet Name="FK_MemberPoints_Members" Association="Self.FK_MemberPoints_Members">
             <End Role="Members" EntitySet="Members" />
             <End Role="MemberPoints" EntitySet="MemberPoints" />
           </AssociationSet>
+          <AssociationSet Name="FK_Members_District" Association="Self.FK_Members_District">
+            <End Role="District" EntitySet="District" />
+            <End Role="Members" EntitySet="Members" />
+          </AssociationSet>
           <AssociationSet Name="FK_Members_Positions" Association="Self.FK_Members_Positions">
             <End Role="Positions" EntitySet="Positions" />
+            <End Role="Members" EntitySet="Members" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Members_Province" Association="Self.FK_Members_Province">
+            <End Role="Province" EntitySet="Province" />
             <End Role="Members" EntitySet="Members" />
           </AssociationSet>
           <AssociationSet Name="FK_Members_Roles" Association="Self.FK_Members_Roles">
@@ -375,8 +449,7 @@
             <End Role="UserPermissions" EntitySet="UserPermissions" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DMPModels" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -430,6 +503,10 @@
           <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Members" FromRole="Members" ToRole="Orders" />
           <NavigationProperty Name="ProductDetails" Relationship="Self.FK_ProductDetails_Members" FromRole="Members" ToRole="ProductDetails" />
           <NavigationProperty Name="SalePoints" Relationship="Self.FK_SalePoints_Members" FromRole="Members" ToRole="SalePoints" />
+          <Property Name="DistrictID" Type="Int32" />
+          <Property Name="ProvinceID" Type="Int32" />
+          <NavigationProperty Name="District" Relationship="DMPModels.FK_Members_District" FromRole="Member" ToRole="District" />
+          <NavigationProperty Name="Province" Relationship="DMPModels.FK_Members_Province" FromRole="Member" ToRole="Province" />
         </EntityType>
         <EntityType Name="OrderDetail">
           <Key>
@@ -469,15 +546,16 @@
         </EntityType>
         <EntityType Name="Price">
           <Key>
-            <PropertyRef Name="BasePriceID" />
+            <PropertyRef Name="PriceID" />
           </Key>
-          <Property Name="BasePriceID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ProductID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
           <Property Name="EndDate" Type="DateTime" Precision="3" />
           <Property Name="BeginDate" Type="DateTime" Precision="3" />
           <Property Name="BasePrice" Type="Double" />
           <Property Name="OriginPrice" Type="Double" />
           <NavigationProperty Name="Product" Relationship="Self.FK_Prices_Products" FromRole="Prices" ToRole="Products" />
+          <Property Name="PriceID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SalePoint" Type="Double" />
         </EntityType>
         <EntityType Name="ProductDetail">
           <Key>
@@ -740,7 +818,82 @@
             <End Role="Roles" EntitySet="Roles" />
             <End Role="UserFunctions" EntitySet="UserFunctions" />
           </AssociationSet>
+          <EntitySet Name="Districts" EntityType="DMPModels.District" />
+          <EntitySet Name="Provinces" EntityType="DMPModels.Province" />
+          <AssociationSet Name="FK_District_Province" Association="DMPModels.FK_District_Province">
+            <End Role="Province" EntitySet="Provinces" />
+            <End Role="District" EntitySet="Districts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Members_District" Association="DMPModels.FK_Members_District">
+            <End Role="District" EntitySet="Districts" />
+            <End Role="Member" EntitySet="Members" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Members_Province" Association="DMPModels.FK_Members_Province">
+            <End Role="Province" EntitySet="Provinces" />
+            <End Role="Member" EntitySet="Members" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="District">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProvinceId" Type="Int32" Nullable="false" />
+          <Property Name="SortOrder" Type="Int32" />
+          <NavigationProperty Name="Province" Relationship="DMPModels.FK_District_Province" FromRole="District" ToRole="Province" />
+          <NavigationProperty Name="Members" Relationship="DMPModels.FK_Members_District" FromRole="District" ToRole="Member" />
+        </EntityType>
+        <EntityType Name="Province">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="TelephoneCode" Type="Int32" />
+          <Property Name="ZipCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="SortOrder" Type="Int32" />
+          <NavigationProperty Name="Districts" Relationship="DMPModels.FK_District_Province" FromRole="Province" ToRole="District" />
+          <NavigationProperty Name="Members" Relationship="DMPModels.FK_Members_Province" FromRole="Province" ToRole="Member" />
+        </EntityType>
+        <Association Name="FK_District_Province">
+          <End Type="DMPModels.Province" Role="Province" Multiplicity="1" />
+          <End Type="DMPModels.District" Role="District" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Province">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="District">
+              <PropertyRef Name="ProvinceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Members_District">
+          <End Type="DMPModels.District" Role="District" Multiplicity="0..1" />
+          <End Type="DMPModels.Member" Role="Member" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="District">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Member">
+              <PropertyRef Name="DistrictID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Members_Province">
+          <End Type="DMPModels.Province" Role="Province" Multiplicity="0..1" />
+          <End Type="DMPModels.Member" Role="Member" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Province">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Member">
+              <PropertyRef Name="ProvinceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -773,6 +926,8 @@
           <EntitySetMapping Name="Members">
             <EntityTypeMapping TypeName="DMPModels.Member">
               <MappingFragment StoreEntitySet="Members">
+                <ScalarProperty Name="ProvinceID" ColumnName="ProvinceID" />
+                <ScalarProperty Name="DistrictID" ColumnName="DistrictID" />
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
                 <ScalarProperty Name="FullName" ColumnName="FullName" />
                 <ScalarProperty Name="Avatar" ColumnName="Avatar" />
@@ -827,7 +982,8 @@
           <EntitySetMapping Name="Prices">
             <EntityTypeMapping TypeName="DMPModels.Price">
               <MappingFragment StoreEntitySet="Prices">
-                <ScalarProperty Name="BasePriceID" ColumnName="BasePriceID" />
+                <ScalarProperty Name="SalePoint" ColumnName="SalePoint" />
+                <ScalarProperty Name="PriceID" ColumnName="PriceID" />
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
                 <ScalarProperty Name="EndDate" ColumnName="EndDate" />
                 <ScalarProperty Name="BeginDate" ColumnName="BeginDate" />
@@ -902,6 +1058,29 @@
               <ScalarProperty Name="FunctionID" ColumnName="FunctionID" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="Districts">
+            <EntityTypeMapping TypeName="DMPModels.District">
+              <MappingFragment StoreEntitySet="District">
+                <ScalarProperty Name="SortOrder" ColumnName="SortOrder" />
+                <ScalarProperty Name="ProvinceId" ColumnName="ProvinceId" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Provinces">
+            <EntityTypeMapping TypeName="DMPModels.Province">
+              <MappingFragment StoreEntitySet="Province">
+                <ScalarProperty Name="SortOrder" ColumnName="SortOrder" />
+                <ScalarProperty Name="ZipCode" ColumnName="ZipCode" />
+                <ScalarProperty Name="TelephoneCode" ColumnName="TelephoneCode" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

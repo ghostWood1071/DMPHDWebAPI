@@ -30,6 +30,11 @@
         <AssociationConnector Association="DMPModels.FK_Prices_Products" ManuallyRouted="false" />
         <AssociationConnector Association="DMPModels.FK_ProductDetails_Products" ManuallyRouted="false" />
         <AssociationConnector Association="DMPModels.UserPermissions" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="DMPModels.District" Width="1.5" PointX="3" PointY="11.125" />
+        <EntityTypeShape EntityType="DMPModels.Province" Width="1.5" PointX="0.75" PointY="8.625" />
+        <AssociationConnector Association="DMPModels.FK_District_Province" />
+        <AssociationConnector Association="DMPModels.FK_Members_District" />
+        <AssociationConnector Association="DMPModels.FK_Members_Province" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
