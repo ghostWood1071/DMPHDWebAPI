@@ -35,6 +35,9 @@
         <AssociationConnector Association="DMPModels.FK_District_Province" />
         <AssociationConnector Association="DMPModels.FK_Members_District" />
         <AssociationConnector Association="DMPModels.FK_Members_Province" />
+        <EntityTypeShape EntityType="DMPModels.Notify" Width="1.5" PointX="5.25" PointY="16.125" />
+        <AssociationConnector Association="DMPModels.FK_Notifies_Members" />
+        <AssociationConnector Association="DMPModels.FK_Notifies_Members1" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

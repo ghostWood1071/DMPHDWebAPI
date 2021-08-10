@@ -61,6 +61,18 @@
           <Property Name="DistrictID" Type="int" />
           <Property Name="ProvinceID" Type="int" />
         </EntityType>
+        <EntityType Name="Notifies">
+          <Key>
+            <PropertyRef Name="NotifyID" />
+          </Key>
+          <Property Name="NotifyID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="100" />
+          <Property Name="NotifyContent" Type="nvarchar" MaxLength="500" />
+          <Property Name="LastUpdated" Type="datetime" />
+          <Property Name="Sender" Type="char" MaxLength="8" />
+          <Property Name="Receiver" Type="char" MaxLength="8" />
+          <Property Name="Status" Type="bit" />
+        </EntityType>
         <EntityType Name="OrderDetails">
           <Key>
             <PropertyRef Name="OrderDetailID" />
@@ -247,6 +259,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Notifies_Members">
+          <End Role="Members" Type="Self.Members" Multiplicity="0..1" />
+          <End Role="Notifies" Type="Self.Notifies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Members">
+              <PropertyRef Name="MemberID" />
+            </Principal>
+            <Dependent Role="Notifies">
+              <PropertyRef Name="Sender" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Notifies_Members1">
+          <End Role="Members" Type="Self.Members" Multiplicity="0..1" />
+          <End Role="Notifies" Type="Self.Notifies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Members">
+              <PropertyRef Name="MemberID" />
+            </Principal>
+            <Dependent Role="Notifies">
+              <PropertyRef Name="Receiver" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_OrderDetails_Orders">
           <End Role="Orders" Type="Self.Orders" Multiplicity="1" />
           <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
@@ -367,11 +403,235 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="AccumulationMark" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MemberID" Type="char" Mode="In" />
+          <Parameter Name="Month" Type="int" Mode="In" />
+          <Parameter Name="Year" Type="int" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="MemberID" Type="char" MaxLength="8" />
+                <Property Name="AccmulationM" Type="float" />
+                <Property Name="ImmediateM" Type="float" />
+                <Property Name="MediateM" Type="float" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
+        <Function Name="CalMemberPointByTime" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MemberID" Type="char" Mode="In" />
+          <Parameter Name="Month" Type="int" Mode="In" />
+          <Parameter Name="Year" Type="int" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="MemberID" Type="char" MaxLength="8" />
+                <Property Name="PersonalPoint" Type="float" />
+                <Property Name="GroupPoint" Type="float" />
+                <Property Name="NetPoint" Type="float" />
+                <Property Name="LowerPoint" Type="float" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
+        <Function Name="DeleteMember" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MemberID" Type="char" Mode="In" />
+        </Function>
+        <Function Name="DeleteNotify" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="NotifyID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="DeleteOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OrderID" Type="char" Mode="In" />
+        </Function>
+        <Function Name="DeletePosition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PositionID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="DeletePrice" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ProductID" Type="char" Mode="In" />
+        </Function>
+        <Function Name="DeleteProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ProductID" Type="char" Mode="In" />
+        </Function>
+        <Function Name="DeleteUserRequest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="RequestID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetLowerMembers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MemberID" Type="char" Mode="In" />
+        </Function>
+        <Function Name="GetMemberByID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MemberID" Type="char" Mode="In" />
+        </Function>
+        <Function Name="GetMembers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetNotifies" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MemberID" Type="char" Mode="In" />
+        </Function>
+        <Function Name="GetNotifyByID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="NotifyID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetOrderByID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OrderID" Type="char" Mode="In" />
+        </Function>
+        <Function Name="GetOrders" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetPositionByID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PositionID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetPositions" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetPriceByID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ProductID" Type="char" Mode="In" />
+        </Function>
+        <Function Name="GetPrices" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetProducts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MemberID" Type="char" Mode="In" />
+        </Function>
+        <Function Name="GetProductsByID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MemberID" Type="char" Mode="In" />
+          <Parameter Name="ProductID" Type="char" Mode="In" />
+        </Function>
+        <Function Name="GetUserRequestByID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="RequestID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetUserRequests" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="ImmediateMark" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int">
+          <Parameter Name="MemberID" Type="char" Mode="In" />
+          <Parameter Name="Month" Type="int" Mode="In" />
+          <Parameter Name="Year" Type="int" Mode="In" />
+        </Function>
+        <Function Name="InserProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MemberID" Type="char" Mode="In" />
+          <Parameter Name="ProductName" Type="nvarchar" Mode="In" />
+          <Parameter Name="OriginPrice" Type="float" Mode="In" />
+          <Parameter Name="BasePrice" Type="float" Mode="In" />
+          <Parameter Name="SalePoint" Type="float" Mode="In" />
+          <Parameter Name="Quantity" Type="int" Mode="In" />
+          <Parameter Name="Description" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="InsertMember" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MemberID" Type="char" Mode="In" />
+          <Parameter Name="FullName" Type="nvarchar" Mode="In" />
+          <Parameter Name="ReferralID" Type="char" Mode="In" />
+          <Parameter Name="Gender" Type="bit" Mode="In" />
+          <Parameter Name="Birthday" Type="datetime" Mode="In" />
+          <Parameter Name="Address" Type="nvarchar" Mode="In" />
+          <Parameter Name="Email" Type="char" Mode="In" />
+          <Parameter Name="Phone" Type="char" Mode="In" />
+          <Parameter Name="IDCard" Type="char" Mode="In" />
+          <Parameter Name="IDCard_PlaceIssue" Type="nvarchar" Mode="In" />
+          <Parameter Name="IDCard_DateIssue" Type="datetime" Mode="In" />
+          <Parameter Name="Password" Type="char" Mode="In" />
+          <Parameter Name="PositionID" Type="int" Mode="In" />
+          <Parameter Name="RoleID" Type="int" Mode="In" />
+          <Parameter Name="IsActive" Type="bit" Mode="In" />
+          <Parameter Name="Avatar" Type="char" Mode="In" />
+        </Function>
+        <Function Name="InsertNotify" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Title" Type="nvarchar" Mode="In" />
+          <Parameter Name="Content" Type="nvarchar" Mode="In" />
+          <Parameter Name="Sender" Type="char" Mode="In" />
+          <Parameter Name="Receiver" Type="char" Mode="In" />
+          <Parameter Name="Status" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="InsertOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MemberID" Type="char" Mode="In" />
+          <Parameter Name="OrderDate" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="InsertPosition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PositionName" Type="nvarchar" Mode="In" />
+          <Parameter Name="Discount" Type="float" Mode="In" />
+          <Parameter Name="Description" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="InsertPrice" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ProductID" Type="char" Mode="In" />
+          <Parameter Name="EndDate" Type="datetime" Mode="In" />
+          <Parameter Name="BeginDate" Type="datetime" Mode="In" />
+          <Parameter Name="BasePrice" Type="float" Mode="In" />
+          <Parameter Name="OriginPrice" Type="float" Mode="In" />
+          <Parameter Name="SaleProint" Type="float" Mode="In" />
+        </Function>
+        <Function Name="InsertUserRequest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Email" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="ReportMemberQuantityByLevel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MemberID" Type="char" Mode="In" />
+        </Function>
+        <Function Name="ReportMemberQuantityByPosition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MemberID" Type="char" Mode="In" />
+        </Function>
+        <Function Name="ReportTotalOrderByYear" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Year" Type="int" Mode="In" />
+          <Parameter Name="MemberID" Type="char" Mode="In" />
+        </Function>
+        <Function Name="SumOfOrderMark" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="float">
+          <Parameter Name="MemberID" Type="char" Mode="In" />
+          <Parameter Name="Month" Type="int" Mode="In" />
+          <Parameter Name="Year" Type="int" Mode="In" />
+        </Function>
+        <Function Name="UpdateMember" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MemberID" Type="char" Mode="In" />
+          <Parameter Name="FullName" Type="nvarchar" Mode="In" />
+          <Parameter Name="ReferralID" Type="char" Mode="In" />
+          <Parameter Name="Gender" Type="bit" Mode="In" />
+          <Parameter Name="Birthday" Type="datetime" Mode="In" />
+          <Parameter Name="Address" Type="nvarchar" Mode="In" />
+          <Parameter Name="Email" Type="char" Mode="In" />
+          <Parameter Name="Phone" Type="char" Mode="In" />
+          <Parameter Name="IDCard" Type="char" Mode="In" />
+          <Parameter Name="IDCard_PlaceIssue" Type="nvarchar" Mode="In" />
+          <Parameter Name="IDCard_DateIssue" Type="datetime" Mode="In" />
+          <Parameter Name="Password" Type="char" Mode="In" />
+          <Parameter Name="PositionID" Type="int" Mode="In" />
+          <Parameter Name="RoleID" Type="int" Mode="In" />
+          <Parameter Name="IsActive" Type="bit" Mode="In" />
+          <Parameter Name="Avatar" Type="char" Mode="In" />
+        </Function>
+        <Function Name="UpdateNotify" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="NotifyID" Type="int" Mode="In" />
+          <Parameter Name="Title" Type="nvarchar" Mode="In" />
+          <Parameter Name="Content" Type="nvarchar" Mode="In" />
+          <Parameter Name="Sender" Type="char" Mode="In" />
+          <Parameter Name="Receiver" Type="char" Mode="In" />
+          <Parameter Name="Status" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="UpdateOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OrderID" Type="char" Mode="In" />
+          <Parameter Name="MemberID" Type="char" Mode="In" />
+          <Parameter Name="OrderDate" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="UpdatePosition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PositionID" Type="int" Mode="In" />
+          <Parameter Name="PositionName" Type="nvarchar" Mode="In" />
+          <Parameter Name="Discount" Type="float" Mode="In" />
+          <Parameter Name="Description" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="UpdatePrice" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ProductID" Type="char" Mode="In" />
+          <Parameter Name="EndDate" Type="datetime" Mode="In" />
+          <Parameter Name="BeginDate" Type="datetime" Mode="In" />
+          <Parameter Name="BasePrice" Type="float" Mode="In" />
+          <Parameter Name="OriginPrice" Type="float" Mode="In" />
+          <Parameter Name="SaleProint" Type="float" Mode="In" />
+        </Function>
+        <Function Name="UpdateProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ProductID" Type="char" Mode="In" />
+          <Parameter Name="ProductName" Type="nvarchar" Mode="In" />
+          <Parameter Name="OriginPrice" Type="float" Mode="In" />
+          <Parameter Name="BasePrice" Type="float" Mode="In" />
+          <Parameter Name="SalePoint" Type="float" Mode="In" />
+          <Parameter Name="Quantity" Type="int" Mode="In" />
+          <Parameter Name="Description" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="UpdateUserRequest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="RequestID" Type="int" Mode="In" />
+          <Parameter Name="Code" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="Email" Type="varchar" Mode="In" />
+          <Parameter Name="RequestTime" Type="datetime" Mode="In" />
+          <Parameter Name="IsHandled" Type="bit" Mode="In" />
+        </Function>
         <EntityContainer Name="DMPModelsStoreContainer">
           <EntitySet Name="Configs" EntityType="Self.Configs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="District" EntityType="Self.District" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MemberPoints" EntityType="Self.MemberPoints" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Members" EntityType="Self.Members" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Notifies" EntityType="Self.Notifies" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrderDetails" EntityType="Self.OrderDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Positions" EntityType="Self.Positions" Schema="dbo" store:Type="Tables" />
@@ -407,6 +667,14 @@
           <AssociationSet Name="FK_Members_Roles" Association="Self.FK_Members_Roles">
             <End Role="Roles" EntitySet="Roles" />
             <End Role="Members" EntitySet="Members" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Notifies_Members" Association="Self.FK_Notifies_Members">
+            <End Role="Members" EntitySet="Members" />
+            <End Role="Notifies" EntitySet="Notifies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Notifies_Members1" Association="Self.FK_Notifies_Members1">
+            <End Role="Members" EntitySet="Members" />
+            <End Role="Notifies" EntitySet="Notifies" />
           </AssociationSet>
           <AssociationSet Name="FK_OrderDetails_Orders" Association="Self.FK_OrderDetails_Orders">
             <End Role="Orders" EntitySet="Orders" />
@@ -507,6 +775,8 @@
           <Property Name="ProvinceID" Type="Int32" />
           <NavigationProperty Name="District" Relationship="DMPModels.FK_Members_District" FromRole="Member" ToRole="District" />
           <NavigationProperty Name="Province" Relationship="DMPModels.FK_Members_Province" FromRole="Member" ToRole="Province" />
+          <NavigationProperty Name="Notifies" Relationship="DMPModels.FK_Notifies_Members" FromRole="Member" ToRole="Notify" />
+          <NavigationProperty Name="Notifies1" Relationship="DMPModels.FK_Notifies_Members1" FromRole="Member" ToRole="Notify" />
         </EntityType>
         <EntityType Name="OrderDetail">
           <Key>
@@ -832,6 +1102,207 @@
             <End Role="Province" EntitySet="Provinces" />
             <End Role="Member" EntitySet="Members" />
           </AssociationSet>
+          <EntitySet Name="Notifies" EntityType="DMPModels.Notify" />
+          <AssociationSet Name="FK_Notifies_Members" Association="DMPModels.FK_Notifies_Members">
+            <End Role="Member" EntitySet="Members" />
+            <End Role="Notify" EntitySet="Notifies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Notifies_Members1" Association="DMPModels.FK_Notifies_Members1">
+            <End Role="Member" EntitySet="Members" />
+            <End Role="Notify" EntitySet="Notifies" />
+          </AssociationSet>
+          <FunctionImport Name="AccumulationMark" IsComposable="true" ReturnType="Collection(DMPModels.AccumulationMark_Result)">
+            <Parameter Name="MemberID" Mode="In" Type="String" />
+            <Parameter Name="Month" Mode="In" Type="Int32" />
+            <Parameter Name="Year" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="CalMemberPointByTime" IsComposable="true" ReturnType="Collection(DMPModels.CalMemberPointByTime_Result)">
+            <Parameter Name="MemberID" Mode="In" Type="String" />
+            <Parameter Name="Month" Mode="In" Type="Int32" />
+            <Parameter Name="Year" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="DeleteMember">
+          <Parameter Name="MemberID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="DeleteNotify">
+          <Parameter Name="NotifyID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="DeletePosition">
+          <Parameter Name="PositionID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="DeletePrice">
+          <Parameter Name="ProductID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="DeleteProduct">
+          <Parameter Name="ProductID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="DeleteUserRequest">
+          <Parameter Name="RequestID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetLowerMembers" ReturnType="Collection(DMPModels.GetLowerMembers_Result)">
+          <Parameter Name="MemberID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetMemberByID" ReturnType="Collection(DMPModels.GetMemberByID_Result)">
+          <Parameter Name="MemberID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetMembers" ReturnType="Collection(DMPModels.GetMembers_Result)" />
+          <FunctionImport Name="GetNotifies" ReturnType="Collection(DMPModels.GetNotifies_Result)">
+          <Parameter Name="MemberID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetNotifyByID" ReturnType="Collection(DMPModels.GetNotifyByID_Result)">
+          <Parameter Name="NotifyID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetPositionByID" ReturnType="Collection(DMPModels.GetPositionByID_Result)">
+          <Parameter Name="PositionID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetPositions" ReturnType="Collection(DMPModels.GetPositions_Result)" />
+          <FunctionImport Name="GetPriceByID" ReturnType="Collection(DMPModels.GetPriceByID_Result)">
+          <Parameter Name="ProductID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetPrices" ReturnType="Collection(DMPModels.GetPrices_Result)" />
+          <FunctionImport Name="GetProducts" ReturnType="Collection(DMPModels.GetProducts_Result)">
+          <Parameter Name="MemberID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetProductsByID" ReturnType="Collection(DMPModels.GetProductsByID_Result)">
+            <Parameter Name="MemberID" Mode="In" Type="String" />
+            <Parameter Name="ProductID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetUserRequestByID" ReturnType="Collection(DMPModels.GetUserRequestByID_Result)">
+          <Parameter Name="RequestID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetUserRequests" ReturnType="Collection(DMPModels.GetUserRequests_Result)" />
+          <FunctionImport Name="InserProduct">
+            <Parameter Name="MemberID" Mode="In" Type="String" />
+            <Parameter Name="ProductName" Mode="In" Type="String" />
+            <Parameter Name="OriginPrice" Mode="In" Type="Double" />
+            <Parameter Name="BasePrice" Mode="In" Type="Double" />
+            <Parameter Name="SalePoint" Mode="In" Type="Double" />
+            <Parameter Name="Quantity" Mode="In" Type="Int32" />
+            <Parameter Name="Description" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="InsertMember">
+            <Parameter Name="MemberID" Mode="In" Type="String" />
+            <Parameter Name="FullName" Mode="In" Type="String" />
+            <Parameter Name="ReferralID" Mode="In" Type="String" />
+            <Parameter Name="Gender" Mode="In" Type="Boolean" />
+            <Parameter Name="Birthday" Mode="In" Type="DateTime" />
+            <Parameter Name="Address" Mode="In" Type="String" />
+            <Parameter Name="Email" Mode="In" Type="String" />
+            <Parameter Name="Phone" Mode="In" Type="String" />
+            <Parameter Name="IDCard" Mode="In" Type="String" />
+            <Parameter Name="IDCard_PlaceIssue" Mode="In" Type="String" />
+            <Parameter Name="IDCard_DateIssue" Mode="In" Type="DateTime" />
+            <Parameter Name="Password" Mode="In" Type="String" />
+            <Parameter Name="PositionID" Mode="In" Type="Int32" />
+            <Parameter Name="RoleID" Mode="In" Type="Int32" />
+            <Parameter Name="IsActive" Mode="In" Type="Boolean" />
+            <Parameter Name="Avatar" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="InsertNotify">
+            <Parameter Name="Title" Mode="In" Type="String" />
+            <Parameter Name="Content" Mode="In" Type="String" />
+            <Parameter Name="Sender" Mode="In" Type="String" />
+            <Parameter Name="Receiver" Mode="In" Type="String" />
+            <Parameter Name="Status" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="InsertPosition">
+            <Parameter Name="PositionName" Mode="In" Type="String" />
+            <Parameter Name="Discount" Mode="In" Type="Double" />
+            <Parameter Name="Description" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="InsertPrice">
+            <Parameter Name="ProductID" Mode="In" Type="String" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+            <Parameter Name="BeginDate" Mode="In" Type="DateTime" />
+            <Parameter Name="BasePrice" Mode="In" Type="Double" />
+            <Parameter Name="OriginPrice" Mode="In" Type="Double" />
+            <Parameter Name="SaleProint" Mode="In" Type="Double" />
+          </FunctionImport>
+          <FunctionImport Name="InsertUserRequest">
+          <Parameter Name="Email" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ReportMemberQuantityByLevel" ReturnType="Collection(DMPModels.ReportMemberQuantityByLevel_Result)">
+          <Parameter Name="MemberID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ReportMemberQuantityByPosition" ReturnType="Collection(DMPModels.ReportMemberQuantityByPosition_Result)">
+          <Parameter Name="MemberID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ReportTotalOrderByYear" ReturnType="Collection(Int32)">
+            <Parameter Name="Year" Mode="In" Type="Int32" />
+            <Parameter Name="MemberID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="UpdateMember">
+            <Parameter Name="MemberID" Mode="In" Type="String" />
+            <Parameter Name="FullName" Mode="In" Type="String" />
+            <Parameter Name="ReferralID" Mode="In" Type="String" />
+            <Parameter Name="Gender" Mode="In" Type="Boolean" />
+            <Parameter Name="Birthday" Mode="In" Type="DateTime" />
+            <Parameter Name="Address" Mode="In" Type="String" />
+            <Parameter Name="Email" Mode="In" Type="String" />
+            <Parameter Name="Phone" Mode="In" Type="String" />
+            <Parameter Name="IDCard" Mode="In" Type="String" />
+            <Parameter Name="IDCard_PlaceIssue" Mode="In" Type="String" />
+            <Parameter Name="IDCard_DateIssue" Mode="In" Type="DateTime" />
+            <Parameter Name="Password" Mode="In" Type="String" />
+            <Parameter Name="PositionID" Mode="In" Type="Int32" />
+            <Parameter Name="RoleID" Mode="In" Type="Int32" />
+            <Parameter Name="IsActive" Mode="In" Type="Boolean" />
+            <Parameter Name="Avatar" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="UpdateNotify">
+            <Parameter Name="NotifyID" Mode="In" Type="Int32" />
+            <Parameter Name="Title" Mode="In" Type="String" />
+            <Parameter Name="Content" Mode="In" Type="String" />
+            <Parameter Name="Sender" Mode="In" Type="String" />
+            <Parameter Name="Receiver" Mode="In" Type="String" />
+            <Parameter Name="Status" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="UpdatePosition">
+            <Parameter Name="PositionID" Mode="In" Type="Int32" />
+            <Parameter Name="PositionName" Mode="In" Type="String" />
+            <Parameter Name="Discount" Mode="In" Type="Double" />
+            <Parameter Name="Description" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="UpdatePrice">
+            <Parameter Name="ProductID" Mode="In" Type="String" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+            <Parameter Name="BeginDate" Mode="In" Type="DateTime" />
+            <Parameter Name="BasePrice" Mode="In" Type="Double" />
+            <Parameter Name="OriginPrice" Mode="In" Type="Double" />
+            <Parameter Name="SaleProint" Mode="In" Type="Double" />
+          </FunctionImport>
+          <FunctionImport Name="UpdateProduct">
+            <Parameter Name="ProductID" Mode="In" Type="String" />
+            <Parameter Name="ProductName" Mode="In" Type="String" />
+            <Parameter Name="OriginPrice" Mode="In" Type="Double" />
+            <Parameter Name="BasePrice" Mode="In" Type="Double" />
+            <Parameter Name="SalePoint" Mode="In" Type="Double" />
+            <Parameter Name="Quantity" Mode="In" Type="Int32" />
+            <Parameter Name="Description" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="UpdateUserRequest">
+            <Parameter Name="RequestID" Mode="In" Type="Int32" />
+            <Parameter Name="Code" Mode="In" Type="Guid" />
+            <Parameter Name="Email" Mode="In" Type="String" />
+            <Parameter Name="RequestTime" Mode="In" Type="DateTime" />
+            <Parameter Name="IsHandled" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="DeleteOrder">
+          <Parameter Name="OrderID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetOrderByID" ReturnType="Collection(DMPModels.GetOrderByID_Result)">
+          <Parameter Name="OrderID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetOrders" ReturnType="Collection(DMPModels.GetOrders_Result)" />
+          <FunctionImport Name="InsertOrder">
+            <Parameter Name="MemberID" Mode="In" Type="String" />
+            <Parameter Name="OrderDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="UpdateOrder">
+            <Parameter Name="OrderID" Mode="In" Type="String" />
+            <Parameter Name="MemberID" Mode="In" Type="String" />
+            <Parameter Name="OrderDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="District">
           <Key>
@@ -894,6 +1365,217 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Notify">
+          <Key>
+            <PropertyRef Name="NotifyID" />
+          </Key>
+          <Property Name="NotifyID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="NotifyContent" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="LastUpdated" Type="DateTime" Precision="3" />
+          <Property Name="Sender" Type="String" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Name="Receiver" Type="String" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Name="Status" Type="Boolean" />
+          <NavigationProperty Name="Member" Relationship="DMPModels.FK_Notifies_Members" FromRole="Notify" ToRole="Member" />
+          <NavigationProperty Name="Member1" Relationship="DMPModels.FK_Notifies_Members1" FromRole="Notify" ToRole="Member" />
+        </EntityType>
+        <Association Name="FK_Notifies_Members">
+          <End Type="DMPModels.Member" Role="Member" Multiplicity="0..1" />
+          <End Type="DMPModels.Notify" Role="Notify" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="MemberID" />
+            </Principal>
+            <Dependent Role="Notify">
+              <PropertyRef Name="Sender" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Notifies_Members1">
+          <End Type="DMPModels.Member" Role="Member" Multiplicity="0..1" />
+          <End Type="DMPModels.Notify" Role="Notify" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="MemberID" />
+            </Principal>
+            <Dependent Role="Notify">
+              <PropertyRef Name="Receiver" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="AccumulationMark_Result">
+          <Property Type="String" Name="MemberID" Nullable="true" MaxLength="8" />
+          <Property Type="Double" Name="AccmulationM" Nullable="true" />
+          <Property Type="Double" Name="ImmediateM" Nullable="true" />
+          <Property Type="Double" Name="MediateM" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="CalMemberPointByTime_Result">
+          <Property Type="String" Name="MemberID" Nullable="true" MaxLength="8" />
+          <Property Type="Double" Name="PersonalPoint" Nullable="true" />
+          <Property Type="Double" Name="GroupPoint" Nullable="true" />
+          <Property Type="Double" Name="NetPoint" Nullable="true" />
+          <Property Type="Double" Name="LowerPoint" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="GetLowerMembers_Result">
+          <Property Type="String" Name="MemberID" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="FullName" Nullable="true" MaxLength="255" />
+          <Property Type="Boolean" Name="Gender" Nullable="true" />
+          <Property Type="DateTime" Name="Birthday" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="RoleID" Nullable="true" />
+          <Property Type="String" Name="Phone" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Address" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="ReferalID" Nullable="false" MaxLength="8" />
+        </ComplexType>
+        <ComplexType Name="GetMemberByID_Result">
+          <Property Type="String" Name="MemberID" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="FullName" Nullable="false" MaxLength="255" />
+          <Property Type="String" Name="ReferralID" Nullable="false" MaxLength="8" />
+          <Property Type="Boolean" Name="Gender" Nullable="true" />
+          <Property Type="DateTime" Name="Birthday" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Address" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Phone" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="IDCard" Nullable="false" MaxLength="13" />
+          <Property Type="String" Name="IDCard_PlaceIssue" Nullable="false" MaxLength="100" />
+          <Property Type="DateTime" Name="IDCard_DateIssue" Nullable="false" Precision="23" />
+          <Property Type="String" Name="Password" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="PositionID" Nullable="true" />
+          <Property Type="Int32" Name="RoleID" Nullable="false" />
+          <Property Type="Boolean" Name="IsActive" Nullable="true" />
+          <Property Type="String" Name="Avatar" Nullable="true" MaxLength="200" />
+        </ComplexType>
+        <ComplexType Name="GetMembers_Result">
+          <Property Type="String" Name="MemberID" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="FullName" Nullable="false" MaxLength="255" />
+          <Property Type="String" Name="ReferralID" Nullable="false" MaxLength="8" />
+          <Property Type="Boolean" Name="Gender" Nullable="true" />
+          <Property Type="DateTime" Name="Birthday" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Address" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Phone" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="IDCard" Nullable="false" MaxLength="13" />
+          <Property Type="String" Name="IDCard_PlaceIssue" Nullable="false" MaxLength="100" />
+          <Property Type="DateTime" Name="IDCard_DateIssue" Nullable="false" Precision="23" />
+          <Property Type="String" Name="Password" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="PositionID" Nullable="true" />
+          <Property Type="Int32" Name="RoleID" Nullable="false" />
+          <Property Type="Boolean" Name="IsActive" Nullable="true" />
+          <Property Type="String" Name="Avatar" Nullable="true" MaxLength="200" />
+        </ComplexType>
+        <ComplexType Name="GetNotifies_Result">
+          <Property Type="Int32" Name="NotifyID" Nullable="false" />
+          <Property Type="String" Name="Title" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="NotifyContent" Nullable="true" MaxLength="500" />
+          <Property Type="DateTime" Name="LastUpdated" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Sender" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="Receiver" Nullable="true" MaxLength="8" />
+          <Property Type="Boolean" Name="Status" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="GetNotifyByID_Result">
+          <Property Type="Int32" Name="NotifyID" Nullable="false" />
+          <Property Type="String" Name="Title" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="NotifyContent" Nullable="true" MaxLength="500" />
+          <Property Type="DateTime" Name="LastUpdated" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Sender" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="Receiver" Nullable="true" MaxLength="8" />
+          <Property Type="Boolean" Name="Status" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="GetPositionByID_Result">
+          <Property Type="Int32" Name="PositionID" Nullable="false" />
+          <Property Type="String" Name="PositionName" Nullable="true" MaxLength="50" />
+          <Property Type="Double" Name="Discount" Nullable="true" />
+          <Property Type="String" Name="Description" Nullable="true" MaxLength="255" />
+        </ComplexType>
+        <ComplexType Name="GetPositions_Result">
+          <Property Type="Int32" Name="PositionID" Nullable="false" />
+          <Property Type="String" Name="PositionName" Nullable="true" MaxLength="50" />
+          <Property Type="Double" Name="Discount" Nullable="true" />
+          <Property Type="String" Name="Description" Nullable="true" MaxLength="255" />
+        </ComplexType>
+        <ComplexType Name="GetPriceByID_Result">
+          <Property Type="Int32" Name="PriceID" Nullable="false" />
+          <Property Type="String" Name="ProductID" Nullable="false" MaxLength="10" />
+          <Property Type="DateTime" Name="EndDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="BeginDate" Nullable="true" Precision="23" />
+          <Property Type="Double" Name="BasePrice" Nullable="true" />
+          <Property Type="Double" Name="OriginPrice" Nullable="true" />
+          <Property Type="Double" Name="SalePoint" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="GetPrices_Result">
+          <Property Type="Int32" Name="PriceID" Nullable="false" />
+          <Property Type="String" Name="ProductID" Nullable="false" MaxLength="10" />
+          <Property Type="DateTime" Name="EndDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="BeginDate" Nullable="true" Precision="23" />
+          <Property Type="Double" Name="BasePrice" Nullable="true" />
+          <Property Type="Double" Name="OriginPrice" Nullable="true" />
+          <Property Type="Double" Name="SalePoint" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="GetProducts_Result">
+          <Property Type="String" Name="ProductID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="ProductName" Nullable="true" MaxLength="50" />
+          <Property Type="Double" Name="OriginPrice" Nullable="true" />
+          <Property Type="Double" Name="BasePrice" Nullable="true" />
+          <Property Type="Double" Name="SalePoint" Nullable="true" />
+          <Property Type="Int32" Name="Quantity" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="GetProductsByID_Result">
+          <Property Type="String" Name="ProductID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="ProductName" Nullable="true" MaxLength="50" />
+          <Property Type="Double" Name="OriginPrice" Nullable="true" />
+          <Property Type="Double" Name="BasePrice" Nullable="true" />
+          <Property Type="Double" Name="SalePoint" Nullable="true" />
+          <Property Type="Int32" Name="Quantity" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="GetUserRequestByID_Result">
+          <Property Type="Int32" Name="RequestID" Nullable="false" />
+          <Property Type="Guid" Name="Code" Nullable="false" />
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="50" />
+          <Property Type="DateTime" Name="RequestTime" Nullable="false" Precision="23" />
+          <Property Type="Boolean" Name="IsHandled" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="GetUserRequests_Result">
+          <Property Type="Int32" Name="RequestID" Nullable="false" />
+          <Property Type="Guid" Name="Code" Nullable="false" />
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="50" />
+          <Property Type="DateTime" Name="RequestTime" Nullable="false" Precision="23" />
+          <Property Type="Boolean" Name="IsHandled" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="ReportMemberQuantityByLevel_Result">
+          <Property Type="Int32" Name="Level1" Nullable="true" />
+          <Property Type="Int32" Name="Level2" Nullable="true" />
+          <Property Type="Int32" Name="Level3" Nullable="true" />
+          <Property Type="Int32" Name="Level4" Nullable="true" />
+          <Property Type="Int32" Name="Level5" Nullable="true" />
+          <Property Type="Int32" Name="Level6" Nullable="true" />
+          <Property Type="Int32" Name="Level7" Nullable="true" />
+          <Property Type="Int32" Name="Level8" Nullable="true" />
+          <Property Type="Int32" Name="Level9" Nullable="true" />
+          <Property Type="Int32" Name="Level10" Nullable="true" />
+          <Property Type="Int32" Name="Level11" Nullable="true" />
+          <Property Type="Int32" Name="Level12" Nullable="true" />
+          <Property Type="Int32" Name="Level13" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="ReportMemberQuantityByPosition_Result">
+          <Property Type="Int32" Name="TruongPhong" Nullable="true" />
+          <Property Type="Int32" Name="TruongPhongDuBi" Nullable="true" />
+          <Property Type="Int32" Name="TruongNhom" Nullable="true" />
+          <Property Type="Int32" Name="ThanhVienDC" Nullable="true" />
+          <Property Type="Int32" Name="ThanhVienTC" Nullable="true" />
+          <Property Type="Int32" Name="ThanhVien300" Nullable="true" />
+          <Property Type="Int32" Name="ThanhVien" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="GetOrderByID_Result">
+          <Property Type="String" Name="OrderID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="MemberID" Nullable="false" MaxLength="8" />
+          <Property Type="DateTime" Name="OrderDate" Nullable="true" Precision="23" />
+          <Property Type="Double" Name="UsedMark" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="GetOrders_Result">
+          <Property Type="String" Name="OrderID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="MemberID" Nullable="false" MaxLength="8" />
+          <Property Type="DateTime" Name="OrderDate" Nullable="true" Precision="23" />
+          <Property Type="Double" Name="UsedMark" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1081,6 +1763,290 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Notifies">
+            <EntityTypeMapping TypeName="DMPModels.Notify">
+              <MappingFragment StoreEntitySet="Notifies">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Receiver" ColumnName="Receiver" />
+                <ScalarProperty Name="Sender" ColumnName="Sender" />
+                <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+                <ScalarProperty Name="NotifyContent" ColumnName="NotifyContent" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="NotifyID" ColumnName="NotifyID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AccumulationMark" FunctionName="DMPModels.Store.AccumulationMark">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.AccumulationMark_Result">
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="AccmulationM" ColumnName="AccmulationM" />
+                <ScalarProperty Name="ImmediateM" ColumnName="ImmediateM" />
+                <ScalarProperty Name="MediateM" ColumnName="MediateM" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CalMemberPointByTime" FunctionName="DMPModels.Store.CalMemberPointByTime">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.CalMemberPointByTime_Result">
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="PersonalPoint" ColumnName="PersonalPoint" />
+                <ScalarProperty Name="GroupPoint" ColumnName="GroupPoint" />
+                <ScalarProperty Name="NetPoint" ColumnName="NetPoint" />
+                <ScalarProperty Name="LowerPoint" ColumnName="LowerPoint" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="DeleteMember" FunctionName="DMPModels.Store.DeleteMember" />
+          <FunctionImportMapping FunctionImportName="DeleteNotify" FunctionName="DMPModels.Store.DeleteNotify" />
+          <FunctionImportMapping FunctionImportName="DeletePosition" FunctionName="DMPModels.Store.DeletePosition" />
+          <FunctionImportMapping FunctionImportName="DeletePrice" FunctionName="DMPModels.Store.DeletePrice" />
+          <FunctionImportMapping FunctionImportName="DeleteProduct" FunctionName="DMPModels.Store.DeleteProduct" />
+          <FunctionImportMapping FunctionImportName="DeleteUserRequest" FunctionName="DMPModels.Store.DeleteUserRequest" />
+          <FunctionImportMapping FunctionImportName="GetLowerMembers" FunctionName="DMPModels.Store.GetLowerMembers">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.GetLowerMembers_Result">
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Birthday" ColumnName="Birthday" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="ReferalID" ColumnName="ReferalID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetMemberByID" FunctionName="DMPModels.Store.GetMemberByID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.GetMemberByID_Result">
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="ReferralID" ColumnName="ReferralID" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Birthday" ColumnName="Birthday" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="IDCard" ColumnName="IDCard" />
+                <ScalarProperty Name="IDCard_PlaceIssue" ColumnName="IDCard_PlaceIssue" />
+                <ScalarProperty Name="IDCard_DateIssue" ColumnName="IDCard_DateIssue" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="PositionID" ColumnName="PositionID" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Avatar" ColumnName="Avatar" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetMembers" FunctionName="DMPModels.Store.GetMembers">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.GetMembers_Result">
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="ReferralID" ColumnName="ReferralID" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Birthday" ColumnName="Birthday" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="IDCard" ColumnName="IDCard" />
+                <ScalarProperty Name="IDCard_PlaceIssue" ColumnName="IDCard_PlaceIssue" />
+                <ScalarProperty Name="IDCard_DateIssue" ColumnName="IDCard_DateIssue" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="PositionID" ColumnName="PositionID" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Avatar" ColumnName="Avatar" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetNotifies" FunctionName="DMPModels.Store.GetNotifies">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.GetNotifies_Result">
+                <ScalarProperty Name="NotifyID" ColumnName="NotifyID" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="NotifyContent" ColumnName="NotifyContent" />
+                <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+                <ScalarProperty Name="Sender" ColumnName="Sender" />
+                <ScalarProperty Name="Receiver" ColumnName="Receiver" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetNotifyByID" FunctionName="DMPModels.Store.GetNotifyByID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.GetNotifyByID_Result">
+                <ScalarProperty Name="NotifyID" ColumnName="NotifyID" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="NotifyContent" ColumnName="NotifyContent" />
+                <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+                <ScalarProperty Name="Sender" ColumnName="Sender" />
+                <ScalarProperty Name="Receiver" ColumnName="Receiver" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetPositionByID" FunctionName="DMPModels.Store.GetPositionByID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.GetPositionByID_Result">
+                <ScalarProperty Name="PositionID" ColumnName="PositionID" />
+                <ScalarProperty Name="PositionName" ColumnName="PositionName" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetPositions" FunctionName="DMPModels.Store.GetPositions">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.GetPositions_Result">
+                <ScalarProperty Name="PositionID" ColumnName="PositionID" />
+                <ScalarProperty Name="PositionName" ColumnName="PositionName" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetPriceByID" FunctionName="DMPModels.Store.GetPriceByID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.GetPriceByID_Result">
+                <ScalarProperty Name="PriceID" ColumnName="PriceID" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="BeginDate" ColumnName="BeginDate" />
+                <ScalarProperty Name="BasePrice" ColumnName="BasePrice" />
+                <ScalarProperty Name="OriginPrice" ColumnName="OriginPrice" />
+                <ScalarProperty Name="SalePoint" ColumnName="SalePoint" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetPrices" FunctionName="DMPModels.Store.GetPrices">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.GetPrices_Result">
+                <ScalarProperty Name="PriceID" ColumnName="PriceID" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="BeginDate" ColumnName="BeginDate" />
+                <ScalarProperty Name="BasePrice" ColumnName="BasePrice" />
+                <ScalarProperty Name="OriginPrice" ColumnName="OriginPrice" />
+                <ScalarProperty Name="SalePoint" ColumnName="SalePoint" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetProducts" FunctionName="DMPModels.Store.GetProducts">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.GetProducts_Result">
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="OriginPrice" ColumnName="OriginPrice" />
+                <ScalarProperty Name="BasePrice" ColumnName="BasePrice" />
+                <ScalarProperty Name="SalePoint" ColumnName="SalePoint" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetProductsByID" FunctionName="DMPModels.Store.GetProductsByID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.GetProductsByID_Result">
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="OriginPrice" ColumnName="OriginPrice" />
+                <ScalarProperty Name="BasePrice" ColumnName="BasePrice" />
+                <ScalarProperty Name="SalePoint" ColumnName="SalePoint" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetUserRequestByID" FunctionName="DMPModels.Store.GetUserRequestByID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.GetUserRequestByID_Result">
+                <ScalarProperty Name="RequestID" ColumnName="RequestID" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="RequestTime" ColumnName="RequestTime" />
+                <ScalarProperty Name="IsHandled" ColumnName="IsHandled" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetUserRequests" FunctionName="DMPModels.Store.GetUserRequests">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.GetUserRequests_Result">
+                <ScalarProperty Name="RequestID" ColumnName="RequestID" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="RequestTime" ColumnName="RequestTime" />
+                <ScalarProperty Name="IsHandled" ColumnName="IsHandled" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="InserProduct" FunctionName="DMPModels.Store.InserProduct" />
+          <FunctionImportMapping FunctionImportName="InsertMember" FunctionName="DMPModels.Store.InsertMember" />
+          <FunctionImportMapping FunctionImportName="InsertNotify" FunctionName="DMPModels.Store.InsertNotify" />
+          <FunctionImportMapping FunctionImportName="InsertPosition" FunctionName="DMPModels.Store.InsertPosition" />
+          <FunctionImportMapping FunctionImportName="InsertPrice" FunctionName="DMPModels.Store.InsertPrice" />
+          <FunctionImportMapping FunctionImportName="InsertUserRequest" FunctionName="DMPModels.Store.InsertUserRequest" />
+          <FunctionImportMapping FunctionImportName="ReportMemberQuantityByLevel" FunctionName="DMPModels.Store.ReportMemberQuantityByLevel">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.ReportMemberQuantityByLevel_Result">
+                <ScalarProperty Name="Level1" ColumnName="Level1" />
+                <ScalarProperty Name="Level2" ColumnName="Level2" />
+                <ScalarProperty Name="Level3" ColumnName="Level3" />
+                <ScalarProperty Name="Level4" ColumnName="Level4" />
+                <ScalarProperty Name="Level5" ColumnName="Level5" />
+                <ScalarProperty Name="Level6" ColumnName="Level6" />
+                <ScalarProperty Name="Level7" ColumnName="Level7" />
+                <ScalarProperty Name="Level8" ColumnName="Level8" />
+                <ScalarProperty Name="Level9" ColumnName="Level9" />
+                <ScalarProperty Name="Level10" ColumnName="Level10" />
+                <ScalarProperty Name="Level11" ColumnName="Level11" />
+                <ScalarProperty Name="Level12" ColumnName="Level12" />
+                <ScalarProperty Name="Level13" ColumnName="Level13" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ReportMemberQuantityByPosition" FunctionName="DMPModels.Store.ReportMemberQuantityByPosition">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.ReportMemberQuantityByPosition_Result">
+                <ScalarProperty Name="TruongPhong" ColumnName="TruongPhong" />
+                <ScalarProperty Name="TruongPhongDuBi" ColumnName="TruongPhongDuBi" />
+                <ScalarProperty Name="TruongNhom" ColumnName="TruongNhom" />
+                <ScalarProperty Name="ThanhVienDC" ColumnName="ThanhVienDC" />
+                <ScalarProperty Name="ThanhVienTC" ColumnName="ThanhVienTC" />
+                <ScalarProperty Name="ThanhVien300" ColumnName="ThanhVien300" />
+                <ScalarProperty Name="ThanhVien" ColumnName="ThanhVien" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ReportTotalOrderByYear" FunctionName="DMPModels.Store.ReportTotalOrderByYear" />
+          <FunctionImportMapping FunctionImportName="UpdateMember" FunctionName="DMPModels.Store.UpdateMember" />
+          <FunctionImportMapping FunctionImportName="UpdateNotify" FunctionName="DMPModels.Store.UpdateNotify" />
+          <FunctionImportMapping FunctionImportName="UpdatePosition" FunctionName="DMPModels.Store.UpdatePosition" />
+          <FunctionImportMapping FunctionImportName="UpdatePrice" FunctionName="DMPModels.Store.UpdatePrice" />
+          <FunctionImportMapping FunctionImportName="UpdateProduct" FunctionName="DMPModels.Store.UpdateProduct" />
+          <FunctionImportMapping FunctionImportName="UpdateUserRequest" FunctionName="DMPModels.Store.UpdateUserRequest" />
+          <FunctionImportMapping FunctionImportName="DeleteOrder" FunctionName="DMPModels.Store.DeleteOrder" />
+          <FunctionImportMapping FunctionImportName="GetOrderByID" FunctionName="DMPModels.Store.GetOrderByID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.GetOrderByID_Result">
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ScalarProperty Name="UsedMark" ColumnName="UsedMark" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetOrders" FunctionName="DMPModels.Store.GetOrders">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.GetOrders_Result">
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ScalarProperty Name="UsedMark" ColumnName="UsedMark" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="InsertOrder" FunctionName="DMPModels.Store.InsertOrder" />
+          <FunctionImportMapping FunctionImportName="UpdateOrder" FunctionName="DMPModels.Store.UpdateOrder" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

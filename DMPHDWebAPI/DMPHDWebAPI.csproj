@@ -174,6 +174,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AccumulationMark_Result.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CalMemberPointByTime_Result.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Config.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
@@ -195,10 +201,58 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DMPModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\GetLowerMembers_Result.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetMemberByID_Result.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetMembers_Result.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetNotifies_Result.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetNotifyByID_Result.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetOrderByID_Result.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetOrders_Result.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetPositionByID_Result.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetPositions_Result.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetPriceByID_Result.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetPrices_Result.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetProductsByID_Result.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetProducts_Result.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetUserRequestByID_Result.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetUserRequests_Result.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Member.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\MemberPoint.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Notify.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Order.cs">
@@ -224,6 +278,12 @@
     </Compile>
     <Compile Include="Models\ProductResult.cs" />
     <Compile Include="Models\Province.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ReportMemberQuantityByLevel_Result.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ReportMemberQuantityByPosition_Result.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Role.cs">

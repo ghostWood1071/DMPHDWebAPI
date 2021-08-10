@@ -12,6 +12,9 @@ namespace DMPHDWebAPI.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Objects;
+    using System.Data.Objects.DataClasses;
+    using System.Linq;
     
     public partial class DMPContext : DbContext
     {
@@ -40,5 +43,673 @@ namespace DMPHDWebAPI.Models
         public DbSet<UserRequest> UserRequests { get; set; }
         public DbSet<District> Districts { get; set; }
         public DbSet<Province> Provinces { get; set; }
+        public DbSet<Notify> Notifies { get; set; }
+    
+        [EdmFunction("DMPContext", "AccumulationMark")]
+        public virtual IQueryable<AccumulationMark_Result> AccumulationMark(string memberID, Nullable<int> month, Nullable<int> year)
+        {
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            var monthParameter = month.HasValue ?
+                new ObjectParameter("Month", month) :
+                new ObjectParameter("Month", typeof(int));
+    
+            var yearParameter = year.HasValue ?
+                new ObjectParameter("Year", year) :
+                new ObjectParameter("Year", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<AccumulationMark_Result>("[DMPContext].[AccumulationMark](@MemberID, @Month, @Year)", memberIDParameter, monthParameter, yearParameter);
+        }
+    
+        [EdmFunction("DMPContext", "CalMemberPointByTime")]
+        public virtual IQueryable<CalMemberPointByTime_Result> CalMemberPointByTime(string memberID, Nullable<int> month, Nullable<int> year)
+        {
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            var monthParameter = month.HasValue ?
+                new ObjectParameter("Month", month) :
+                new ObjectParameter("Month", typeof(int));
+    
+            var yearParameter = year.HasValue ?
+                new ObjectParameter("Year", year) :
+                new ObjectParameter("Year", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<CalMemberPointByTime_Result>("[DMPContext].[CalMemberPointByTime](@MemberID, @Month, @Year)", memberIDParameter, monthParameter, yearParameter);
+        }
+    
+        public virtual int DeleteMember(string memberID)
+        {
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DeleteMember", memberIDParameter);
+        }
+    
+        public virtual int DeleteNotify(Nullable<int> notifyID)
+        {
+            var notifyIDParameter = notifyID.HasValue ?
+                new ObjectParameter("NotifyID", notifyID) :
+                new ObjectParameter("NotifyID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DeleteNotify", notifyIDParameter);
+        }
+    
+        public virtual int DeletePosition(Nullable<int> positionID)
+        {
+            var positionIDParameter = positionID.HasValue ?
+                new ObjectParameter("PositionID", positionID) :
+                new ObjectParameter("PositionID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DeletePosition", positionIDParameter);
+        }
+    
+        public virtual int DeletePrice(string productID)
+        {
+            var productIDParameter = productID != null ?
+                new ObjectParameter("ProductID", productID) :
+                new ObjectParameter("ProductID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DeletePrice", productIDParameter);
+        }
+    
+        public virtual int DeleteProduct(string productID)
+        {
+            var productIDParameter = productID != null ?
+                new ObjectParameter("ProductID", productID) :
+                new ObjectParameter("ProductID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DeleteProduct", productIDParameter);
+        }
+    
+        public virtual int DeleteUserRequest(Nullable<int> requestID)
+        {
+            var requestIDParameter = requestID.HasValue ?
+                new ObjectParameter("RequestID", requestID) :
+                new ObjectParameter("RequestID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DeleteUserRequest", requestIDParameter);
+        }
+    
+        public virtual ObjectResult<GetLowerMembers_Result> GetLowerMembers(string memberID)
+        {
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLowerMembers_Result>("GetLowerMembers", memberIDParameter);
+        }
+    
+        public virtual ObjectResult<GetMemberByID_Result> GetMemberByID(string memberID)
+        {
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetMemberByID_Result>("GetMemberByID", memberIDParameter);
+        }
+    
+        public virtual ObjectResult<GetMembers_Result> GetMembers()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetMembers_Result>("GetMembers");
+        }
+    
+        public virtual ObjectResult<GetNotifies_Result> GetNotifies(string memberID)
+        {
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetNotifies_Result>("GetNotifies", memberIDParameter);
+        }
+    
+        public virtual ObjectResult<GetNotifyByID_Result> GetNotifyByID(Nullable<int> notifyID)
+        {
+            var notifyIDParameter = notifyID.HasValue ?
+                new ObjectParameter("NotifyID", notifyID) :
+                new ObjectParameter("NotifyID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetNotifyByID_Result>("GetNotifyByID", notifyIDParameter);
+        }
+    
+        public virtual ObjectResult<GetPositionByID_Result> GetPositionByID(Nullable<int> positionID)
+        {
+            var positionIDParameter = positionID.HasValue ?
+                new ObjectParameter("PositionID", positionID) :
+                new ObjectParameter("PositionID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPositionByID_Result>("GetPositionByID", positionIDParameter);
+        }
+    
+        public virtual ObjectResult<GetPositions_Result> GetPositions()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPositions_Result>("GetPositions");
+        }
+    
+        public virtual ObjectResult<GetPriceByID_Result> GetPriceByID(string productID)
+        {
+            var productIDParameter = productID != null ?
+                new ObjectParameter("ProductID", productID) :
+                new ObjectParameter("ProductID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPriceByID_Result>("GetPriceByID", productIDParameter);
+        }
+    
+        public virtual ObjectResult<GetPrices_Result> GetPrices()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPrices_Result>("GetPrices");
+        }
+    
+        public virtual ObjectResult<GetProducts_Result> GetProducts(string memberID)
+        {
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetProducts_Result>("GetProducts", memberIDParameter);
+        }
+    
+        public virtual ObjectResult<GetProductsByID_Result> GetProductsByID(string memberID, string productID)
+        {
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            var productIDParameter = productID != null ?
+                new ObjectParameter("ProductID", productID) :
+                new ObjectParameter("ProductID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetProductsByID_Result>("GetProductsByID", memberIDParameter, productIDParameter);
+        }
+    
+        public virtual ObjectResult<GetUserRequestByID_Result> GetUserRequestByID(Nullable<int> requestID)
+        {
+            var requestIDParameter = requestID.HasValue ?
+                new ObjectParameter("RequestID", requestID) :
+                new ObjectParameter("RequestID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetUserRequestByID_Result>("GetUserRequestByID", requestIDParameter);
+        }
+    
+        public virtual ObjectResult<GetUserRequests_Result> GetUserRequests()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetUserRequests_Result>("GetUserRequests");
+        }
+    
+        public virtual int InserProduct(string memberID, string productName, Nullable<double> originPrice, Nullable<double> basePrice, Nullable<double> salePoint, Nullable<int> quantity, string description)
+        {
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            var productNameParameter = productName != null ?
+                new ObjectParameter("ProductName", productName) :
+                new ObjectParameter("ProductName", typeof(string));
+    
+            var originPriceParameter = originPrice.HasValue ?
+                new ObjectParameter("OriginPrice", originPrice) :
+                new ObjectParameter("OriginPrice", typeof(double));
+    
+            var basePriceParameter = basePrice.HasValue ?
+                new ObjectParameter("BasePrice", basePrice) :
+                new ObjectParameter("BasePrice", typeof(double));
+    
+            var salePointParameter = salePoint.HasValue ?
+                new ObjectParameter("SalePoint", salePoint) :
+                new ObjectParameter("SalePoint", typeof(double));
+    
+            var quantityParameter = quantity.HasValue ?
+                new ObjectParameter("Quantity", quantity) :
+                new ObjectParameter("Quantity", typeof(int));
+    
+            var descriptionParameter = description != null ?
+                new ObjectParameter("Description", description) :
+                new ObjectParameter("Description", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InserProduct", memberIDParameter, productNameParameter, originPriceParameter, basePriceParameter, salePointParameter, quantityParameter, descriptionParameter);
+        }
+    
+        public virtual int InsertMember(string memberID, string fullName, string referralID, Nullable<bool> gender, Nullable<System.DateTime> birthday, string address, string email, string phone, string iDCard, string iDCard_PlaceIssue, Nullable<System.DateTime> iDCard_DateIssue, string password, Nullable<int> positionID, Nullable<int> roleID, Nullable<bool> isActive, string avatar)
+        {
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            var fullNameParameter = fullName != null ?
+                new ObjectParameter("FullName", fullName) :
+                new ObjectParameter("FullName", typeof(string));
+    
+            var referralIDParameter = referralID != null ?
+                new ObjectParameter("ReferralID", referralID) :
+                new ObjectParameter("ReferralID", typeof(string));
+    
+            var genderParameter = gender.HasValue ?
+                new ObjectParameter("Gender", gender) :
+                new ObjectParameter("Gender", typeof(bool));
+    
+            var birthdayParameter = birthday.HasValue ?
+                new ObjectParameter("Birthday", birthday) :
+                new ObjectParameter("Birthday", typeof(System.DateTime));
+    
+            var addressParameter = address != null ?
+                new ObjectParameter("Address", address) :
+                new ObjectParameter("Address", typeof(string));
+    
+            var emailParameter = email != null ?
+                new ObjectParameter("Email", email) :
+                new ObjectParameter("Email", typeof(string));
+    
+            var phoneParameter = phone != null ?
+                new ObjectParameter("Phone", phone) :
+                new ObjectParameter("Phone", typeof(string));
+    
+            var iDCardParameter = iDCard != null ?
+                new ObjectParameter("IDCard", iDCard) :
+                new ObjectParameter("IDCard", typeof(string));
+    
+            var iDCard_PlaceIssueParameter = iDCard_PlaceIssue != null ?
+                new ObjectParameter("IDCard_PlaceIssue", iDCard_PlaceIssue) :
+                new ObjectParameter("IDCard_PlaceIssue", typeof(string));
+    
+            var iDCard_DateIssueParameter = iDCard_DateIssue.HasValue ?
+                new ObjectParameter("IDCard_DateIssue", iDCard_DateIssue) :
+                new ObjectParameter("IDCard_DateIssue", typeof(System.DateTime));
+    
+            var passwordParameter = password != null ?
+                new ObjectParameter("Password", password) :
+                new ObjectParameter("Password", typeof(string));
+    
+            var positionIDParameter = positionID.HasValue ?
+                new ObjectParameter("PositionID", positionID) :
+                new ObjectParameter("PositionID", typeof(int));
+    
+            var roleIDParameter = roleID.HasValue ?
+                new ObjectParameter("RoleID", roleID) :
+                new ObjectParameter("RoleID", typeof(int));
+    
+            var isActiveParameter = isActive.HasValue ?
+                new ObjectParameter("IsActive", isActive) :
+                new ObjectParameter("IsActive", typeof(bool));
+    
+            var avatarParameter = avatar != null ?
+                new ObjectParameter("Avatar", avatar) :
+                new ObjectParameter("Avatar", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertMember", memberIDParameter, fullNameParameter, referralIDParameter, genderParameter, birthdayParameter, addressParameter, emailParameter, phoneParameter, iDCardParameter, iDCard_PlaceIssueParameter, iDCard_DateIssueParameter, passwordParameter, positionIDParameter, roleIDParameter, isActiveParameter, avatarParameter);
+        }
+    
+        public virtual int InsertNotify(string title, string content, string sender, string receiver, Nullable<bool> status)
+        {
+            var titleParameter = title != null ?
+                new ObjectParameter("Title", title) :
+                new ObjectParameter("Title", typeof(string));
+    
+            var contentParameter = content != null ?
+                new ObjectParameter("Content", content) :
+                new ObjectParameter("Content", typeof(string));
+    
+            var senderParameter = sender != null ?
+                new ObjectParameter("Sender", sender) :
+                new ObjectParameter("Sender", typeof(string));
+    
+            var receiverParameter = receiver != null ?
+                new ObjectParameter("Receiver", receiver) :
+                new ObjectParameter("Receiver", typeof(string));
+    
+            var statusParameter = status.HasValue ?
+                new ObjectParameter("Status", status) :
+                new ObjectParameter("Status", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertNotify", titleParameter, contentParameter, senderParameter, receiverParameter, statusParameter);
+        }
+    
+        public virtual int InsertPosition(string positionName, Nullable<double> discount, string description)
+        {
+            var positionNameParameter = positionName != null ?
+                new ObjectParameter("PositionName", positionName) :
+                new ObjectParameter("PositionName", typeof(string));
+    
+            var discountParameter = discount.HasValue ?
+                new ObjectParameter("Discount", discount) :
+                new ObjectParameter("Discount", typeof(double));
+    
+            var descriptionParameter = description != null ?
+                new ObjectParameter("Description", description) :
+                new ObjectParameter("Description", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertPosition", positionNameParameter, discountParameter, descriptionParameter);
+        }
+    
+        public virtual int InsertPrice(string productID, Nullable<System.DateTime> endDate, Nullable<System.DateTime> beginDate, Nullable<double> basePrice, Nullable<double> originPrice, Nullable<double> saleProint)
+        {
+            var productIDParameter = productID != null ?
+                new ObjectParameter("ProductID", productID) :
+                new ObjectParameter("ProductID", typeof(string));
+    
+            var endDateParameter = endDate.HasValue ?
+                new ObjectParameter("EndDate", endDate) :
+                new ObjectParameter("EndDate", typeof(System.DateTime));
+    
+            var beginDateParameter = beginDate.HasValue ?
+                new ObjectParameter("BeginDate", beginDate) :
+                new ObjectParameter("BeginDate", typeof(System.DateTime));
+    
+            var basePriceParameter = basePrice.HasValue ?
+                new ObjectParameter("BasePrice", basePrice) :
+                new ObjectParameter("BasePrice", typeof(double));
+    
+            var originPriceParameter = originPrice.HasValue ?
+                new ObjectParameter("OriginPrice", originPrice) :
+                new ObjectParameter("OriginPrice", typeof(double));
+    
+            var saleProintParameter = saleProint.HasValue ?
+                new ObjectParameter("SaleProint", saleProint) :
+                new ObjectParameter("SaleProint", typeof(double));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertPrice", productIDParameter, endDateParameter, beginDateParameter, basePriceParameter, originPriceParameter, saleProintParameter);
+        }
+    
+        public virtual int InsertUserRequest(string email)
+        {
+            var emailParameter = email != null ?
+                new ObjectParameter("Email", email) :
+                new ObjectParameter("Email", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertUserRequest", emailParameter);
+        }
+    
+        public virtual ObjectResult<ReportMemberQuantityByLevel_Result> ReportMemberQuantityByLevel(string memberID)
+        {
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ReportMemberQuantityByLevel_Result>("ReportMemberQuantityByLevel", memberIDParameter);
+        }
+    
+        public virtual ObjectResult<ReportMemberQuantityByPosition_Result> ReportMemberQuantityByPosition(string memberID)
+        {
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ReportMemberQuantityByPosition_Result>("ReportMemberQuantityByPosition", memberIDParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> ReportTotalOrderByYear(Nullable<int> year, string memberID)
+        {
+            var yearParameter = year.HasValue ?
+                new ObjectParameter("Year", year) :
+                new ObjectParameter("Year", typeof(int));
+    
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("ReportTotalOrderByYear", yearParameter, memberIDParameter);
+        }
+    
+        public virtual int UpdateMember(string memberID, string fullName, string referralID, Nullable<bool> gender, Nullable<System.DateTime> birthday, string address, string email, string phone, string iDCard, string iDCard_PlaceIssue, Nullable<System.DateTime> iDCard_DateIssue, string password, Nullable<int> positionID, Nullable<int> roleID, Nullable<bool> isActive, string avatar)
+        {
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            var fullNameParameter = fullName != null ?
+                new ObjectParameter("FullName", fullName) :
+                new ObjectParameter("FullName", typeof(string));
+    
+            var referralIDParameter = referralID != null ?
+                new ObjectParameter("ReferralID", referralID) :
+                new ObjectParameter("ReferralID", typeof(string));
+    
+            var genderParameter = gender.HasValue ?
+                new ObjectParameter("Gender", gender) :
+                new ObjectParameter("Gender", typeof(bool));
+    
+            var birthdayParameter = birthday.HasValue ?
+                new ObjectParameter("Birthday", birthday) :
+                new ObjectParameter("Birthday", typeof(System.DateTime));
+    
+            var addressParameter = address != null ?
+                new ObjectParameter("Address", address) :
+                new ObjectParameter("Address", typeof(string));
+    
+            var emailParameter = email != null ?
+                new ObjectParameter("Email", email) :
+                new ObjectParameter("Email", typeof(string));
+    
+            var phoneParameter = phone != null ?
+                new ObjectParameter("Phone", phone) :
+                new ObjectParameter("Phone", typeof(string));
+    
+            var iDCardParameter = iDCard != null ?
+                new ObjectParameter("IDCard", iDCard) :
+                new ObjectParameter("IDCard", typeof(string));
+    
+            var iDCard_PlaceIssueParameter = iDCard_PlaceIssue != null ?
+                new ObjectParameter("IDCard_PlaceIssue", iDCard_PlaceIssue) :
+                new ObjectParameter("IDCard_PlaceIssue", typeof(string));
+    
+            var iDCard_DateIssueParameter = iDCard_DateIssue.HasValue ?
+                new ObjectParameter("IDCard_DateIssue", iDCard_DateIssue) :
+                new ObjectParameter("IDCard_DateIssue", typeof(System.DateTime));
+    
+            var passwordParameter = password != null ?
+                new ObjectParameter("Password", password) :
+                new ObjectParameter("Password", typeof(string));
+    
+            var positionIDParameter = positionID.HasValue ?
+                new ObjectParameter("PositionID", positionID) :
+                new ObjectParameter("PositionID", typeof(int));
+    
+            var roleIDParameter = roleID.HasValue ?
+                new ObjectParameter("RoleID", roleID) :
+                new ObjectParameter("RoleID", typeof(int));
+    
+            var isActiveParameter = isActive.HasValue ?
+                new ObjectParameter("IsActive", isActive) :
+                new ObjectParameter("IsActive", typeof(bool));
+    
+            var avatarParameter = avatar != null ?
+                new ObjectParameter("Avatar", avatar) :
+                new ObjectParameter("Avatar", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdateMember", memberIDParameter, fullNameParameter, referralIDParameter, genderParameter, birthdayParameter, addressParameter, emailParameter, phoneParameter, iDCardParameter, iDCard_PlaceIssueParameter, iDCard_DateIssueParameter, passwordParameter, positionIDParameter, roleIDParameter, isActiveParameter, avatarParameter);
+        }
+    
+        public virtual int UpdateNotify(Nullable<int> notifyID, string title, string content, string sender, string receiver, Nullable<bool> status)
+        {
+            var notifyIDParameter = notifyID.HasValue ?
+                new ObjectParameter("NotifyID", notifyID) :
+                new ObjectParameter("NotifyID", typeof(int));
+    
+            var titleParameter = title != null ?
+                new ObjectParameter("Title", title) :
+                new ObjectParameter("Title", typeof(string));
+    
+            var contentParameter = content != null ?
+                new ObjectParameter("Content", content) :
+                new ObjectParameter("Content", typeof(string));
+    
+            var senderParameter = sender != null ?
+                new ObjectParameter("Sender", sender) :
+                new ObjectParameter("Sender", typeof(string));
+    
+            var receiverParameter = receiver != null ?
+                new ObjectParameter("Receiver", receiver) :
+                new ObjectParameter("Receiver", typeof(string));
+    
+            var statusParameter = status.HasValue ?
+                new ObjectParameter("Status", status) :
+                new ObjectParameter("Status", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdateNotify", notifyIDParameter, titleParameter, contentParameter, senderParameter, receiverParameter, statusParameter);
+        }
+    
+        public virtual int UpdatePosition(Nullable<int> positionID, string positionName, Nullable<double> discount, string description)
+        {
+            var positionIDParameter = positionID.HasValue ?
+                new ObjectParameter("PositionID", positionID) :
+                new ObjectParameter("PositionID", typeof(int));
+    
+            var positionNameParameter = positionName != null ?
+                new ObjectParameter("PositionName", positionName) :
+                new ObjectParameter("PositionName", typeof(string));
+    
+            var discountParameter = discount.HasValue ?
+                new ObjectParameter("Discount", discount) :
+                new ObjectParameter("Discount", typeof(double));
+    
+            var descriptionParameter = description != null ?
+                new ObjectParameter("Description", description) :
+                new ObjectParameter("Description", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdatePosition", positionIDParameter, positionNameParameter, discountParameter, descriptionParameter);
+        }
+    
+        public virtual int UpdatePrice(string productID, Nullable<System.DateTime> endDate, Nullable<System.DateTime> beginDate, Nullable<double> basePrice, Nullable<double> originPrice, Nullable<double> saleProint)
+        {
+            var productIDParameter = productID != null ?
+                new ObjectParameter("ProductID", productID) :
+                new ObjectParameter("ProductID", typeof(string));
+    
+            var endDateParameter = endDate.HasValue ?
+                new ObjectParameter("EndDate", endDate) :
+                new ObjectParameter("EndDate", typeof(System.DateTime));
+    
+            var beginDateParameter = beginDate.HasValue ?
+                new ObjectParameter("BeginDate", beginDate) :
+                new ObjectParameter("BeginDate", typeof(System.DateTime));
+    
+            var basePriceParameter = basePrice.HasValue ?
+                new ObjectParameter("BasePrice", basePrice) :
+                new ObjectParameter("BasePrice", typeof(double));
+    
+            var originPriceParameter = originPrice.HasValue ?
+                new ObjectParameter("OriginPrice", originPrice) :
+                new ObjectParameter("OriginPrice", typeof(double));
+    
+            var saleProintParameter = saleProint.HasValue ?
+                new ObjectParameter("SaleProint", saleProint) :
+                new ObjectParameter("SaleProint", typeof(double));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdatePrice", productIDParameter, endDateParameter, beginDateParameter, basePriceParameter, originPriceParameter, saleProintParameter);
+        }
+    
+        public virtual int UpdateProduct(string productID, string productName, Nullable<double> originPrice, Nullable<double> basePrice, Nullable<double> salePoint, Nullable<int> quantity, string description)
+        {
+            var productIDParameter = productID != null ?
+                new ObjectParameter("ProductID", productID) :
+                new ObjectParameter("ProductID", typeof(string));
+    
+            var productNameParameter = productName != null ?
+                new ObjectParameter("ProductName", productName) :
+                new ObjectParameter("ProductName", typeof(string));
+    
+            var originPriceParameter = originPrice.HasValue ?
+                new ObjectParameter("OriginPrice", originPrice) :
+                new ObjectParameter("OriginPrice", typeof(double));
+    
+            var basePriceParameter = basePrice.HasValue ?
+                new ObjectParameter("BasePrice", basePrice) :
+                new ObjectParameter("BasePrice", typeof(double));
+    
+            var salePointParameter = salePoint.HasValue ?
+                new ObjectParameter("SalePoint", salePoint) :
+                new ObjectParameter("SalePoint", typeof(double));
+    
+            var quantityParameter = quantity.HasValue ?
+                new ObjectParameter("Quantity", quantity) :
+                new ObjectParameter("Quantity", typeof(int));
+    
+            var descriptionParameter = description != null ?
+                new ObjectParameter("Description", description) :
+                new ObjectParameter("Description", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdateProduct", productIDParameter, productNameParameter, originPriceParameter, basePriceParameter, salePointParameter, quantityParameter, descriptionParameter);
+        }
+    
+        public virtual int UpdateUserRequest(Nullable<int> requestID, Nullable<System.Guid> code, string email, Nullable<System.DateTime> requestTime, Nullable<bool> isHandled)
+        {
+            var requestIDParameter = requestID.HasValue ?
+                new ObjectParameter("RequestID", requestID) :
+                new ObjectParameter("RequestID", typeof(int));
+    
+            var codeParameter = code.HasValue ?
+                new ObjectParameter("Code", code) :
+                new ObjectParameter("Code", typeof(System.Guid));
+    
+            var emailParameter = email != null ?
+                new ObjectParameter("Email", email) :
+                new ObjectParameter("Email", typeof(string));
+    
+            var requestTimeParameter = requestTime.HasValue ?
+                new ObjectParameter("RequestTime", requestTime) :
+                new ObjectParameter("RequestTime", typeof(System.DateTime));
+    
+            var isHandledParameter = isHandled.HasValue ?
+                new ObjectParameter("IsHandled", isHandled) :
+                new ObjectParameter("IsHandled", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdateUserRequest", requestIDParameter, codeParameter, emailParameter, requestTimeParameter, isHandledParameter);
+        }
+    
+        public virtual int DeleteOrder(string orderID)
+        {
+            var orderIDParameter = orderID != null ?
+                new ObjectParameter("OrderID", orderID) :
+                new ObjectParameter("OrderID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DeleteOrder", orderIDParameter);
+        }
+    
+        public virtual ObjectResult<GetOrderByID_Result> GetOrderByID(string orderID)
+        {
+            var orderIDParameter = orderID != null ?
+                new ObjectParameter("OrderID", orderID) :
+                new ObjectParameter("OrderID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetOrderByID_Result>("GetOrderByID", orderIDParameter);
+        }
+    
+        public virtual ObjectResult<GetOrders_Result> GetOrders()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetOrders_Result>("GetOrders");
+        }
+    
+        public virtual int InsertOrder(string memberID, Nullable<System.DateTime> orderDate)
+        {
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            var orderDateParameter = orderDate.HasValue ?
+                new ObjectParameter("OrderDate", orderDate) :
+                new ObjectParameter("OrderDate", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertOrder", memberIDParameter, orderDateParameter);
+        }
+    
+        public virtual int UpdateOrder(string orderID, string memberID, Nullable<System.DateTime> orderDate)
+        {
+            var orderIDParameter = orderID != null ?
+                new ObjectParameter("OrderID", orderID) :
+                new ObjectParameter("OrderID", typeof(string));
+    
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            var orderDateParameter = orderDate.HasValue ?
+                new ObjectParameter("OrderDate", orderDate) :
+                new ObjectParameter("OrderDate", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdateOrder", orderIDParameter, memberIDParameter, orderDateParameter);
+        }
     }
 }

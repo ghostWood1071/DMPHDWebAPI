@@ -11,42 +11,27 @@ namespace DMPHDWebAPI.Controllers
     public class OrderController : ApiController
     {
         // GET: api/Order
-        public IEnumerable<OrderResult> Get()
+        public IEnumerable<GetOrders_Result> Get()
         {
             using(DMPContext context = new DMPContext())
             {
-                return context.Orders.Select(x => new OrderResult
-                {
-                    MemberID = x.MemberID,
-                    MemberName = x.Member.FullName,
-                    OrderDate = x.OrderDate.Value.ToString("dd/MM/yyyy"),
-                    OrderID = x.OrderID,
-                    TotalPrice = x.OrderDetails.Sum(dt => dt.UnitPrice.Value),
-                    UsedMark = x.UsedMark.Value
-                }).ToList();
+               return context.GetOrders().ToList();
             }
         }
 
         // GET: api/Order/5
-        public IEnumerable<OrderDetailResult> Get(string id)
+        public IEnumerable<GetOrderByID_Result> Get(string id)
         {
             using(DMPContext context = new DMPContext())
             {
-                return context.OrderDetails.Where(x => x.OrderID == id).Select(x => new OrderDetailResult
-                {
-                    OrderDetailID = x.OrderDetailID,
-                    Discount = x.Discount.Value,
-                    ProductID = x.Product.ProductID,
-                    ProductName = x.Product.ProductName,
-                    Quantity = x.Quantity.Value,
-                    UnitPrice = x.UnitPrice.Value
-                }).ToList();
+                return context.GetOrderByID(id).ToList();
             };
         }
 
         // POST: api/Order
         public void Post([FromBody]string value)
         {
+
         }
 
         // PUT: api/Order/5

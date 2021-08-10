@@ -12,17 +12,7 @@ namespace DMPHDWebAPI.Models
 
         }
 
-        public ProductResult(string productID, int productDetailsID, string memberID, string productName, double basePrice, double salesPoints, double sellPrices, int quantity)
-        {
-            ProductID = productID;
-            ProductDetailsID = productDetailsID;
-            MemberID = memberID;
-            ProductName = productName;
-            BasePrice = basePrice;
-            SalesPoints = salesPoints;
-            SellPrices = sellPrices;
-            Quantity = quantity;
-        }
+        
 
         public string ProductID { get; set; }
         public int ProductDetailsID { get; set; }
@@ -32,5 +22,6 @@ namespace DMPHDWebAPI.Models
         public double SalesPoints { get; set; }
         public double SellPrices { get; set; }
         public int Quantity { get; set; }
+        public string Description { get; set; }
     }
 }
