@@ -29,19 +29,30 @@ namespace DMPHDWebAPI.Controllers
         }
 
         // POST: api/Order
-        public void Post([FromBody]string value)
+        public void Post([FromBody] OrderPost order)
         {
-
+            using(DMPContext context = new DMPContext())
+            {
+                context.InsertOrder(order.MemberID, order.OrderDate);
+            }
         }
 
         // PUT: api/Order/5
-        public void Put(int id, [FromBody]string value)
+        public void Put([FromBody] OrderPut order)
         {
+            using (DMPContext context = new DMPContext())
+            {
+                context.UpdateOrder(order.OrderID , order.MemberID, order.OrderDate);
+            }
         }
 
         // DELETE: api/Order/5
-        public void Delete(int id)
+        public void Delete(string orderID)
         {
+            using(DMPContext context = new DMPContext())
+            {
+                context.DeleteOrder(orderID);
+            }
         }
     }
 }
