@@ -220,6 +220,9 @@
     <Compile Include="Models\GetOrderByID_Result.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\GetOrderDetails_Result.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\GetOrders_Result.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
@@ -239,6 +242,9 @@
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GetProducts_Result.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetSalary_Result.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GetUserRequestByID_Result.cs">
