@@ -15,10 +15,18 @@ namespace DMPHDWebAPI.Controllers
         [Route("GetMembers")]
         public IEnumerable<GetMembers_Result> Get()
         {
-            using(DMPContext context = new DMPContext())
-            {
-                return context.GetMembers().ToList();
+            List<GetMembers_Result> result = null;
+            try {
+                using (DMPContext context = new DMPContext())
+                {
+                    result = context.GetMembers().ToList();
+                }
             }
+            catch (Exception e)
+            {
+                throw new ArgumentException("My message", e);
+            }
+            return result;
         }
 
         // GET api/<controller>/5
@@ -26,30 +34,95 @@ namespace DMPHDWebAPI.Controllers
         [Route("GetMember")]
         public IEnumerable<GetMemberByID_Result> Get(string id)
         {
-            using (DMPContext context = new DMPContext())
+
+            List<GetMemberByID_Result> result = null;
+            try
             {
-                return context.GetMemberByID(id).ToList();
+                using (DMPContext context = new DMPContext())
+                {
+                    result = context.GetMemberByID(id).ToList();
+                }
             }
+            catch (Exception e)
+            {
+                throw new ArgumentException("My message", e);
+            }
+            return result;
         }
         [HttpGet]
         [Route("GetLowerMembers")]
         public IEnumerable<GetLowerMembers_Result> GetLowerMembers(string id)
         {
-            using (DMPContext context = new DMPContext())
+            List<GetLowerMembers_Result> result = null;
+            try
             {
-                return context.GetLowerMembers(id).ToList();
+                using (DMPContext context = new DMPContext())
+                {
+                    result = context.GetLowerMembers(id).ToList();
+                }
             }
+            catch (Exception e)
+            {
+                throw new ArgumentException("My message", e);
+            }
+            return result;
         }
         [HttpGet]
         [Route("GetSalary")]
         public IEnumerable<GetSalary_Result> GetSalary(string id,int year)
         {
-            using (DMPContext context = new DMPContext())
+            List<GetSalary_Result> result = null;
+            try
             {
-                return context.GetSalary(id,year).ToList();
+                using (DMPContext context = new DMPContext())
+                {
+                    result = context.GetSalary(id, year).ToList();
+                }
             }
+            catch (Exception e)
+            {
+                throw new ArgumentException("My message", e);
+            }
+            return result;
         }
         // POST api/<controller>
+        [HttpGet]
+        [Route("ReportMemberQuantityByLevel")]
+        public IEnumerable<ReportMemberQuantityByLevel_Result> ReportMemberQuantityByLevel(string id)
+        {
+            List<ReportMemberQuantityByLevel_Result> result = null;
+            try
+            {
+                using (DMPContext context = new DMPContext())
+                {
+                    result = context.ReportMemberQuantityByLevel(id).ToList();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException("My message", e);
+            }
+            return result;
+        }
+
+        [HttpGet]
+        [Route("ReportMemberQuantityByPosition")]
+        public IEnumerable<ReportMemberQuantityByPosition_Result> ReportMemberQuantityByPosition(string id)
+        {
+            List<ReportMemberQuantityByPosition_Result> result = null;
+            try
+            {
+                using (DMPContext context = new DMPContext())
+                {
+                    result = context.ReportMemberQuantityByPosition(id).ToList();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException("My message", e);
+            }
+            return result;
+        }
         public void Post([FromBody] MemberResult Member)
         {
             using (DMPContext context = new DMPContext())
