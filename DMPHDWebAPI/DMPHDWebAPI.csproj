@@ -221,6 +221,9 @@
     <Compile Include="Models\GetOrderByID_Result.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\GetOrderDetails_Result.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\GetOrders_Result.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
