@@ -7,10 +7,7 @@ namespace DMPHDWebAPI.Models
 {
     public class ProductResult
     {
-        public ProductResult()
-        {
-
-        }
+       
 
         
 

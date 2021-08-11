@@ -52,7 +52,8 @@ namespace DMPHDWebAPI.Controllers
            using(DMPContext context = new DMPContext())
             {
                 context.UpdateProduct(product.ProductID, 
-                                      product.ProductName, 
+                                      product.MemberID,
+                                      product.ProductName,
                                       product.SellPrices, 
                                       product.BasePrice, 
                                       product.SalesPoints, 

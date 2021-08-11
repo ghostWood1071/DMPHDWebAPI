@@ -592,11 +592,15 @@ namespace DMPHDWebAPI.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdatePrice", productIDParameter, endDateParameter, beginDateParameter, basePriceParameter, originPriceParameter, saleProintParameter);
         }
     
-        public virtual int UpdateProduct(string productID, string productName, Nullable<double> originPrice, Nullable<double> basePrice, Nullable<double> salePoint, Nullable<int> quantity, string description)
+        public virtual int UpdateProduct(string productID, string memberID, string productName, Nullable<double> originPrice, Nullable<double> basePrice, Nullable<double> salePoint, Nullable<int> quantity, string description)
         {
             var productIDParameter = productID != null ?
                 new ObjectParameter("ProductID", productID) :
                 new ObjectParameter("ProductID", typeof(string));
+    
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
     
             var productNameParameter = productName != null ?
                 new ObjectParameter("ProductName", productName) :
@@ -622,7 +626,7 @@ namespace DMPHDWebAPI.Models
                 new ObjectParameter("Description", description) :
                 new ObjectParameter("Description", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdateProduct", productIDParameter, productNameParameter, originPriceParameter, basePriceParameter, salePointParameter, quantityParameter, descriptionParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdateProduct", productIDParameter, memberIDParameter, productNameParameter, originPriceParameter, basePriceParameter, salePointParameter, quantityParameter, descriptionParameter);
         }
     
         public virtual int UpdateUserRequest(Nullable<int> requestID, Nullable<System.Guid> code, string email, Nullable<System.DateTime> requestTime, Nullable<bool> isHandled)
@@ -860,6 +864,15 @@ namespace DMPHDWebAPI.Models
                 new ObjectParameter("OrderID", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DeleteOrderdetails", orderIDParameter);
+        }
+    
+        public virtual ObjectResult<GetOrderDetail_Result> GetOrderDetail(Nullable<int> orderDetailID)
+        {
+            var orderDetailIDParameter = orderDetailID.HasValue ?
+                new ObjectParameter("OrderDetailID", orderDetailID) :
+                new ObjectParameter("OrderDetailID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetOrderDetail_Result>("GetOrderDetail", orderDetailIDParameter);
         }
     }
 }

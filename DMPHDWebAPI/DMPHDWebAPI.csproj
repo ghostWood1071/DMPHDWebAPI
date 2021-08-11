@@ -172,6 +172,8 @@
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\OrderDetailController.cs" />
     <Compile Include="Controllers\ProductsController.cs" />
+    <Compile Include="Controllers\SalePointController.cs" />
+    <Compile Include="Controllers\SalePointPost.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -224,6 +226,9 @@
     <Compile Include="Models\GetOrderDetails_Result.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\GetOrderDetail_Result.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\GetOrders_Result.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
@@ -270,6 +275,7 @@
     <Compile Include="Models\OrderDetail.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\OrderDetailPost.cs" />
     <Compile Include="Models\OrderDetailResult.cs" />
     <Compile Include="Models\OrderPost.cs" />
     <Compile Include="Models\OrderPut.cs" />
@@ -291,6 +297,7 @@
     <Compile Include="Models\Province.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\QuantityChecker.cs" />
     <Compile Include="Models\ReportMemberQuantityByLevel_Result.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>

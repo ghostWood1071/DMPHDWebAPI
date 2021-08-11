@@ -474,6 +474,9 @@
         <Function Name="GetOrderByID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="OrderID" Type="char" Mode="In" />
         </Function>
+        <Function Name="GetOrderDetail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OrderDetailID" Type="int" Mode="In" />
+        </Function>
         <Function Name="GetOrderDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="OrderID" Type="char" Mode="In" />
         </Function>
@@ -644,6 +647,7 @@
         </Function>
         <Function Name="UpdateProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ProductID" Type="char" Mode="In" />
+          <Parameter Name="MemberID" Type="char" Mode="In" />
           <Parameter Name="ProductName" Type="nvarchar" Mode="In" />
           <Parameter Name="OriginPrice" Type="float" Mode="In" />
           <Parameter Name="BasePrice" Type="float" Mode="In" />
@@ -1315,6 +1319,7 @@
           </FunctionImport>
           <FunctionImport Name="UpdateProduct">
             <Parameter Name="ProductID" Mode="In" Type="String" />
+            <Parameter Name="MemberID" Mode="In" Type="String" />
             <Parameter Name="ProductName" Mode="In" Type="String" />
             <Parameter Name="OriginPrice" Mode="In" Type="Double" />
             <Parameter Name="BasePrice" Mode="In" Type="Double" />
@@ -1349,10 +1354,10 @@
           <Parameter Name="MemberID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="DeleteSalePoint">
-            <Parameter Name="OrderID" Mode="In" Type="String" />
+          <Parameter Name="OrderID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetOrderDetails" ReturnType="Collection(DMPModels.GetOrderDetails_Result)">
-            <Parameter Name="OrderID" Mode="In" Type="String" />
+          <Parameter Name="OrderID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetSalary" ReturnType="Collection(DMPModels.GetSalary_Result)">
             <Parameter Name="MemberID" Mode="In" Type="String" />
@@ -1366,7 +1371,7 @@
             <Parameter Name="ProductID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="InsertOrderDetails">
-            <Parameter Name="Details" Mode="In" Type="String" />
+          <Parameter Name="Details" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="InsertSalePoint">
             <Parameter Name="OrderID" Mode="In" Type="String" />
@@ -1388,10 +1393,13 @@
             <Parameter Name="SaleYear" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="DeleteOrderDetail">
-            <Parameter Name="OrderDetailID" Mode="In" Type="Int32" />
+          <Parameter Name="OrderDetailID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="DeleteOrderdetails">
-            <Parameter Name="OrderID" Mode="In" Type="String" />
+          <Parameter Name="OrderID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetOrderDetail" ReturnType="Collection(DMPModels.GetOrderDetail_Result)">
+          <Parameter Name="OrderDetailID" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="District">
@@ -1686,6 +1694,14 @@
           <Property Type="Double" Name="TotalMark" Nullable="true" />
           <Property Type="Double" Name="TotalMark1" Nullable="true" />
           <Property Type="Double" Name="Column1" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="GetOrderDetail_Result">
+          <Property Type="Int32" Name="OrderDetailID" Nullable="false" />
+          <Property Type="String" Name="OrderID" Nullable="false" MaxLength="10" />
+          <Property Type="Int32" Name="Quantity" Nullable="true" />
+          <Property Type="Double" Name="UnitPrice" Nullable="true" />
+          <Property Type="Double" Name="Discount" Nullable="true" />
+          <Property Type="String" Name="ProductID" Nullable="true" MaxLength="10" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -2195,6 +2211,18 @@
           <FunctionImportMapping FunctionImportName="UpdateSalePoint" FunctionName="DMPModels.Store.UpdateSalePoint" />
           <FunctionImportMapping FunctionImportName="DeleteOrderDetail" FunctionName="DMPModels.Store.DeleteOrderDetail" />
           <FunctionImportMapping FunctionImportName="DeleteOrderdetails" FunctionName="DMPModels.Store.DeleteOrderdetails" />
+          <FunctionImportMapping FunctionImportName="GetOrderDetail" FunctionName="DMPModels.Store.GetOrderDetail">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.GetOrderDetail_Result">
+                <ScalarProperty Name="OrderDetailID" ColumnName="OrderDetailID" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
