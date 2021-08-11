@@ -245,6 +245,9 @@
     <Compile Include="Models\GetProducts_Result.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\GetSalary_Result.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\GetUserRequestByID_Result.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>

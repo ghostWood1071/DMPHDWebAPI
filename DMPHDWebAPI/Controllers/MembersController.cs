@@ -31,7 +31,24 @@ namespace DMPHDWebAPI.Controllers
                 return context.GetMemberByID(id).ToList();
             }
         }
-
+        [HttpGet]
+        [Route("GetLowerMembers")]
+        public IEnumerable<GetLowerMembers_Result> GetLowerMembers(string id)
+        {
+            using (DMPContext context = new DMPContext())
+            {
+                return context.GetLowerMembers(id).ToList();
+            }
+        }
+        [HttpGet]
+        [Route("GetSalary")]
+        public IEnumerable<GetSalary_Result> GetSalary(string id,int year)
+        {
+            using (DMPContext context = new DMPContext())
+            {
+                return context.GetSalary(id,year).ToList();
+            }
+        }
         // POST api/<controller>
         public void Post([FromBody] MemberResult Member)
         {

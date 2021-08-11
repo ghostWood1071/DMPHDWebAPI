@@ -493,6 +493,10 @@
           <Parameter Name="MemberID" Type="char" Mode="In" />
           <Parameter Name="ProductID" Type="char" Mode="In" />
         </Function>
+        <Function Name="GetSalary" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MemberID" Type="char" Mode="In" />
+          <Parameter Name="Year" Type="int" Mode="In" />
+        </Function>
         <Function Name="GetUserRequestByID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="RequestID" Type="int" Mode="In" />
         </Function>
@@ -1180,9 +1184,6 @@
           <FunctionImport Name="DeleteUserRequest">
           <Parameter Name="RequestID" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="GetLowerMembers" ReturnType="Collection(DMPModels.GetLowerMembers_Result)">
-          <Parameter Name="MemberID" Mode="In" Type="String" />
-          </FunctionImport>
           <FunctionImport Name="GetMemberByID" ReturnType="Collection(DMPModels.GetMemberByID_Result)">
           <Parameter Name="MemberID" Mode="In" Type="String" />
           </FunctionImport>
@@ -1344,11 +1345,18 @@
             <Parameter Name="MemberID" Mode="In" Type="String" />
             <Parameter Name="OrderDate" Mode="In" Type="DateTime" />
           </FunctionImport>
+          <FunctionImport Name="GetLowerMembers" ReturnType="Collection(DMPModels.GetLowerMembers_Result)">
+          <Parameter Name="MemberID" Mode="In" Type="String" />
+          </FunctionImport>
           <FunctionImport Name="DeleteSalePoint">
             <Parameter Name="OrderID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetOrderDetails" ReturnType="Collection(DMPModels.GetOrderDetails_Result)">
             <Parameter Name="OrderID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetSalary" ReturnType="Collection(DMPModels.GetSalary_Result)">
+            <Parameter Name="MemberID" Mode="In" Type="String" />
+            <Parameter Name="Year" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="InsertOrderDetail">
             <Parameter Name="OrderID" Mode="In" Type="String" />
@@ -1497,16 +1505,6 @@
           <Property Type="Double" Name="GroupPoint" Nullable="true" />
           <Property Type="Double" Name="NetPoint" Nullable="true" />
           <Property Type="Double" Name="LowerPoint" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="GetLowerMembers_Result">
-          <Property Type="String" Name="MemberID" Nullable="true" MaxLength="8" />
-          <Property Type="String" Name="FullName" Nullable="true" MaxLength="255" />
-          <Property Type="Boolean" Name="Gender" Nullable="true" />
-          <Property Type="DateTime" Name="Birthday" Nullable="true" Precision="23" />
-          <Property Type="Int32" Name="RoleID" Nullable="true" />
-          <Property Type="String" Name="Phone" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="Address" Nullable="true" MaxLength="100" />
-          <Property Type="String" Name="ReferalID" Nullable="false" MaxLength="8" />
         </ComplexType>
         <ComplexType Name="GetMemberByID_Result">
           <Property Type="String" Name="MemberID" Nullable="false" MaxLength="8" />
@@ -1658,6 +1656,19 @@
           <Property Type="DateTime" Name="OrderDate" Nullable="true" Precision="23" />
           <Property Type="Double" Name="UsedMark" Nullable="true" />
         </ComplexType>
+        <ComplexType Name="GetLowerMembers_Result">
+          <Property Type="String" Name="MemberID" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="FullName" Nullable="true" MaxLength="255" />
+          <Property Type="Boolean" Name="Gender" Nullable="true" />
+          <Property Type="DateTime" Name="Birthday" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="PositionID" Nullable="true" />
+          <Property Type="String" Name="Phone" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Address" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="IDCard" Nullable="true" MaxLength="13" />
+          <Property Type="DateTime" Name="IDCard_DateIssue" Nullable="true" Precision="23" />
+          <Property Type="String" Name="IDCard_PlaceIssue" Nullable="true" MaxLength="100" />
+        </ComplexType>
         <ComplexType Name="GetOrderDetails_Result">
           <Property Type="Int32" Name="OrderDetailID" Nullable="false" />
           <Property Type="String" Name="OrderID" Nullable="false" MaxLength="10" />
@@ -1665,6 +1676,16 @@
           <Property Type="Double" Name="UnitPrice" Nullable="true" />
           <Property Type="Double" Name="Discount" Nullable="true" />
           <Property Type="String" Name="ProductID" Nullable="true" MaxLength="10" />
+        </ComplexType>
+        <ComplexType Name="GetSalary_Result">
+          <Property Type="Int32" Name="Month" Nullable="false" />
+          <Property Type="Double" Name="AccumulatedMark" Nullable="true" />
+          <Property Type="Double" Name="ImmediateMark" Nullable="true" />
+          <Property Type="Double" Name="MediateMark" Nullable="true" />
+          <Property Type="Double" Name="UsedMark" Nullable="true" />
+          <Property Type="Double" Name="TotalMark" Nullable="true" />
+          <Property Type="Double" Name="TotalMark1" Nullable="true" />
+          <Property Type="Double" Name="Column1" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1893,20 +1914,6 @@
           <FunctionImportMapping FunctionImportName="DeletePrice" FunctionName="DMPModels.Store.DeletePrice" />
           <FunctionImportMapping FunctionImportName="DeleteProduct" FunctionName="DMPModels.Store.DeleteProduct" />
           <FunctionImportMapping FunctionImportName="DeleteUserRequest" FunctionName="DMPModels.Store.DeleteUserRequest" />
-          <FunctionImportMapping FunctionImportName="GetLowerMembers" FunctionName="DMPModels.Store.GetLowerMembers">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="DMPModels.GetLowerMembers_Result">
-                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
-                <ScalarProperty Name="FullName" ColumnName="FullName" />
-                <ScalarProperty Name="Gender" ColumnName="Gender" />
-                <ScalarProperty Name="Birthday" ColumnName="Birthday" />
-                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
-                <ScalarProperty Name="Phone" ColumnName="Phone" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="ReferalID" ColumnName="ReferalID" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="GetMemberByID" FunctionName="DMPModels.Store.GetMemberByID">
             <ResultMapping>
               <ComplexTypeMapping TypeName="DMPModels.GetMemberByID_Result">
@@ -2137,6 +2144,23 @@
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="InsertOrder" FunctionName="DMPModels.Store.InsertOrder" />
           <FunctionImportMapping FunctionImportName="UpdateOrder" FunctionName="DMPModels.Store.UpdateOrder" />
+          <FunctionImportMapping FunctionImportName="GetLowerMembers" FunctionName="DMPModels.Store.GetLowerMembers">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.GetLowerMembers_Result">
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Birthday" ColumnName="Birthday" />
+                <ScalarProperty Name="PositionID" ColumnName="PositionID" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="IDCard" ColumnName="IDCard" />
+                <ScalarProperty Name="IDCard_DateIssue" ColumnName="IDCard_DateIssue" />
+                <ScalarProperty Name="IDCard_PlaceIssue" ColumnName="IDCard_PlaceIssue" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="DeleteSalePoint" FunctionName="DMPModels.Store.DeleteSalePoint" />
           <FunctionImportMapping FunctionImportName="GetOrderDetails" FunctionName="DMPModels.Store.GetOrderDetails">
             <ResultMapping>
@@ -2147,6 +2171,20 @@
                 <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
                 <ScalarProperty Name="Discount" ColumnName="Discount" />
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetSalary" FunctionName="DMPModels.Store.GetSalary">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.GetSalary_Result">
+                <ScalarProperty Name="Month" ColumnName="Month" />
+                <ScalarProperty Name="AccumulatedMark" ColumnName="AccumulatedMark" />
+                <ScalarProperty Name="ImmediateMark" ColumnName="ImmediateMark" />
+                <ScalarProperty Name="MediateMark" ColumnName="MediateMark" />
+                <ScalarProperty Name="UsedMark" ColumnName="UsedMark" />
+                <ScalarProperty Name="TotalMark" ColumnName="TotalMark" />
+                <ScalarProperty Name="TotalMark1" ColumnName="TotalMark1" />
+                <ScalarProperty Name="Column1" ColumnName="Column1" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
