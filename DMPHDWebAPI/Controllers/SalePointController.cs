@@ -21,6 +21,17 @@ namespace DMPHDWebAPI.Controllers
             }
         }
 
+
+        [HttpPost]
+        [Route("Update")]
+        public void Update([FromBody] SalePointPost value)
+        {
+            using(DMPContext context = new DMPContext())
+            {
+                Order order = context.Orders.FirstOrDefault(x => x.OrderID == value.OrderID);
+                context.UpdateSalePoint(value.OrderID, value.MemberID, value.Mark, order.OrderDate.Value.Month, order.OrderDate.Value.Year);
+            }
+        }
         
     }
 }

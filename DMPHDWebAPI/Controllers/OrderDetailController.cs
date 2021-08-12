@@ -90,17 +90,37 @@ namespace DMPHDWebAPI.Controllers
         }
 
         // PUT: api/OrderDetail/5
-        public void Put(int id, [FromBody] OrderDetailPost value)
+        public void Put(string memberID, [FromBody] OrderDetailPut value)
         {
             using(DMPContext context = new DMPContext())
             {
+                OrderDetail detail =   context.OrderDetails.FirstOrDefault(x => x.OrderDetailID == value.OrderDetailID);
+                if(detail.ProductID != value.ProductID)
+                {
+                    ProductDetail productDetail = detail.Product.ProductDetails.FirstOrDefault(x => x.MemberID == memberID);
+                    productDetail.Quantity += detail.Quantity.Value;
+                    ProductDetail productDetailNew = context.ProductDetails.FirstOrDefault(x => x.ProductID == value.ProductID && x.MemberID == memberID);
+                    productDetailNew.Quantity -= value.Quantity;
+                }
 
+                if(detail.Quantity != value.Quantity)
+                {
+                    detail.Product.ProductDetails.FirstOrDefault(x => x.MemberID == memberID)
+                                                 .Quantity += (value.Quantity - detail.Quantity.Value);
+
+                }
+                context.SaveChanges();
+                context.UpdateOrrderDetail(value.OrderDetailID, value.ProductID, value.Quantity, value.Discount, value.UnitPrice);
             }
         }
 
         // DELETE: api/OrderDetail/5
         public void Delete(int id)
         {
+            using(DMPContext context = new DMPContext())
+            {
+                context.DeleteOrderDetail(id);
+            }
         }
     }
 }
