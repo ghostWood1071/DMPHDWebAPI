@@ -10,8 +10,6 @@ namespace DMPHDWebAPI.Controllers
 {
     public class SalePointController : ApiController
     {
-        
-
         // POST: api/SalePoint
         public void Post([FromBody]SalePointPost value)
         {
