@@ -85,6 +85,24 @@ namespace DMPHDWebAPI.Controllers
             }
             return result;
         }
+        [HttpGet]
+        [Route("ReportGenaral")]
+        public IEnumerable<ReportGenaral_Result> ReportGenaral(string id, int year,int month)
+        {
+            List<ReportGenaral_Result> result = null;
+            try
+            {
+                using (DMPContext context = new DMPContext())
+                {
+                    result = context.ReportGenaral(id, year,month).ToList();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException("My message", e);
+            }
+            return result;
+        }
         // POST api/<controller>
         [HttpGet]
         [Route("ReportMemberQuantityByLevel")]

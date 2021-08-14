@@ -874,5 +874,22 @@ namespace DMPHDWebAPI.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetOrderDetail_Result>("GetOrderDetail", orderDetailIDParameter);
         }
+    
+        public virtual ObjectResult<ReportGenaral_Result> ReportGenaral(string memberID, Nullable<int> year, Nullable<int> month)
+        {
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            var yearParameter = year.HasValue ?
+                new ObjectParameter("Year", year) :
+                new ObjectParameter("Year", typeof(int));
+    
+            var monthParameter = month.HasValue ?
+                new ObjectParameter("Month", month) :
+                new ObjectParameter("Month", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ReportGenaral_Result>("ReportGenaral", memberIDParameter, yearParameter, monthParameter);
+        }
     }
 }

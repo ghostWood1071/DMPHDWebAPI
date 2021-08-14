@@ -578,6 +578,11 @@
         <Function Name="InsertUserRequest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Email" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="ReportGenaral" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MemberID" Type="char" Mode="In" />
+          <Parameter Name="Year" Type="int" Mode="In" />
+          <Parameter Name="Month" Type="int" Mode="In" />
+        </Function>
         <Function Name="ReportMemberQuantityByLevel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="MemberID" Type="char" Mode="In" />
         </Function>
@@ -1401,6 +1406,11 @@
           <FunctionImport Name="GetOrderDetail" ReturnType="Collection(DMPModels.GetOrderDetail_Result)">
           <Parameter Name="OrderDetailID" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="ReportGenaral" ReturnType="Collection(DMPModels.ReportGenaral_Result)">
+            <Parameter Name="MemberID" Mode="In" Type="String" />
+            <Parameter Name="Year" Mode="In" Type="Int32" />
+            <Parameter Name="Month" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="District">
           <Key>
@@ -1702,6 +1712,12 @@
           <Property Type="Double" Name="UnitPrice" Nullable="true" />
           <Property Type="Double" Name="Discount" Nullable="true" />
           <Property Type="String" Name="ProductID" Nullable="true" MaxLength="10" />
+        </ComplexType>
+        <ComplexType Name="ReportGenaral_Result">
+          <Property Type="Int32" Name="CountLowerMembers" Nullable="true" />
+          <Property Type="Int32" Name="CountOrders" Nullable="true" />
+          <Property Type="Double" Name="Accmulation" Nullable="true" />
+          <Property Type="Double" Name="Salary" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -2220,6 +2236,16 @@
                 <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
                 <ScalarProperty Name="Discount" ColumnName="Discount" />
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ReportGenaral" FunctionName="DMPModels.Store.ReportGenaral">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.ReportGenaral_Result">
+                <ScalarProperty Name="CountLowerMembers" ColumnName="CountLowerMembers" />
+                <ScalarProperty Name="CountOrders" ColumnName="CountOrders" />
+                <ScalarProperty Name="Accmulation" ColumnName="Accmulation" />
+                <ScalarProperty Name="Salary" ColumnName="Salary" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
