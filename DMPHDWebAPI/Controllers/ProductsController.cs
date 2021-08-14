@@ -5,8 +5,11 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using DMPHDWebAPI.Models;
+using System.Web.Http.Cors;
+
 namespace DMPHDWebAPI.Controllers
 {
+    [EnableCors(origins:"http://localhost:52278", headers: "*", methods: "*")]
     public class ProductsController : ApiController
     {
         [HttpGet]
