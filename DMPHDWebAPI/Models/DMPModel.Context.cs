@@ -162,20 +162,6 @@ namespace DMPHDWebAPI.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLowerMembers_Result>("GetLowerMembers", memberIDParameter);
         }
     
-        public virtual ObjectResult<GetMemberByID_Result> GetMemberByID(string memberID)
-        {
-            var memberIDParameter = memberID != null ?
-                new ObjectParameter("MemberID", memberID) :
-                new ObjectParameter("MemberID", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetMemberByID_Result>("GetMemberByID", memberIDParameter);
-        }
-    
-        public virtual ObjectResult<GetMembers_Result> GetMembers()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetMembers_Result>("GetMembers");
-        }
-    
         public virtual ObjectResult<GetNotifies_Result> GetNotifies(string memberID)
         {
             var memberIDParameter = memberID != null ?
@@ -895,6 +881,20 @@ namespace DMPHDWebAPI.Models
                 new ObjectParameter("OrderID", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetOrderDetails_Result>("GetOrderDetails", orderIDParameter);
+        }
+    
+        public virtual ObjectResult<GetMemberByID_Result> GetMemberByID(string memberID)
+        {
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetMemberByID_Result>("GetMemberByID", memberIDParameter);
+        }
+    
+        public virtual ObjectResult<GetMembers_Result> GetMembers()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetMembers_Result>("GetMembers");
         }
     }
 }
