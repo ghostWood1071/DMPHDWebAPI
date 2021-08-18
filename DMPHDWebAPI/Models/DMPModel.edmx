@@ -1724,6 +1724,42 @@
           <Property Type="Int32" Name="Quantity" Nullable="true" />
           <Property Type="String" Name="Description" Nullable="true" MaxLength="500" />
         </ComplexType>
+        <ComplexType Name="GetMemberByID_Result">
+          <Property Type="String" Name="MemberID" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="FullName" Nullable="false" MaxLength="255" />
+          <Property Type="String" Name="ReferralID" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="Gender" Nullable="false" MaxLength="3" />
+          <Property Type="String" Name="Birthday" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Address" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Phone" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="IDCard" Nullable="false" MaxLength="13" />
+          <Property Type="String" Name="IDCard_PlaceIssue" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="IDCard_DateIssue" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Password" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="PositionID" Nullable="true" MaxLength="18" />
+          <Property Type="Int32" Name="RoleID" Nullable="false" />
+          <Property Type="Boolean" Name="IsActive" Nullable="true" />
+          <Property Type="String" Name="Avatar" Nullable="true" MaxLength="200" />
+        </ComplexType>
+        <ComplexType Name="GetMembers_Result">
+          <Property Type="String" Name="MemberID" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="FullName" Nullable="false" MaxLength="255" />
+          <Property Type="String" Name="ReferralID" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="Gender" Nullable="false" MaxLength="3" />
+          <Property Type="String" Name="Birthday" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Address" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Phone" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="IDCard" Nullable="false" MaxLength="13" />
+          <Property Type="String" Name="IDCard_PlaceIssue" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="IDCard_DateIssue" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Password" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="PositionID" Nullable="true" MaxLength="18" />
+          <Property Type="Int32" Name="RoleID" Nullable="false" />
+          <Property Type="Boolean" Name="IsActive" Nullable="true" />
+          <Property Type="String" Name="Avatar" Nullable="true" MaxLength="200" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
