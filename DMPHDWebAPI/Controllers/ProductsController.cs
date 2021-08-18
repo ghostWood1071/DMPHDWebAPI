@@ -99,18 +99,19 @@ namespace DMPHDWebAPI.Controllers
         // DELETE: api/Products/5
         [HttpDelete]
         [Route("DeleteProduct")]
-        public void Delete(string productID)
+        public IHttpActionResult Delete(string productID)
         {
             try
             {
                 using (DMPContext context = new DMPContext())
                 {
                     context.DeleteProduct(productID);
-                    
+                    return Ok();
                 }
             } catch(Exception e)
             {
                 Debug.WriteLine(e);
+                return BadRequest();
             }
         }
     }
