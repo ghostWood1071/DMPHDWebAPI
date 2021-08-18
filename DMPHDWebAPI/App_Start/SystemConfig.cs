@@ -15,5 +15,6 @@ namespace DMPHDWebAPI.App_Start
         public static string STANDARD_LEADER = "STANDARD_LEADER";
         public static string STANDARD_MANAGER = "STANDARD_MANAGER";
         public static string STANDARD_RESERVE_MANAGER = "STANDARD_RESERVE_MANAGER";
+        public const string CLIENT_DOMAIN = "http://localhost:52278";
     }
 }

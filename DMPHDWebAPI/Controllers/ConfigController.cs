@@ -6,9 +6,11 @@ using System.Net.Http;
 using System.Web.Http;
 using DMPHDWebAPI.Models;
 using DMPHDWebAPI.App_Start;
+using System.Web.Http.Cors;
 
 namespace DMPHDWebAPI.Controllers
 {
+    [EnableCors(origins: SystemConfig.CLIENT_DOMAIN, headers: "*", methods: "*")]
     public class ConfigController : ApiController
     {
 

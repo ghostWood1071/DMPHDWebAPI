@@ -9,5 +9,6 @@ namespace DMPHDWebAPI.Models
     {
         public string MemberID { get; set; }
         public DateTime OrderDate { get; set; }
+        public float Discount { get; set; }
     }
 }

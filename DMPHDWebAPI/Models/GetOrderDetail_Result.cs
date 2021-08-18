@@ -17,7 +17,6 @@ namespace DMPHDWebAPI.Models
         public string OrderID { get; set; }
         public Nullable<int> Quantity { get; set; }
         public Nullable<double> UnitPrice { get; set; }
-        public Nullable<double> Discount { get; set; }
         public string ProductID { get; set; }
     }
 }

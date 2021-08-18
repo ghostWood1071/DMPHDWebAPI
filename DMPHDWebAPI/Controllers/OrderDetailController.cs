@@ -59,7 +59,7 @@ namespace DMPHDWebAPI.Controllers
                 ProductDetail productDetail = context.ProductDetails.Where(x => x.ProductID == detail.ProductID && x.MemberID == memberID).FirstOrDefault();
                 productDetail.Quantity -= detail.Quantity;
                 context.SaveChanges();
-                context.InsertOrderDetail(detail.OrderID, detail.Quantity, detail.UnitPrice, detail.Discount, detail.ProductID);
+                context.InsertOrderDetail(detail.OrderID, detail.Quantity, detail.UnitPrice, detail.ProductID);
             }
         }
 
@@ -110,7 +110,7 @@ namespace DMPHDWebAPI.Controllers
 
                 }
                 context.SaveChanges();
-                context.UpdateOrrderDetail(value.OrderDetailID, value.ProductID, value.Quantity, value.Discount, value.UnitPrice);
+                context.UpdateOrrderDetail(value.OrderDetailID, value.ProductID, value.Quantity, value.UnitPrice);
             }
         }
 

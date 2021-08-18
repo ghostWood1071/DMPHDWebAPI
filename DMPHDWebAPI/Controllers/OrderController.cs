@@ -33,7 +33,7 @@ namespace DMPHDWebAPI.Controllers
         {
             using(DMPContext context = new DMPContext())
             {
-                context.InsertOrder(order.MemberID, order.OrderDate);
+                context.InsertOrder(order.MemberID, order.OrderDate, order.Discount);
             }
         }
 

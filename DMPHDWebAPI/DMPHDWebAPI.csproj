@@ -176,11 +176,19 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\ConfigController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MembersController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\OrderDetailController.cs" />
     <Compile Include="Controllers\ProductsController.cs" />
     <Compile Include="Controllers\SalePointController.cs" />
+    <Compile Include="Models\AccountPost.cs" />
+    <Compile Include="Models\GetOrderByID_Result.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetOrders_Result.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\OrderDetailPut.cs" />
     <Compile Include="Models\ReportGenaral_Result.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
@@ -232,16 +240,10 @@
     <Compile Include="Models\GetNotifyByID_Result.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\GetOrderByID_Result.cs">
-      <DependentUpon>DMPModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\GetOrderDetails_Result.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GetOrderDetail_Result.cs">
-      <DependentUpon>DMPModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\GetOrders_Result.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GetPositionByID_Result.cs">

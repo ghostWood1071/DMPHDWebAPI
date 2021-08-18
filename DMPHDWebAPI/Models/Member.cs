@@ -17,11 +17,11 @@ namespace DMPHDWebAPI.Models
         public Member()
         {
             this.MemberPoints = new HashSet<MemberPoint>();
+            this.Notifies = new HashSet<Notify>();
+            this.Notifies1 = new HashSet<Notify>();
             this.Orders = new HashSet<Order>();
             this.ProductDetails = new HashSet<ProductDetail>();
             this.SalePoints = new HashSet<SalePoint>();
-            this.Notifies = new HashSet<Notify>();
-            this.Notifies1 = new HashSet<Notify>();
         }
     
         public string MemberID { get; set; }
@@ -43,15 +43,15 @@ namespace DMPHDWebAPI.Models
         public Nullable<int> DistrictID { get; set; }
         public Nullable<int> ProvinceID { get; set; }
     
+        public virtual District District { get; set; }
         public virtual ICollection<MemberPoint> MemberPoints { get; set; }
         public virtual Position Position { get; set; }
+        public virtual Province Province { get; set; }
         public virtual Role Role { get; set; }
+        public virtual ICollection<Notify> Notifies { get; set; }
+        public virtual ICollection<Notify> Notifies1 { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
         public virtual ICollection<ProductDetail> ProductDetails { get; set; }
         public virtual ICollection<SalePoint> SalePoints { get; set; }
-        public virtual District District { get; set; }
-        public virtual Province Province { get; set; }
-        public virtual ICollection<Notify> Notifies { get; set; }
-        public virtual ICollection<Notify> Notifies1 { get; set; }
     }
 }

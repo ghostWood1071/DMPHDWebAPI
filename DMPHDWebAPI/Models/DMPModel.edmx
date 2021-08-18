@@ -82,7 +82,6 @@
           <Property Name="OrderID" Type="char" MaxLength="10" Nullable="false" />
           <Property Name="Quantity" Type="int" />
           <Property Name="UnitPrice" Type="float" />
-          <Property Name="Discount" Type="float" />
           <Property Name="ProductID" Type="char" MaxLength="10" />
         </EntityType>
         <EntityType Name="Orders">
@@ -92,7 +91,7 @@
           <Property Name="OrderID" Type="char" MaxLength="10" Nullable="false" />
           <Property Name="MemberID" Type="char" MaxLength="8" Nullable="false" />
           <Property Name="OrderDate" Type="datetime" />
-          <Property Name="UsedMark" Type="float" />
+          <Property Name="Discount" Type="float" />
         </EntityType>
         <EntityType Name="Positions">
           <Key>
@@ -546,12 +545,12 @@
         <Function Name="InsertOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="MemberID" Type="char" Mode="In" />
           <Parameter Name="OrderDate" Type="datetime" Mode="In" />
+          <Parameter Name="Discount" Type="float" Mode="In" />
         </Function>
         <Function Name="InsertOrderDetail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="OrderID" Type="char" Mode="In" />
           <Parameter Name="Quantity" Type="int" Mode="In" />
           <Parameter Name="UnitPrice" Type="float" Mode="In" />
-          <Parameter Name="Discount" Type="float" Mode="In" />
           <Parameter Name="ProductID" Type="char" Mode="In" />
         </Function>
         <Function Name="InsertOrderDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -633,7 +632,6 @@
           <Parameter Name="OrderDetailID" Type="int" Mode="In" />
           <Parameter Name="ProductID" Type="char" Mode="In" />
           <Parameter Name="Quantity" Type="int" Mode="In" />
-          <Parameter Name="Discount" Type="float" Mode="In" />
           <Parameter Name="UnitPrice" Type="float" Mode="In" />
         </Function>
         <Function Name="UpdatePosition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -673,6 +671,9 @@
           <Parameter Name="Email" Type="varchar" Mode="In" />
           <Parameter Name="RequestTime" Type="datetime" Mode="In" />
           <Parameter Name="IsHandled" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="CountLowerMembers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="vip12641_dmphd_user">
+          <Parameter Name="MemberID" Type="char" Mode="In" />
         </Function>
         <Function Name="DeleteOrderDetail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="vip12641_dmphd_user">
           <Parameter Name="OrderDetailID" Type="int" Mode="In" />
@@ -775,375 +776,23 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DMPModels" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Config">
-          <Key>
-            <PropertyRef Name="ParameterID" />
-          </Key>
-          <Property Name="ParameterID" Type="String" MaxLength="50" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="Value" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="MemberPoint">
-          <Key>
-            <PropertyRef Name="MemberID" />
-            <PropertyRef Name="Month" />
-            <PropertyRef Name="Year" />
-          </Key>
-          <Property Name="MemberID" Type="String" MaxLength="8" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="Month" Type="Int32" Nullable="false" />
-          <Property Name="Year" Type="Int32" Nullable="false" />
-          <Property Name="MediateMark" Type="Double" />
-          <Property Name="ImmediateMark" Type="Double" />
-          <Property Name="AccumulatedMark" Type="Double" />
-          <Property Name="UsedMark" Type="Double" />
-          <Property Name="TotalMark" Type="Double" />
-          <NavigationProperty Name="Member" Relationship="Self.FK_MemberPoints_Members" FromRole="MemberPoints" ToRole="Members" />
-        </EntityType>
-        <EntityType Name="Member">
-          <Key>
-            <PropertyRef Name="MemberID" />
-          </Key>
-          <Property Name="MemberID" Type="String" MaxLength="8" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="FullName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Avatar" Type="String" MaxLength="200" FixedLength="true" Unicode="false" />
-          <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Birthday" Type="DateTime" Precision="3" />
-          <Property Name="Gender" Type="Boolean" />
-          <Property Name="IDCard" Type="String" MaxLength="13" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="IDCard_PlaceIssue" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="IDCard_DateIssue" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Email" Type="String" MaxLength="50" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="Phone" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="Password" Type="String" MaxLength="50" FixedLength="true" Unicode="false" />
-          <Property Name="ReferralID" Type="String" MaxLength="8" FixedLength="true" Unicode="false" />
-          <Property Name="PositionID" Type="Int32" />
-          <Property Name="IsActive" Type="Boolean" />
-          <Property Name="RoleID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="MemberPoints" Relationship="Self.FK_MemberPoints_Members" FromRole="Members" ToRole="MemberPoints" />
-          <NavigationProperty Name="Position" Relationship="Self.FK_Members_Positions" FromRole="Members" ToRole="Positions" />
-          <NavigationProperty Name="Role" Relationship="Self.FK_Members_Roles" FromRole="Members" ToRole="Roles" />
-          <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Members" FromRole="Members" ToRole="Orders" />
-          <NavigationProperty Name="ProductDetails" Relationship="Self.FK_ProductDetails_Members" FromRole="Members" ToRole="ProductDetails" />
-          <NavigationProperty Name="SalePoints" Relationship="Self.FK_SalePoints_Members" FromRole="Members" ToRole="SalePoints" />
-          <Property Name="DistrictID" Type="Int32" />
-          <Property Name="ProvinceID" Type="Int32" />
-          <NavigationProperty Name="District" Relationship="DMPModels.FK_Members_District" FromRole="Member" ToRole="District" />
-          <NavigationProperty Name="Province" Relationship="DMPModels.FK_Members_Province" FromRole="Member" ToRole="Province" />
-          <NavigationProperty Name="Notifies" Relationship="DMPModels.FK_Notifies_Members" FromRole="Member" ToRole="Notify" />
-          <NavigationProperty Name="Notifies1" Relationship="DMPModels.FK_Notifies_Members1" FromRole="Member" ToRole="Notify" />
-        </EntityType>
-        <EntityType Name="OrderDetail">
-          <Key>
-            <PropertyRef Name="OrderDetailID" />
-            <PropertyRef Name="OrderID" />
-          </Key>
-          <Property Name="OrderDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="OrderID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="Quantity" Type="Int32" />
-          <Property Name="UnitPrice" Type="Double" />
-          <Property Name="Discount" Type="Double" />
-          <Property Name="ProductID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
-          <NavigationProperty Name="Order" Relationship="Self.FK_OrderDetails_Orders" FromRole="OrderDetails" ToRole="Orders" />
-          <NavigationProperty Name="Product" Relationship="Self.FK_OrderDetails_Products" FromRole="OrderDetails" ToRole="Products" />
-        </EntityType>
-        <EntityType Name="Order">
-          <Key>
-            <PropertyRef Name="OrderID" />
-          </Key>
-          <Property Name="OrderID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="MemberID" Type="String" MaxLength="8" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="OrderDate" Type="DateTime" Precision="3" />
-          <Property Name="UsedMark" Type="Double" />
-          <NavigationProperty Name="Member" Relationship="Self.FK_Orders_Members" FromRole="Orders" ToRole="Members" />
-          <NavigationProperty Name="OrderDetails" Relationship="Self.FK_OrderDetails_Orders" FromRole="Orders" ToRole="OrderDetails" />
-          <NavigationProperty Name="SalePoints" Relationship="Self.FK_SalePoints_Orders" FromRole="Orders" ToRole="SalePoints" />
-        </EntityType>
-        <EntityType Name="Position">
-          <Key>
-            <PropertyRef Name="PositionID" />
-          </Key>
-          <Property Name="PositionID" Type="Int32" Nullable="false" />
-          <Property Name="PositionName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Discount" Type="Double" />
-          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Members" Relationship="Self.FK_Members_Positions" FromRole="Positions" ToRole="Members" />
-        </EntityType>
-        <EntityType Name="Price">
-          <Key>
-            <PropertyRef Name="PriceID" />
-          </Key>
-          <Property Name="ProductID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="EndDate" Type="DateTime" Precision="3" />
-          <Property Name="BeginDate" Type="DateTime" Precision="3" />
-          <Property Name="BasePrice" Type="Double" />
-          <Property Name="OriginPrice" Type="Double" />
-          <NavigationProperty Name="Product" Relationship="Self.FK_Prices_Products" FromRole="Prices" ToRole="Products" />
-          <Property Name="PriceID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="SalePoint" Type="Double" />
-        </EntityType>
-        <EntityType Name="ProductDetail">
-          <Key>
-            <PropertyRef Name="ProductDetailID" />
-            <PropertyRef Name="ProductID" />
-          </Key>
-          <Property Name="ProductDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="MemberID" Type="String" MaxLength="8" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="Quantity" Type="Int32" Nullable="false" />
-          <Property Name="ProductID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="Member" Relationship="Self.FK_ProductDetails_Members" FromRole="ProductDetails" ToRole="Members" />
-          <NavigationProperty Name="Product" Relationship="Self.FK_ProductDetails_Products" FromRole="ProductDetails" ToRole="Products" />
-        </EntityType>
-        <EntityType Name="Product">
-          <Key>
-            <PropertyRef Name="ProductID" />
-          </Key>
-          <Property Name="ProductID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="ProductName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="OrderDetails" Relationship="Self.FK_OrderDetails_Products" FromRole="Products" ToRole="OrderDetails" />
-          <NavigationProperty Name="Prices" Relationship="Self.FK_Prices_Products" FromRole="Products" ToRole="Prices" />
-          <NavigationProperty Name="ProductDetails" Relationship="Self.FK_ProductDetails_Products" FromRole="Products" ToRole="ProductDetails" />
-        </EntityType>
-        <EntityType Name="Role">
-          <Key>
-            <PropertyRef Name="RoleID" />
-          </Key>
-          <Property Name="RoleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="RoleName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Members" Relationship="Self.FK_Members_Roles" FromRole="Roles" ToRole="Members" />
-          <NavigationProperty Name="UserFunctions" Relationship="Self.UserPermissions" FromRole="Roles" ToRole="UserFunctions" />
-        </EntityType>
-        <EntityType Name="SalePoint">
-          <Key>
-            <PropertyRef Name="SalePointID" />
-          </Key>
-          <Property Name="SalePointID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="MemberID" Type="String" MaxLength="8" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="Mark" Type="Double" />
-          <Property Name="OrderID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
-          <Property Name="SaleMonth" Type="Int32" />
-          <Property Name="SaleYear" Type="Int32" />
-          <NavigationProperty Name="Member" Relationship="Self.FK_SalePoints_Members" FromRole="SalePoints" ToRole="Members" />
-          <NavigationProperty Name="Order" Relationship="Self.FK_SalePoints_Orders" FromRole="SalePoints" ToRole="Orders" />
-        </EntityType>
-        <EntityType Name="UserFunction">
-          <Key>
-            <PropertyRef Name="FunctionID" />
-          </Key>
-          <Property Name="FunctionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="FunctionName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Roles" Relationship="Self.UserPermissions" FromRole="UserFunctions" ToRole="Roles" />
-        </EntityType>
-        <EntityType Name="UserRequest">
-          <Key>
-            <PropertyRef Name="RequestID" />
-          </Key>
-          <Property Name="RequestID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Code" Type="Guid" Nullable="false" />
-          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="RequestTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="IsHandled" Type="Boolean" Nullable="false" />
-        </EntityType>
-        <Association Name="FK_MemberPoints_Members">
-          <End Role="Members" Type="Self.Member" Multiplicity="1" />
-          <End Role="MemberPoints" Type="Self.MemberPoint" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Members">
-              <PropertyRef Name="MemberID" />
-            </Principal>
-            <Dependent Role="MemberPoints">
-              <PropertyRef Name="MemberID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Members_Positions">
-          <End Role="Positions" Type="Self.Position" Multiplicity="0..1" />
-          <End Role="Members" Type="Self.Member" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Positions">
-              <PropertyRef Name="PositionID" />
-            </Principal>
-            <Dependent Role="Members">
-              <PropertyRef Name="PositionID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Members_Roles">
-          <End Role="Roles" Type="Self.Role" Multiplicity="1" />
-          <End Role="Members" Type="Self.Member" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Roles">
-              <PropertyRef Name="RoleID" />
-            </Principal>
-            <Dependent Role="Members">
-              <PropertyRef Name="RoleID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Orders_Members">
-          <End Role="Members" Type="Self.Member" Multiplicity="1" />
-          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Members">
-              <PropertyRef Name="MemberID" />
-            </Principal>
-            <Dependent Role="Orders">
-              <PropertyRef Name="MemberID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ProductDetails_Members">
-          <End Role="Members" Type="Self.Member" Multiplicity="1" />
-          <End Role="ProductDetails" Type="Self.ProductDetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Members">
-              <PropertyRef Name="MemberID" />
-            </Principal>
-            <Dependent Role="ProductDetails">
-              <PropertyRef Name="MemberID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SalePoints_Members">
-          <End Role="Members" Type="Self.Member" Multiplicity="1" />
-          <End Role="SalePoints" Type="Self.SalePoint" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Members">
-              <PropertyRef Name="MemberID" />
-            </Principal>
-            <Dependent Role="SalePoints">
-              <PropertyRef Name="MemberID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_OrderDetails_Orders">
-          <End Role="Orders" Type="Self.Order" Multiplicity="1" />
-          <End Role="OrderDetails" Type="Self.OrderDetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Orders">
-              <PropertyRef Name="OrderID" />
-            </Principal>
-            <Dependent Role="OrderDetails">
-              <PropertyRef Name="OrderID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_OrderDetails_Products">
-          <End Role="Products" Type="Self.Product" Multiplicity="0..1" />
-          <End Role="OrderDetails" Type="Self.OrderDetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Products">
-              <PropertyRef Name="ProductID" />
-            </Principal>
-            <Dependent Role="OrderDetails">
-              <PropertyRef Name="ProductID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SalePoints_Orders">
-          <End Role="Orders" Type="Self.Order" Multiplicity="0..1" />
-          <End Role="SalePoints" Type="Self.SalePoint" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Orders">
-              <PropertyRef Name="OrderID" />
-            </Principal>
-            <Dependent Role="SalePoints">
-              <PropertyRef Name="OrderID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Prices_Products">
-          <End Role="Products" Type="Self.Product" Multiplicity="1" />
-          <End Role="Prices" Type="Self.Price" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Products">
-              <PropertyRef Name="ProductID" />
-            </Principal>
-            <Dependent Role="Prices">
-              <PropertyRef Name="ProductID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ProductDetails_Products">
-          <End Role="Products" Type="Self.Product" Multiplicity="1" />
-          <End Role="ProductDetails" Type="Self.ProductDetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Products">
-              <PropertyRef Name="ProductID" />
-            </Principal>
-            <Dependent Role="ProductDetails">
-              <PropertyRef Name="ProductID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="UserPermissions">
-          <End Role="Roles" Type="Self.Role" Multiplicity="*" />
-          <End Role="UserFunctions" Type="Self.UserFunction" Multiplicity="*" />
-        </Association>
         <EntityContainer Name="DMPContext" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Configs" EntityType="Self.Config" />
-          <EntitySet Name="MemberPoints" EntityType="Self.MemberPoint" />
-          <EntitySet Name="Members" EntityType="Self.Member" />
-          <EntitySet Name="OrderDetails" EntityType="Self.OrderDetail" />
-          <EntitySet Name="Orders" EntityType="Self.Order" />
-          <EntitySet Name="Positions" EntityType="Self.Position" />
-          <EntitySet Name="Prices" EntityType="Self.Price" />
-          <EntitySet Name="ProductDetails" EntityType="Self.ProductDetail" />
-          <EntitySet Name="Products" EntityType="Self.Product" />
-          <EntitySet Name="Roles" EntityType="Self.Role" />
-          <EntitySet Name="SalePoints" EntityType="Self.SalePoint" />
-          <EntitySet Name="UserFunctions" EntityType="Self.UserFunction" />
-          <EntitySet Name="UserRequests" EntityType="Self.UserRequest" />
-          <AssociationSet Name="FK_MemberPoints_Members" Association="Self.FK_MemberPoints_Members">
-            <End Role="Members" EntitySet="Members" />
-            <End Role="MemberPoints" EntitySet="MemberPoints" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Members_Positions" Association="Self.FK_Members_Positions">
-            <End Role="Positions" EntitySet="Positions" />
-            <End Role="Members" EntitySet="Members" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Members_Roles" Association="Self.FK_Members_Roles">
-            <End Role="Roles" EntitySet="Roles" />
-            <End Role="Members" EntitySet="Members" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Orders_Members" Association="Self.FK_Orders_Members">
-            <End Role="Members" EntitySet="Members" />
-            <End Role="Orders" EntitySet="Orders" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ProductDetails_Members" Association="Self.FK_ProductDetails_Members">
-            <End Role="Members" EntitySet="Members" />
-            <End Role="ProductDetails" EntitySet="ProductDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_SalePoints_Members" Association="Self.FK_SalePoints_Members">
-            <End Role="Members" EntitySet="Members" />
-            <End Role="SalePoints" EntitySet="SalePoints" />
-          </AssociationSet>
-          <AssociationSet Name="FK_OrderDetails_Orders" Association="Self.FK_OrderDetails_Orders">
-            <End Role="Orders" EntitySet="Orders" />
-            <End Role="OrderDetails" EntitySet="OrderDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_OrderDetails_Products" Association="Self.FK_OrderDetails_Products">
-            <End Role="Products" EntitySet="Products" />
-            <End Role="OrderDetails" EntitySet="OrderDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_SalePoints_Orders" Association="Self.FK_SalePoints_Orders">
-            <End Role="Orders" EntitySet="Orders" />
-            <End Role="SalePoints" EntitySet="SalePoints" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Prices_Products" Association="Self.FK_Prices_Products">
-            <End Role="Products" EntitySet="Products" />
-            <End Role="Prices" EntitySet="Prices" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ProductDetails_Products" Association="Self.FK_ProductDetails_Products">
-            <End Role="Products" EntitySet="Products" />
-            <End Role="ProductDetails" EntitySet="ProductDetails" />
-          </AssociationSet>
-          <AssociationSet Name="UserPermissions" Association="Self.UserPermissions">
-            <End Role="Roles" EntitySet="Roles" />
-            <End Role="UserFunctions" EntitySet="UserFunctions" />
-          </AssociationSet>
+          <EntitySet Name="Configs" EntityType="DMPModels.Config" />
           <EntitySet Name="Districts" EntityType="DMPModels.District" />
+          <EntitySet Name="MemberPoints" EntityType="DMPModels.MemberPoint" />
+          <EntitySet Name="Members" EntityType="DMPModels.Member" />
+          <EntitySet Name="Notifies" EntityType="DMPModels.Notify" />
+          <EntitySet Name="OrderDetails" EntityType="DMPModels.OrderDetail" />
+          <EntitySet Name="Orders" EntityType="DMPModels.Order" />
+          <EntitySet Name="Positions" EntityType="DMPModels.Position" />
+          <EntitySet Name="Prices" EntityType="DMPModels.Price" />
+          <EntitySet Name="ProductDetails" EntityType="DMPModels.ProductDetail" />
+          <EntitySet Name="Products" EntityType="DMPModels.Product" />
           <EntitySet Name="Provinces" EntityType="DMPModels.Province" />
+          <EntitySet Name="Roles" EntityType="DMPModels.Role" />
+          <EntitySet Name="SalePoints" EntityType="DMPModels.SalePoint" />
+          <EntitySet Name="UserFunctions" EntityType="DMPModels.UserFunction" />
+          <EntitySet Name="UserRequests" EntityType="DMPModels.UserRequest" />
           <AssociationSet Name="FK_District_Province" Association="DMPModels.FK_District_Province">
             <End Role="Province" EntitySet="Provinces" />
             <End Role="District" EntitySet="Districts" />
@@ -1152,11 +801,22 @@
             <End Role="District" EntitySet="Districts" />
             <End Role="Member" EntitySet="Members" />
           </AssociationSet>
+          <AssociationSet Name="FK_MemberPoints_Members" Association="DMPModels.FK_MemberPoints_Members">
+            <End Role="Member" EntitySet="Members" />
+            <End Role="MemberPoint" EntitySet="MemberPoints" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Members_Positions" Association="DMPModels.FK_Members_Positions">
+            <End Role="Position" EntitySet="Positions" />
+            <End Role="Member" EntitySet="Members" />
+          </AssociationSet>
           <AssociationSet Name="FK_Members_Province" Association="DMPModels.FK_Members_Province">
             <End Role="Province" EntitySet="Provinces" />
             <End Role="Member" EntitySet="Members" />
           </AssociationSet>
-          <EntitySet Name="Notifies" EntityType="DMPModels.Notify" />
+          <AssociationSet Name="FK_Members_Roles" Association="DMPModels.FK_Members_Roles">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="Member" EntitySet="Members" />
+          </AssociationSet>
           <AssociationSet Name="FK_Notifies_Members" Association="DMPModels.FK_Notifies_Members">
             <End Role="Member" EntitySet="Members" />
             <End Role="Notify" EntitySet="Notifies" />
@@ -1164,6 +824,42 @@
           <AssociationSet Name="FK_Notifies_Members1" Association="DMPModels.FK_Notifies_Members1">
             <End Role="Member" EntitySet="Members" />
             <End Role="Notify" EntitySet="Notifies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Members" Association="DMPModels.FK_Orders_Members">
+            <End Role="Member" EntitySet="Members" />
+            <End Role="Order" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductDetails_Members" Association="DMPModels.FK_ProductDetails_Members">
+            <End Role="Member" EntitySet="Members" />
+            <End Role="ProductDetail" EntitySet="ProductDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SalePoints_Members" Association="DMPModels.FK_SalePoints_Members">
+            <End Role="Member" EntitySet="Members" />
+            <End Role="SalePoint" EntitySet="SalePoints" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetails_Orders" Association="DMPModels.FK_OrderDetails_Orders">
+            <End Role="Order" EntitySet="Orders" />
+            <End Role="OrderDetail" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetails_Products" Association="DMPModels.FK_OrderDetails_Products">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="OrderDetail" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SalePoints_Orders" Association="DMPModels.FK_SalePoints_Orders">
+            <End Role="Order" EntitySet="Orders" />
+            <End Role="SalePoint" EntitySet="SalePoints" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Prices_Products" Association="DMPModels.FK_Prices_Products">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="Price" EntitySet="Prices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductDetails_Products" Association="DMPModels.FK_ProductDetails_Products">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="ProductDetail" EntitySet="ProductDetails" />
+          </AssociationSet>
+          <AssociationSet Name="UserPermissions" Association="DMPModels.UserPermissions">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="UserFunction" EntitySet="UserFunctions" />
           </AssociationSet>
           <FunctionImport Name="AccumulationMark" IsComposable="true" ReturnType="Collection(DMPModels.AccumulationMark_Result)">
             <Parameter Name="MemberID" Mode="In" Type="String" />
@@ -1181,6 +877,9 @@
           <FunctionImport Name="DeleteNotify">
           <Parameter Name="NotifyID" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="DeleteOrder">
+          <Parameter Name="OrderID" Mode="In" Type="String" />
+          </FunctionImport>
           <FunctionImport Name="DeletePosition">
           <Parameter Name="PositionID" Mode="In" Type="Int32" />
           </FunctionImport>
@@ -1190,8 +889,14 @@
           <FunctionImport Name="DeleteProduct">
           <Parameter Name="ProductID" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="DeleteSalePoint">
+          <Parameter Name="OrderID" Mode="In" Type="String" />
+          </FunctionImport>
           <FunctionImport Name="DeleteUserRequest">
           <Parameter Name="RequestID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetLowerMembers" ReturnType="Collection(DMPModels.GetLowerMembers_Result)">
+          <Parameter Name="MemberID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetMemberByID" ReturnType="Collection(DMPModels.GetMemberByID_Result)">
           <Parameter Name="MemberID" Mode="In" Type="String" />
@@ -1202,6 +907,9 @@
           </FunctionImport>
           <FunctionImport Name="GetNotifyByID" ReturnType="Collection(DMPModels.GetNotifyByID_Result)">
           <Parameter Name="NotifyID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetOrderDetail" ReturnType="Collection(DMPModels.GetOrderDetail_Result)">
+          <Parameter Name="OrderDetailID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetPositionByID" ReturnType="Collection(DMPModels.GetPositionByID_Result)">
           <Parameter Name="PositionID" Mode="In" Type="Int32" />
@@ -1217,6 +925,10 @@
           <FunctionImport Name="GetProductsByID" ReturnType="Collection(DMPModels.GetProductsByID_Result)">
             <Parameter Name="MemberID" Mode="In" Type="String" />
             <Parameter Name="ProductID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetSalary" ReturnType="Collection(DMPModels.GetSalary_Result)">
+            <Parameter Name="MemberID" Mode="In" Type="String" />
+            <Parameter Name="Year" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetUserRequestByID" ReturnType="Collection(DMPModels.GetUserRequestByID_Result)">
           <Parameter Name="RequestID" Mode="In" Type="Int32" />
@@ -1256,6 +968,20 @@
             <Parameter Name="Receiver" Mode="In" Type="String" />
             <Parameter Name="Status" Mode="In" Type="Boolean" />
           </FunctionImport>
+          <FunctionImport Name="InsertOrder">
+            <Parameter Name="MemberID" Mode="In" Type="String" />
+            <Parameter Name="OrderDate" Mode="In" Type="DateTime" />
+            <Parameter Name="Discount" Mode="In" Type="Double" />
+          </FunctionImport>
+          <FunctionImport Name="InsertOrderDetail">
+            <Parameter Name="OrderID" Mode="In" Type="String" />
+            <Parameter Name="Quantity" Mode="In" Type="Int32" />
+            <Parameter Name="UnitPrice" Mode="In" Type="Double" />
+            <Parameter Name="ProductID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="InsertOrderDetails">
+          <Parameter Name="Details" Mode="In" Type="String" />
+          </FunctionImport>
           <FunctionImport Name="InsertPosition">
             <Parameter Name="PositionName" Mode="In" Type="String" />
             <Parameter Name="Discount" Mode="In" Type="Double" />
@@ -1269,8 +995,18 @@
             <Parameter Name="OriginPrice" Mode="In" Type="Double" />
             <Parameter Name="SaleProint" Mode="In" Type="Double" />
           </FunctionImport>
+          <FunctionImport Name="InsertSalePoint">
+            <Parameter Name="OrderID" Mode="In" Type="String" />
+            <Parameter Name="MemberID" Mode="In" Type="String" />
+            <Parameter Name="Mark" Mode="In" Type="Double" />
+          </FunctionImport>
           <FunctionImport Name="InsertUserRequest">
           <Parameter Name="Email" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ReportGenaral" ReturnType="Collection(DMPModels.ReportGenaral_Result)">
+            <Parameter Name="MemberID" Mode="In" Type="String" />
+            <Parameter Name="Year" Mode="In" Type="Int32" />
+            <Parameter Name="Month" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="ReportMemberQuantityByLevel" ReturnType="Collection(DMPModels.ReportMemberQuantityByLevel_Result)">
           <Parameter Name="MemberID" Mode="In" Type="String" />
@@ -1308,6 +1044,17 @@
             <Parameter Name="Receiver" Mode="In" Type="String" />
             <Parameter Name="Status" Mode="In" Type="Boolean" />
           </FunctionImport>
+          <FunctionImport Name="UpdateOrder">
+            <Parameter Name="OrderID" Mode="In" Type="String" />
+            <Parameter Name="MemberID" Mode="In" Type="String" />
+            <Parameter Name="OrderDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="UpdateOrrderDetail">
+            <Parameter Name="OrderDetailID" Mode="In" Type="Int32" />
+            <Parameter Name="ProductID" Mode="In" Type="String" />
+            <Parameter Name="Quantity" Mode="In" Type="Int32" />
+            <Parameter Name="UnitPrice" Mode="In" Type="Double" />
+          </FunctionImport>
           <FunctionImport Name="UpdatePosition">
             <Parameter Name="PositionID" Mode="In" Type="Int32" />
             <Parameter Name="PositionName" Mode="In" Type="String" />
@@ -1332,64 +1079,6 @@
             <Parameter Name="Quantity" Mode="In" Type="Int32" />
             <Parameter Name="Description" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="UpdateUserRequest">
-            <Parameter Name="RequestID" Mode="In" Type="Int32" />
-            <Parameter Name="Code" Mode="In" Type="Guid" />
-            <Parameter Name="Email" Mode="In" Type="String" />
-            <Parameter Name="RequestTime" Mode="In" Type="DateTime" />
-            <Parameter Name="IsHandled" Mode="In" Type="Boolean" />
-          </FunctionImport>
-          <FunctionImport Name="DeleteOrder">
-          <Parameter Name="OrderID" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="GetOrderByID" ReturnType="Collection(DMPModels.GetOrderByID_Result)">
-          <Parameter Name="OrderID" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="GetOrders" ReturnType="Collection(DMPModels.GetOrders_Result)" />
-          <FunctionImport Name="InsertOrder">
-            <Parameter Name="MemberID" Mode="In" Type="String" />
-            <Parameter Name="OrderDate" Mode="In" Type="DateTime" />
-          </FunctionImport>
-          <FunctionImport Name="UpdateOrder">
-            <Parameter Name="OrderID" Mode="In" Type="String" />
-            <Parameter Name="MemberID" Mode="In" Type="String" />
-            <Parameter Name="OrderDate" Mode="In" Type="DateTime" />
-          </FunctionImport>
-          <FunctionImport Name="GetLowerMembers" ReturnType="Collection(DMPModels.GetLowerMembers_Result)">
-          <Parameter Name="MemberID" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="DeleteSalePoint">
-          <Parameter Name="OrderID" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="GetOrderDetails" ReturnType="Collection(DMPModels.GetOrderDetails_Result)">
-          <Parameter Name="OrderID" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="GetSalary" ReturnType="Collection(DMPModels.GetSalary_Result)">
-            <Parameter Name="MemberID" Mode="In" Type="String" />
-            <Parameter Name="Year" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="InsertOrderDetail">
-            <Parameter Name="OrderID" Mode="In" Type="String" />
-            <Parameter Name="Quantity" Mode="In" Type="Int32" />
-            <Parameter Name="UnitPrice" Mode="In" Type="Double" />
-            <Parameter Name="Discount" Mode="In" Type="Double" />
-            <Parameter Name="ProductID" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="InsertOrderDetails">
-          <Parameter Name="Details" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="InsertSalePoint">
-            <Parameter Name="OrderID" Mode="In" Type="String" />
-            <Parameter Name="MemberID" Mode="In" Type="String" />
-            <Parameter Name="Mark" Mode="In" Type="Double" />
-          </FunctionImport>
-          <FunctionImport Name="UpdateOrrderDetail">
-            <Parameter Name="OrderDetailID" Mode="In" Type="Int32" />
-            <Parameter Name="ProductID" Mode="In" Type="String" />
-            <Parameter Name="Quantity" Mode="In" Type="Int32" />
-            <Parameter Name="Discount" Mode="In" Type="Double" />
-            <Parameter Name="UnitPrice" Mode="In" Type="Double" />
-          </FunctionImport>
           <FunctionImport Name="UpdateSalePoint">
             <Parameter Name="OrderID" Mode="In" Type="String" />
             <Parameter Name="MemberID" Mode="In" Type="String" />
@@ -1397,21 +1086,38 @@
             <Parameter Name="SaleMonth" Mode="In" Type="Int32" />
             <Parameter Name="SaleYear" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="UpdateUserRequest">
+            <Parameter Name="RequestID" Mode="In" Type="Int32" />
+            <Parameter Name="Code" Mode="In" Type="Guid" />
+            <Parameter Name="Email" Mode="In" Type="String" />
+            <Parameter Name="RequestTime" Mode="In" Type="DateTime" />
+            <Parameter Name="IsHandled" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="CountLowerMembers" ReturnType="Collection(Int32)">
+          <Parameter Name="MemberID" Mode="In" Type="String" />
+          </FunctionImport>
           <FunctionImport Name="DeleteOrderDetail">
           <Parameter Name="OrderDetailID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="DeleteOrderdetails">
           <Parameter Name="OrderID" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="GetOrderDetail" ReturnType="Collection(DMPModels.GetOrderDetail_Result)">
-          <Parameter Name="OrderDetailID" Mode="In" Type="Int32" />
+          <FunctionImport Name="GetOrderByID" ReturnType="Collection(DMPModels.GetOrderByID_Result)">
+          <Parameter Name="OrderID" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="ReportGenaral" ReturnType="Collection(DMPModels.ReportGenaral_Result)">
-            <Parameter Name="MemberID" Mode="In" Type="String" />
-            <Parameter Name="Year" Mode="In" Type="Int32" />
-            <Parameter Name="Month" Mode="In" Type="Int32" />
+          <FunctionImport Name="GetOrders" ReturnType="Collection(DMPModels.GetOrders_Result)" />
+          <FunctionImport Name="GetOrderDetails" ReturnType="Collection(DMPModels.GetOrderDetails_Result)">
+            <Parameter Name="OrderID" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
+        <EntityType Name="Config">
+          <Key>
+            <PropertyRef Name="ParameterID" />
+          </Key>
+          <Property Name="ParameterID" Type="String" Nullable="false" MaxLength="50" FixedLength="true" Unicode="false" />
+          <Property Name="Value" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
         <EntityType Name="District">
           <Key>
             <PropertyRef Name="Id" />
@@ -1423,6 +1129,140 @@
           <Property Name="SortOrder" Type="Int32" />
           <NavigationProperty Name="Province" Relationship="DMPModels.FK_District_Province" FromRole="District" ToRole="Province" />
           <NavigationProperty Name="Members" Relationship="DMPModels.FK_Members_District" FromRole="District" ToRole="Member" />
+        </EntityType>
+        <EntityType Name="MemberPoint">
+          <Key>
+            <PropertyRef Name="MemberID" />
+            <PropertyRef Name="Month" />
+            <PropertyRef Name="Year" />
+          </Key>
+          <Property Name="MemberID" Type="String" Nullable="false" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Name="Month" Type="Int32" Nullable="false" />
+          <Property Name="Year" Type="Int32" Nullable="false" />
+          <Property Name="MediateMark" Type="Double" />
+          <Property Name="ImmediateMark" Type="Double" />
+          <Property Name="AccumulatedMark" Type="Double" />
+          <Property Name="UsedMark" Type="Double" />
+          <Property Name="TotalMark" Type="Double" />
+          <NavigationProperty Name="Member" Relationship="DMPModels.FK_MemberPoints_Members" FromRole="MemberPoint" ToRole="Member" />
+        </EntityType>
+        <EntityType Name="Member">
+          <Key>
+            <PropertyRef Name="MemberID" />
+          </Key>
+          <Property Name="MemberID" Type="String" Nullable="false" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Name="FullName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Avatar" Type="String" MaxLength="200" FixedLength="true" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Birthday" Type="DateTime" Precision="3" />
+          <Property Name="Gender" Type="Boolean" />
+          <Property Name="IDCard" Type="String" Nullable="false" MaxLength="13" FixedLength="true" Unicode="false" />
+          <Property Name="IDCard_PlaceIssue" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="IDCard_DateIssue" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="true" Unicode="false" />
+          <Property Name="Phone" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="true" Unicode="false" />
+          <Property Name="ReferralID" Type="String" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Name="PositionID" Type="Int32" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="RoleID" Type="Int32" Nullable="false" />
+          <Property Name="DistrictID" Type="Int32" />
+          <Property Name="ProvinceID" Type="Int32" />
+          <NavigationProperty Name="District" Relationship="DMPModels.FK_Members_District" FromRole="Member" ToRole="District" />
+          <NavigationProperty Name="MemberPoints" Relationship="DMPModels.FK_MemberPoints_Members" FromRole="Member" ToRole="MemberPoint" />
+          <NavigationProperty Name="Position" Relationship="DMPModels.FK_Members_Positions" FromRole="Member" ToRole="Position" />
+          <NavigationProperty Name="Province" Relationship="DMPModels.FK_Members_Province" FromRole="Member" ToRole="Province" />
+          <NavigationProperty Name="Role" Relationship="DMPModels.FK_Members_Roles" FromRole="Member" ToRole="Role" />
+          <NavigationProperty Name="Notifies" Relationship="DMPModels.FK_Notifies_Members" FromRole="Member" ToRole="Notify" />
+          <NavigationProperty Name="Notifies1" Relationship="DMPModels.FK_Notifies_Members1" FromRole="Member" ToRole="Notify" />
+          <NavigationProperty Name="Orders" Relationship="DMPModels.FK_Orders_Members" FromRole="Member" ToRole="Order" />
+          <NavigationProperty Name="ProductDetails" Relationship="DMPModels.FK_ProductDetails_Members" FromRole="Member" ToRole="ProductDetail" />
+          <NavigationProperty Name="SalePoints" Relationship="DMPModels.FK_SalePoints_Members" FromRole="Member" ToRole="SalePoint" />
+        </EntityType>
+        <EntityType Name="Notify">
+          <Key>
+            <PropertyRef Name="NotifyID" />
+          </Key>
+          <Property Name="NotifyID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="NotifyContent" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="LastUpdated" Type="DateTime" Precision="3" />
+          <Property Name="Sender" Type="String" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Name="Receiver" Type="String" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Name="Status" Type="Boolean" />
+          <NavigationProperty Name="Member" Relationship="DMPModels.FK_Notifies_Members" FromRole="Notify" ToRole="Member" />
+          <NavigationProperty Name="Member1" Relationship="DMPModels.FK_Notifies_Members1" FromRole="Notify" ToRole="Member" />
+        </EntityType>
+        <EntityType Name="OrderDetail">
+          <Key>
+            <PropertyRef Name="OrderDetailID" />
+            <PropertyRef Name="OrderID" />
+          </Key>
+          <Property Name="OrderDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderID" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="UnitPrice" Type="Double" />
+          <Property Name="ProductID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="Order" Relationship="DMPModels.FK_OrderDetails_Orders" FromRole="OrderDetail" ToRole="Order" />
+          <NavigationProperty Name="Product" Relationship="DMPModels.FK_OrderDetails_Products" FromRole="OrderDetail" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="OrderID" />
+          </Key>
+          <Property Name="OrderID" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="MemberID" Type="String" Nullable="false" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Name="OrderDate" Type="DateTime" Precision="3" />
+          <Property Name="Discount" Type="Double" />
+          <NavigationProperty Name="Member" Relationship="DMPModels.FK_Orders_Members" FromRole="Order" ToRole="Member" />
+          <NavigationProperty Name="OrderDetails" Relationship="DMPModels.FK_OrderDetails_Orders" FromRole="Order" ToRole="OrderDetail" />
+          <NavigationProperty Name="SalePoints" Relationship="DMPModels.FK_SalePoints_Orders" FromRole="Order" ToRole="SalePoint" />
+        </EntityType>
+        <EntityType Name="Position">
+          <Key>
+            <PropertyRef Name="PositionID" />
+          </Key>
+          <Property Name="PositionID" Type="Int32" Nullable="false" />
+          <Property Name="PositionName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Discount" Type="Double" />
+          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Members" Relationship="DMPModels.FK_Members_Positions" FromRole="Position" ToRole="Member" />
+        </EntityType>
+        <EntityType Name="Price">
+          <Key>
+            <PropertyRef Name="PriceID" />
+          </Key>
+          <Property Name="PriceID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductID" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="EndDate" Type="DateTime" Precision="3" />
+          <Property Name="BeginDate" Type="DateTime" Precision="3" />
+          <Property Name="BasePrice" Type="Double" />
+          <Property Name="OriginPrice" Type="Double" />
+          <Property Name="SalePoint" Type="Double" />
+          <NavigationProperty Name="Product" Relationship="DMPModels.FK_Prices_Products" FromRole="Price" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="ProductDetail">
+          <Key>
+            <PropertyRef Name="ProductDetailID" />
+            <PropertyRef Name="ProductID" />
+          </Key>
+          <Property Name="ProductDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MemberID" Type="String" Nullable="false" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="ProductID" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="Member" Relationship="DMPModels.FK_ProductDetails_Members" FromRole="ProductDetail" ToRole="Member" />
+          <NavigationProperty Name="Product" Relationship="DMPModels.FK_ProductDetails_Products" FromRole="ProductDetail" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ProductID" />
+          </Key>
+          <Property Name="ProductID" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="ProductName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="OrderDetails" Relationship="DMPModels.FK_OrderDetails_Products" FromRole="Product" ToRole="OrderDetail" />
+          <NavigationProperty Name="Prices" Relationship="DMPModels.FK_Prices_Products" FromRole="Product" ToRole="Price" />
+          <NavigationProperty Name="ProductDetails" Relationship="DMPModels.FK_ProductDetails_Products" FromRole="Product" ToRole="ProductDetail" />
         </EntityType>
         <EntityType Name="Province">
           <Key>
@@ -1436,6 +1276,46 @@
           <Property Name="SortOrder" Type="Int32" />
           <NavigationProperty Name="Districts" Relationship="DMPModels.FK_District_Province" FromRole="Province" ToRole="District" />
           <NavigationProperty Name="Members" Relationship="DMPModels.FK_Members_Province" FromRole="Province" ToRole="Member" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Members" Relationship="DMPModels.FK_Members_Roles" FromRole="Role" ToRole="Member" />
+          <NavigationProperty Name="UserFunctions" Relationship="DMPModels.UserPermissions" FromRole="Role" ToRole="UserFunction" />
+        </EntityType>
+        <EntityType Name="SalePoint">
+          <Key>
+            <PropertyRef Name="SalePointID" />
+          </Key>
+          <Property Name="SalePointID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MemberID" Type="String" Nullable="false" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Name="Mark" Type="Double" />
+          <Property Name="OrderID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="SaleMonth" Type="Int32" />
+          <Property Name="SaleYear" Type="Int32" />
+          <NavigationProperty Name="Member" Relationship="DMPModels.FK_SalePoints_Members" FromRole="SalePoint" ToRole="Member" />
+          <NavigationProperty Name="Order" Relationship="DMPModels.FK_SalePoints_Orders" FromRole="SalePoint" ToRole="Order" />
+        </EntityType>
+        <EntityType Name="UserFunction">
+          <Key>
+            <PropertyRef Name="FunctionID" />
+          </Key>
+          <Property Name="FunctionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FunctionName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Roles" Relationship="DMPModels.UserPermissions" FromRole="UserFunction" ToRole="Role" />
+        </EntityType>
+        <EntityType Name="UserRequest">
+          <Key>
+            <PropertyRef Name="RequestID" />
+          </Key>
+          <Property Name="RequestID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="Guid" Nullable="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RequestTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsHandled" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="FK_District_Province">
           <End Type="DMPModels.Province" Role="Province" Multiplicity="1" />
@@ -1461,6 +1341,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_MemberPoints_Members">
+          <End Type="DMPModels.Member" Role="Member" Multiplicity="1" />
+          <End Type="DMPModels.MemberPoint" Role="MemberPoint" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="MemberID" />
+            </Principal>
+            <Dependent Role="MemberPoint">
+              <PropertyRef Name="MemberID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Members_Positions">
+          <End Type="DMPModels.Position" Role="Position" Multiplicity="0..1" />
+          <End Type="DMPModels.Member" Role="Member" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Position">
+              <PropertyRef Name="PositionID" />
+            </Principal>
+            <Dependent Role="Member">
+              <PropertyRef Name="PositionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Members_Province">
           <End Type="DMPModels.Province" Role="Province" Multiplicity="0..1" />
           <End Type="DMPModels.Member" Role="Member" Multiplicity="*" />
@@ -1473,20 +1377,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="Notify">
-          <Key>
-            <PropertyRef Name="NotifyID" />
-          </Key>
-          <Property Name="NotifyID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="NotifyContent" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="LastUpdated" Type="DateTime" Precision="3" />
-          <Property Name="Sender" Type="String" MaxLength="8" FixedLength="true" Unicode="false" />
-          <Property Name="Receiver" Type="String" MaxLength="8" FixedLength="true" Unicode="false" />
-          <Property Name="Status" Type="Boolean" />
-          <NavigationProperty Name="Member" Relationship="DMPModels.FK_Notifies_Members" FromRole="Notify" ToRole="Member" />
-          <NavigationProperty Name="Member1" Relationship="DMPModels.FK_Notifies_Members1" FromRole="Notify" ToRole="Member" />
-        </EntityType>
+        <Association Name="FK_Members_Roles">
+          <End Type="DMPModels.Role" Role="Role" Multiplicity="1" />
+          <End Type="DMPModels.Member" Role="Member" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="Member">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Notifies_Members">
           <End Type="DMPModels.Member" Role="Member" Multiplicity="0..1" />
           <End Type="DMPModels.Notify" Role="Notify" Multiplicity="*" />
@@ -1511,6 +1413,106 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Orders_Members">
+          <End Type="DMPModels.Member" Role="Member" Multiplicity="1" />
+          <End Type="DMPModels.Order" Role="Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="MemberID" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="MemberID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductDetails_Members">
+          <End Type="DMPModels.Member" Role="Member" Multiplicity="1" />
+          <End Type="DMPModels.ProductDetail" Role="ProductDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="MemberID" />
+            </Principal>
+            <Dependent Role="ProductDetail">
+              <PropertyRef Name="MemberID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SalePoints_Members">
+          <End Type="DMPModels.Member" Role="Member" Multiplicity="1" />
+          <End Type="DMPModels.SalePoint" Role="SalePoint" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="MemberID" />
+            </Principal>
+            <Dependent Role="SalePoint">
+              <PropertyRef Name="MemberID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetails_Orders">
+          <End Type="DMPModels.Order" Role="Order" Multiplicity="1" />
+          <End Type="DMPModels.OrderDetail" Role="OrderDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="OrderID" />
+            </Principal>
+            <Dependent Role="OrderDetail">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetails_Products">
+          <End Type="DMPModels.Product" Role="Product" Multiplicity="0..1" />
+          <End Type="DMPModels.OrderDetail" Role="OrderDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="OrderDetail">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SalePoints_Orders">
+          <End Type="DMPModels.Order" Role="Order" Multiplicity="0..1" />
+          <End Type="DMPModels.SalePoint" Role="SalePoint" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="OrderID" />
+            </Principal>
+            <Dependent Role="SalePoint">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Prices_Products">
+          <End Type="DMPModels.Product" Role="Product" Multiplicity="1" />
+          <End Type="DMPModels.Price" Role="Price" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="Price">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductDetails_Products">
+          <End Type="DMPModels.Product" Role="Product" Multiplicity="1" />
+          <End Type="DMPModels.ProductDetail" Role="ProductDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="ProductDetail">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="UserPermissions">
+          <End Type="DMPModels.Role" Role="Role" Multiplicity="*" />
+          <End Type="DMPModels.UserFunction" Role="UserFunction" Multiplicity="*" />
+        </Association>
         <ComplexType Name="AccumulationMark_Result">
           <Property Type="String" Name="MemberID" Nullable="true" MaxLength="8" />
           <Property Type="Double" Name="AccmulationM" Nullable="true" />
@@ -1524,10 +1526,23 @@
           <Property Type="Double" Name="NetPoint" Nullable="true" />
           <Property Type="Double" Name="LowerPoint" Nullable="true" />
         </ComplexType>
+        <ComplexType Name="GetLowerMembers_Result">
+          <Property Type="String" Name="MemberID" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="FullName" Nullable="true" MaxLength="255" />
+          <Property Type="Boolean" Name="Gender" Nullable="true" />
+          <Property Type="DateTime" Name="Birthday" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="PositionID" Nullable="true" />
+          <Property Type="String" Name="Phone" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Address" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="IDCard" Nullable="true" MaxLength="13" />
+          <Property Type="DateTime" Name="IDCard_DateIssue" Nullable="true" Precision="23" />
+          <Property Type="String" Name="IDCard_PlaceIssue" Nullable="true" MaxLength="100" />
+        </ComplexType>
         <ComplexType Name="GetMemberByID_Result">
           <Property Type="String" Name="MemberID" Nullable="false" MaxLength="8" />
           <Property Type="String" Name="FullName" Nullable="false" MaxLength="255" />
-          <Property Type="String" Name="ReferralID" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="ReferralID" Nullable="true" MaxLength="8" />
           <Property Type="Boolean" Name="Gender" Nullable="true" />
           <Property Type="DateTime" Name="Birthday" Nullable="true" Precision="23" />
           <Property Type="String" Name="Address" Nullable="true" MaxLength="100" />
@@ -1545,7 +1560,7 @@
         <ComplexType Name="GetMembers_Result">
           <Property Type="String" Name="MemberID" Nullable="false" MaxLength="8" />
           <Property Type="String" Name="FullName" Nullable="false" MaxLength="255" />
-          <Property Type="String" Name="ReferralID" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="ReferralID" Nullable="true" MaxLength="8" />
           <Property Type="Boolean" Name="Gender" Nullable="true" />
           <Property Type="DateTime" Name="Birthday" Nullable="true" Precision="23" />
           <Property Type="String" Name="Address" Nullable="true" MaxLength="100" />
@@ -1577,6 +1592,13 @@
           <Property Type="String" Name="Sender" Nullable="true" MaxLength="8" />
           <Property Type="String" Name="Receiver" Nullable="true" MaxLength="8" />
           <Property Type="Boolean" Name="Status" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="GetOrderDetail_Result">
+          <Property Type="Int32" Name="OrderDetailID" Nullable="false" />
+          <Property Type="String" Name="OrderID" Nullable="false" MaxLength="10" />
+          <Property Type="Int32" Name="Quantity" Nullable="true" />
+          <Property Type="Double" Name="UnitPrice" Nullable="true" />
+          <Property Type="String" Name="ProductID" Nullable="true" MaxLength="10" />
         </ComplexType>
         <ComplexType Name="GetPositionByID_Result">
           <Property Type="Int32" Name="PositionID" Nullable="false" />
@@ -1624,6 +1646,16 @@
           <Property Type="Double" Name="SalePoint" Nullable="true" />
           <Property Type="Int32" Name="Quantity" Nullable="true" />
         </ComplexType>
+        <ComplexType Name="GetSalary_Result">
+          <Property Type="Int32" Name="Month" Nullable="false" />
+          <Property Type="Double" Name="AccumulatedMark" Nullable="true" />
+          <Property Type="Double" Name="ImmediateMark" Nullable="true" />
+          <Property Type="Double" Name="MediateMark" Nullable="true" />
+          <Property Type="Double" Name="UsedMark" Nullable="true" />
+          <Property Type="Double" Name="TotalMark" Nullable="true" />
+          <Property Type="Double" Name="TotalMark1" Nullable="true" />
+          <Property Type="Double" Name="Column1" Nullable="true" />
+        </ComplexType>
         <ComplexType Name="GetUserRequestByID_Result">
           <Property Type="Int32" Name="RequestID" Nullable="false" />
           <Property Type="Guid" Name="Code" Nullable="false" />
@@ -1637,6 +1669,12 @@
           <Property Type="String" Name="Email" Nullable="false" MaxLength="50" />
           <Property Type="DateTime" Name="RequestTime" Nullable="false" Precision="23" />
           <Property Type="Boolean" Name="IsHandled" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="ReportGenaral_Result">
+          <Property Type="Int32" Name="CountLowerMembers" Nullable="true" />
+          <Property Type="Int32" Name="CountOrders" Nullable="true" />
+          <Property Type="Double" Name="Accmulation" Nullable="true" />
+          <Property Type="Double" Name="Salary" Nullable="true" />
         </ComplexType>
         <ComplexType Name="ReportMemberQuantityByLevel_Result">
           <Property Type="Int32" Name="Level1" Nullable="true" />
@@ -1666,58 +1704,23 @@
           <Property Type="String" Name="OrderID" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="MemberID" Nullable="false" MaxLength="8" />
           <Property Type="DateTime" Name="OrderDate" Nullable="true" Precision="23" />
-          <Property Type="Double" Name="UsedMark" Nullable="true" />
+          <Property Type="Double" Name="Discount" Nullable="true" />
+          <Property Type="String" Name="FullName" Nullable="false" MaxLength="255" />
         </ComplexType>
         <ComplexType Name="GetOrders_Result">
           <Property Type="String" Name="OrderID" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="MemberID" Nullable="false" MaxLength="8" />
           <Property Type="DateTime" Name="OrderDate" Nullable="true" Precision="23" />
-          <Property Type="Double" Name="UsedMark" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="GetLowerMembers_Result">
-          <Property Type="String" Name="MemberID" Nullable="true" MaxLength="8" />
-          <Property Type="String" Name="FullName" Nullable="true" MaxLength="255" />
-          <Property Type="Boolean" Name="Gender" Nullable="true" />
-          <Property Type="DateTime" Name="Birthday" Nullable="true" Precision="23" />
-          <Property Type="Int32" Name="PositionID" Nullable="true" />
-          <Property Type="String" Name="Phone" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="Address" Nullable="true" MaxLength="100" />
-          <Property Type="String" Name="Email" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="IDCard" Nullable="true" MaxLength="13" />
-          <Property Type="DateTime" Name="IDCard_DateIssue" Nullable="true" Precision="23" />
-          <Property Type="String" Name="IDCard_PlaceIssue" Nullable="true" MaxLength="100" />
+          <Property Type="Double" Name="Discount" Nullable="true" />
+          <Property Type="String" Name="FullName" Nullable="false" MaxLength="255" />
         </ComplexType>
         <ComplexType Name="GetOrderDetails_Result">
           <Property Type="Int32" Name="OrderDetailID" Nullable="false" />
           <Property Type="String" Name="OrderID" Nullable="false" MaxLength="10" />
           <Property Type="Int32" Name="Quantity" Nullable="true" />
           <Property Type="Double" Name="UnitPrice" Nullable="true" />
-          <Property Type="Double" Name="Discount" Nullable="true" />
           <Property Type="String" Name="ProductID" Nullable="true" MaxLength="10" />
-        </ComplexType>
-        <ComplexType Name="GetSalary_Result">
-          <Property Type="Int32" Name="Month" Nullable="false" />
-          <Property Type="Double" Name="AccumulatedMark" Nullable="true" />
-          <Property Type="Double" Name="ImmediateMark" Nullable="true" />
-          <Property Type="Double" Name="MediateMark" Nullable="true" />
-          <Property Type="Double" Name="UsedMark" Nullable="true" />
-          <Property Type="Double" Name="TotalMark" Nullable="true" />
-          <Property Type="Double" Name="TotalMark1" Nullable="true" />
-          <Property Type="Double" Name="Column1" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="GetOrderDetail_Result">
-          <Property Type="Int32" Name="OrderDetailID" Nullable="false" />
-          <Property Type="String" Name="OrderID" Nullable="false" MaxLength="10" />
-          <Property Type="Int32" Name="Quantity" Nullable="true" />
-          <Property Type="Double" Name="UnitPrice" Nullable="true" />
-          <Property Type="Double" Name="Discount" Nullable="true" />
-          <Property Type="String" Name="ProductID" Nullable="true" MaxLength="10" />
-        </ComplexType>
-        <ComplexType Name="ReportGenaral_Result">
-          <Property Type="Int32" Name="CountLowerMembers" Nullable="true" />
-          <Property Type="Int32" Name="CountOrders" Nullable="true" />
-          <Property Type="Double" Name="Accmulation" Nullable="true" />
-          <Property Type="Double" Name="Salary" Nullable="true" />
+          <Property Type="String" Name="ProductName" Nullable="true" MaxLength="50" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1728,161 +1731,12 @@
           <EntitySetMapping Name="Configs">
             <EntityTypeMapping TypeName="DMPModels.Config">
               <MappingFragment StoreEntitySet="Configs">
-                <ScalarProperty Name="ParameterID" ColumnName="ParameterID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Value" ColumnName="Value" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ParameterID" ColumnName="ParameterID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="MemberPoints">
-            <EntityTypeMapping TypeName="DMPModels.MemberPoint">
-              <MappingFragment StoreEntitySet="MemberPoints">
-                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
-                <ScalarProperty Name="Month" ColumnName="Month" />
-                <ScalarProperty Name="Year" ColumnName="Year" />
-                <ScalarProperty Name="MediateMark" ColumnName="MediateMark" />
-                <ScalarProperty Name="ImmediateMark" ColumnName="ImmediateMark" />
-                <ScalarProperty Name="AccumulatedMark" ColumnName="AccumulatedMark" />
-                <ScalarProperty Name="UsedMark" ColumnName="UsedMark" />
-                <ScalarProperty Name="TotalMark" ColumnName="TotalMark" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Members">
-            <EntityTypeMapping TypeName="DMPModels.Member">
-              <MappingFragment StoreEntitySet="Members">
-                <ScalarProperty Name="ProvinceID" ColumnName="ProvinceID" />
-                <ScalarProperty Name="DistrictID" ColumnName="DistrictID" />
-                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
-                <ScalarProperty Name="FullName" ColumnName="FullName" />
-                <ScalarProperty Name="Avatar" ColumnName="Avatar" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="Birthday" ColumnName="Birthday" />
-                <ScalarProperty Name="Gender" ColumnName="Gender" />
-                <ScalarProperty Name="IDCard" ColumnName="IDCard" />
-                <ScalarProperty Name="IDCard_PlaceIssue" ColumnName="IDCard_PlaceIssue" />
-                <ScalarProperty Name="IDCard_DateIssue" ColumnName="IDCard_DateIssue" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Phone" ColumnName="Phone" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="ReferralID" ColumnName="ReferralID" />
-                <ScalarProperty Name="PositionID" ColumnName="PositionID" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="OrderDetails">
-            <EntityTypeMapping TypeName="DMPModels.OrderDetail">
-              <MappingFragment StoreEntitySet="OrderDetails">
-                <ScalarProperty Name="OrderDetailID" ColumnName="OrderDetailID" />
-                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
-                <ScalarProperty Name="Discount" ColumnName="Discount" />
-                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Orders">
-            <EntityTypeMapping TypeName="DMPModels.Order">
-              <MappingFragment StoreEntitySet="Orders">
-                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
-                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
-                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
-                <ScalarProperty Name="UsedMark" ColumnName="UsedMark" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Positions">
-            <EntityTypeMapping TypeName="DMPModels.Position">
-              <MappingFragment StoreEntitySet="Positions">
-                <ScalarProperty Name="PositionID" ColumnName="PositionID" />
-                <ScalarProperty Name="PositionName" ColumnName="PositionName" />
-                <ScalarProperty Name="Discount" ColumnName="Discount" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Prices">
-            <EntityTypeMapping TypeName="DMPModels.Price">
-              <MappingFragment StoreEntitySet="Prices">
-                <ScalarProperty Name="SalePoint" ColumnName="SalePoint" />
-                <ScalarProperty Name="PriceID" ColumnName="PriceID" />
-                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
-                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
-                <ScalarProperty Name="BeginDate" ColumnName="BeginDate" />
-                <ScalarProperty Name="BasePrice" ColumnName="BasePrice" />
-                <ScalarProperty Name="OriginPrice" ColumnName="OriginPrice" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ProductDetails">
-            <EntityTypeMapping TypeName="DMPModels.ProductDetail">
-              <MappingFragment StoreEntitySet="ProductDetails">
-                <ScalarProperty Name="ProductDetailID" ColumnName="ProductDetailID" />
-                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Products">
-            <EntityTypeMapping TypeName="DMPModels.Product">
-              <MappingFragment StoreEntitySet="Products">
-                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
-                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Roles">
-            <EntityTypeMapping TypeName="DMPModels.Role">
-              <MappingFragment StoreEntitySet="Roles">
-                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
-                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="SalePoints">
-            <EntityTypeMapping TypeName="DMPModels.SalePoint">
-              <MappingFragment StoreEntitySet="SalePoints">
-                <ScalarProperty Name="SalePointID" ColumnName="SalePointID" />
-                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
-                <ScalarProperty Name="Mark" ColumnName="Mark" />
-                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
-                <ScalarProperty Name="SaleMonth" ColumnName="SaleMonth" />
-                <ScalarProperty Name="SaleYear" ColumnName="SaleYear" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="UserFunctions">
-            <EntityTypeMapping TypeName="DMPModels.UserFunction">
-              <MappingFragment StoreEntitySet="UserFunctions">
-                <ScalarProperty Name="FunctionID" ColumnName="FunctionID" />
-                <ScalarProperty Name="FunctionName" ColumnName="FunctionName" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="UserRequests">
-            <EntityTypeMapping TypeName="DMPModels.UserRequest">
-              <MappingFragment StoreEntitySet="UserRequests">
-                <ScalarProperty Name="RequestID" ColumnName="RequestID" />
-                <ScalarProperty Name="Code" ColumnName="Code" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="RequestTime" ColumnName="RequestTime" />
-                <ScalarProperty Name="IsHandled" ColumnName="IsHandled" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <AssociationSetMapping Name="UserPermissions" TypeName="DMPModels.UserPermissions" StoreEntitySet="UserPermissions">
-            <EndProperty Name="Roles">
-              <ScalarProperty Name="RoleID" ColumnName="RoleID" />
-            </EndProperty>
-            <EndProperty Name="UserFunctions">
-              <ScalarProperty Name="FunctionID" ColumnName="FunctionID" />
-            </EndProperty>
-          </AssociationSetMapping>
           <EntitySetMapping Name="Districts">
             <EntityTypeMapping TypeName="DMPModels.District">
               <MappingFragment StoreEntitySet="District">
@@ -1894,15 +1748,41 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Provinces">
-            <EntityTypeMapping TypeName="DMPModels.Province">
-              <MappingFragment StoreEntitySet="Province">
-                <ScalarProperty Name="SortOrder" ColumnName="SortOrder" />
-                <ScalarProperty Name="ZipCode" ColumnName="ZipCode" />
-                <ScalarProperty Name="TelephoneCode" ColumnName="TelephoneCode" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
+          <EntitySetMapping Name="MemberPoints">
+            <EntityTypeMapping TypeName="DMPModels.MemberPoint">
+              <MappingFragment StoreEntitySet="MemberPoints">
+                <ScalarProperty Name="TotalMark" ColumnName="TotalMark" />
+                <ScalarProperty Name="UsedMark" ColumnName="UsedMark" />
+                <ScalarProperty Name="AccumulatedMark" ColumnName="AccumulatedMark" />
+                <ScalarProperty Name="ImmediateMark" ColumnName="ImmediateMark" />
+                <ScalarProperty Name="MediateMark" ColumnName="MediateMark" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="Month" ColumnName="Month" />
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Members">
+            <EntityTypeMapping TypeName="DMPModels.Member">
+              <MappingFragment StoreEntitySet="Members">
+                <ScalarProperty Name="ProvinceID" ColumnName="ProvinceID" />
+                <ScalarProperty Name="DistrictID" ColumnName="DistrictID" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="PositionID" ColumnName="PositionID" />
+                <ScalarProperty Name="ReferralID" ColumnName="ReferralID" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="IDCard_DateIssue" ColumnName="IDCard_DateIssue" />
+                <ScalarProperty Name="IDCard_PlaceIssue" ColumnName="IDCard_PlaceIssue" />
+                <ScalarProperty Name="IDCard" ColumnName="IDCard" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Birthday" ColumnName="Birthday" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Avatar" ColumnName="Avatar" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1919,6 +1799,128 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="OrderDetails">
+            <EntityTypeMapping TypeName="DMPModels.OrderDetail">
+              <MappingFragment StoreEntitySet="OrderDetails">
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="OrderDetailID" ColumnName="OrderDetailID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="DMPModels.Order">
+              <MappingFragment StoreEntitySet="Orders">
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Positions">
+            <EntityTypeMapping TypeName="DMPModels.Position">
+              <MappingFragment StoreEntitySet="Positions">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="PositionName" ColumnName="PositionName" />
+                <ScalarProperty Name="PositionID" ColumnName="PositionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Prices">
+            <EntityTypeMapping TypeName="DMPModels.Price">
+              <MappingFragment StoreEntitySet="Prices">
+                <ScalarProperty Name="SalePoint" ColumnName="SalePoint" />
+                <ScalarProperty Name="OriginPrice" ColumnName="OriginPrice" />
+                <ScalarProperty Name="BasePrice" ColumnName="BasePrice" />
+                <ScalarProperty Name="BeginDate" ColumnName="BeginDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="PriceID" ColumnName="PriceID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductDetails">
+            <EntityTypeMapping TypeName="DMPModels.ProductDetail">
+              <MappingFragment StoreEntitySet="ProductDetails">
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="ProductDetailID" ColumnName="ProductDetailID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="DMPModels.Product">
+              <MappingFragment StoreEntitySet="Products">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Provinces">
+            <EntityTypeMapping TypeName="DMPModels.Province">
+              <MappingFragment StoreEntitySet="Province">
+                <ScalarProperty Name="SortOrder" ColumnName="SortOrder" />
+                <ScalarProperty Name="ZipCode" ColumnName="ZipCode" />
+                <ScalarProperty Name="TelephoneCode" ColumnName="TelephoneCode" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="DMPModels.Role">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SalePoints">
+            <EntityTypeMapping TypeName="DMPModels.SalePoint">
+              <MappingFragment StoreEntitySet="SalePoints">
+                <ScalarProperty Name="SaleYear" ColumnName="SaleYear" />
+                <ScalarProperty Name="SaleMonth" ColumnName="SaleMonth" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="Mark" ColumnName="Mark" />
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="SalePointID" ColumnName="SalePointID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserFunctions">
+            <EntityTypeMapping TypeName="DMPModels.UserFunction">
+              <MappingFragment StoreEntitySet="UserFunctions">
+                <ScalarProperty Name="FunctionName" ColumnName="FunctionName" />
+                <ScalarProperty Name="FunctionID" ColumnName="FunctionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserRequests">
+            <EntityTypeMapping TypeName="DMPModels.UserRequest">
+              <MappingFragment StoreEntitySet="UserRequests">
+                <ScalarProperty Name="IsHandled" ColumnName="IsHandled" />
+                <ScalarProperty Name="RequestTime" ColumnName="RequestTime" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="RequestID" ColumnName="RequestID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="UserPermissions" TypeName="DMPModels.UserPermissions" StoreEntitySet="UserPermissions">
+            <EndProperty Name="UserFunction">
+              <ScalarProperty Name="FunctionID" ColumnName="FunctionID" />
+            </EndProperty>
+            <EndProperty Name="Role">
+              <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+            </EndProperty>
+          </AssociationSetMapping>
           <FunctionImportMapping FunctionImportName="AccumulationMark" FunctionName="DMPModels.Store.AccumulationMark">
             <ResultMapping>
               <ComplexTypeMapping TypeName="DMPModels.AccumulationMark_Result">
@@ -1942,10 +1944,29 @@
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="DeleteMember" FunctionName="DMPModels.Store.DeleteMember" />
           <FunctionImportMapping FunctionImportName="DeleteNotify" FunctionName="DMPModels.Store.DeleteNotify" />
+          <FunctionImportMapping FunctionImportName="DeleteOrder" FunctionName="DMPModels.Store.DeleteOrder" />
           <FunctionImportMapping FunctionImportName="DeletePosition" FunctionName="DMPModels.Store.DeletePosition" />
           <FunctionImportMapping FunctionImportName="DeletePrice" FunctionName="DMPModels.Store.DeletePrice" />
           <FunctionImportMapping FunctionImportName="DeleteProduct" FunctionName="DMPModels.Store.DeleteProduct" />
+          <FunctionImportMapping FunctionImportName="DeleteSalePoint" FunctionName="DMPModels.Store.DeleteSalePoint" />
           <FunctionImportMapping FunctionImportName="DeleteUserRequest" FunctionName="DMPModels.Store.DeleteUserRequest" />
+          <FunctionImportMapping FunctionImportName="GetLowerMembers" FunctionName="DMPModels.Store.GetLowerMembers">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.GetLowerMembers_Result">
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Birthday" ColumnName="Birthday" />
+                <ScalarProperty Name="PositionID" ColumnName="PositionID" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="IDCard" ColumnName="IDCard" />
+                <ScalarProperty Name="IDCard_DateIssue" ColumnName="IDCard_DateIssue" />
+                <ScalarProperty Name="IDCard_PlaceIssue" ColumnName="IDCard_PlaceIssue" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="GetMemberByID" FunctionName="DMPModels.Store.GetMemberByID">
             <ResultMapping>
               <ComplexTypeMapping TypeName="DMPModels.GetMemberByID_Result">
@@ -2013,6 +2034,17 @@
                 <ScalarProperty Name="Sender" ColumnName="Sender" />
                 <ScalarProperty Name="Receiver" ColumnName="Receiver" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetOrderDetail" FunctionName="DMPModels.Store.GetOrderDetail">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.GetOrderDetail_Result">
+                <ScalarProperty Name="OrderDetailID" ColumnName="OrderDetailID" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -2086,6 +2118,20 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetSalary" FunctionName="DMPModels.Store.GetSalary">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.GetSalary_Result">
+                <ScalarProperty Name="Month" ColumnName="Month" />
+                <ScalarProperty Name="AccumulatedMark" ColumnName="AccumulatedMark" />
+                <ScalarProperty Name="ImmediateMark" ColumnName="ImmediateMark" />
+                <ScalarProperty Name="MediateMark" ColumnName="MediateMark" />
+                <ScalarProperty Name="UsedMark" ColumnName="UsedMark" />
+                <ScalarProperty Name="TotalMark" ColumnName="TotalMark" />
+                <ScalarProperty Name="TotalMark1" ColumnName="TotalMark1" />
+                <ScalarProperty Name="Column1" ColumnName="Column1" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="GetUserRequestByID" FunctionName="DMPModels.Store.GetUserRequestByID">
             <ResultMapping>
               <ComplexTypeMapping TypeName="DMPModels.GetUserRequestByID_Result">
@@ -2111,9 +2157,23 @@
           <FunctionImportMapping FunctionImportName="InserProduct" FunctionName="DMPModels.Store.InserProduct" />
           <FunctionImportMapping FunctionImportName="InsertMember" FunctionName="DMPModels.Store.InsertMember" />
           <FunctionImportMapping FunctionImportName="InsertNotify" FunctionName="DMPModels.Store.InsertNotify" />
+          <FunctionImportMapping FunctionImportName="InsertOrder" FunctionName="DMPModels.Store.InsertOrder" />
+          <FunctionImportMapping FunctionImportName="InsertOrderDetail" FunctionName="DMPModels.Store.InsertOrderDetail" />
+          <FunctionImportMapping FunctionImportName="InsertOrderDetails" FunctionName="DMPModels.Store.InsertOrderDetails" />
           <FunctionImportMapping FunctionImportName="InsertPosition" FunctionName="DMPModels.Store.InsertPosition" />
           <FunctionImportMapping FunctionImportName="InsertPrice" FunctionName="DMPModels.Store.InsertPrice" />
+          <FunctionImportMapping FunctionImportName="InsertSalePoint" FunctionName="DMPModels.Store.InsertSalePoint" />
           <FunctionImportMapping FunctionImportName="InsertUserRequest" FunctionName="DMPModels.Store.InsertUserRequest" />
+          <FunctionImportMapping FunctionImportName="ReportGenaral" FunctionName="DMPModels.Store.ReportGenaral">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.ReportGenaral_Result">
+                <ScalarProperty Name="CountLowerMembers" ColumnName="CountLowerMembers" />
+                <ScalarProperty Name="CountOrders" ColumnName="CountOrders" />
+                <ScalarProperty Name="Accmulation" ColumnName="Accmulation" />
+                <ScalarProperty Name="Salary" ColumnName="Salary" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="ReportMemberQuantityByLevel" FunctionName="DMPModels.Store.ReportMemberQuantityByLevel">
             <ResultMapping>
               <ComplexTypeMapping TypeName="DMPModels.ReportMemberQuantityByLevel_Result">
@@ -2149,18 +2209,24 @@
           <FunctionImportMapping FunctionImportName="ReportTotalOrderByYear" FunctionName="DMPModels.Store.ReportTotalOrderByYear" />
           <FunctionImportMapping FunctionImportName="UpdateMember" FunctionName="DMPModels.Store.UpdateMember" />
           <FunctionImportMapping FunctionImportName="UpdateNotify" FunctionName="DMPModels.Store.UpdateNotify" />
+          <FunctionImportMapping FunctionImportName="UpdateOrder" FunctionName="DMPModels.Store.UpdateOrder" />
+          <FunctionImportMapping FunctionImportName="UpdateOrrderDetail" FunctionName="DMPModels.Store.UpdateOrrderDetail" />
           <FunctionImportMapping FunctionImportName="UpdatePosition" FunctionName="DMPModels.Store.UpdatePosition" />
           <FunctionImportMapping FunctionImportName="UpdatePrice" FunctionName="DMPModels.Store.UpdatePrice" />
           <FunctionImportMapping FunctionImportName="UpdateProduct" FunctionName="DMPModels.Store.UpdateProduct" />
+          <FunctionImportMapping FunctionImportName="UpdateSalePoint" FunctionName="DMPModels.Store.UpdateSalePoint" />
           <FunctionImportMapping FunctionImportName="UpdateUserRequest" FunctionName="DMPModels.Store.UpdateUserRequest" />
-          <FunctionImportMapping FunctionImportName="DeleteOrder" FunctionName="DMPModels.Store.DeleteOrder" />
+          <FunctionImportMapping FunctionImportName="CountLowerMembers" FunctionName="DMPModels.Store.CountLowerMembers" />
+          <FunctionImportMapping FunctionImportName="DeleteOrderDetail" FunctionName="DMPModels.Store.DeleteOrderDetail" />
+          <FunctionImportMapping FunctionImportName="DeleteOrderdetails" FunctionName="DMPModels.Store.DeleteOrderdetails" />
           <FunctionImportMapping FunctionImportName="GetOrderByID" FunctionName="DMPModels.Store.GetOrderByID">
             <ResultMapping>
               <ComplexTypeMapping TypeName="DMPModels.GetOrderByID_Result">
                 <ScalarProperty Name="OrderID" ColumnName="OrderID" />
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
                 <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
-                <ScalarProperty Name="UsedMark" ColumnName="UsedMark" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -2170,30 +2236,11 @@
                 <ScalarProperty Name="OrderID" ColumnName="OrderID" />
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
                 <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
-                <ScalarProperty Name="UsedMark" ColumnName="UsedMark" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="InsertOrder" FunctionName="DMPModels.Store.InsertOrder" />
-          <FunctionImportMapping FunctionImportName="UpdateOrder" FunctionName="DMPModels.Store.UpdateOrder" />
-          <FunctionImportMapping FunctionImportName="GetLowerMembers" FunctionName="DMPModels.Store.GetLowerMembers">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="DMPModels.GetLowerMembers_Result">
-                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
                 <ScalarProperty Name="FullName" ColumnName="FullName" />
-                <ScalarProperty Name="Gender" ColumnName="Gender" />
-                <ScalarProperty Name="Birthday" ColumnName="Birthday" />
-                <ScalarProperty Name="PositionID" ColumnName="PositionID" />
-                <ScalarProperty Name="Phone" ColumnName="Phone" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="IDCard" ColumnName="IDCard" />
-                <ScalarProperty Name="IDCard_DateIssue" ColumnName="IDCard_DateIssue" />
-                <ScalarProperty Name="IDCard_PlaceIssue" ColumnName="IDCard_PlaceIssue" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="DeleteSalePoint" FunctionName="DMPModels.Store.DeleteSalePoint" />
           <FunctionImportMapping FunctionImportName="GetOrderDetails" FunctionName="DMPModels.Store.GetOrderDetails">
             <ResultMapping>
               <ComplexTypeMapping TypeName="DMPModels.GetOrderDetails_Result">
@@ -2201,51 +2248,8 @@
                 <ScalarProperty Name="OrderID" ColumnName="OrderID" />
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />
                 <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
-                <ScalarProperty Name="Discount" ColumnName="Discount" />
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="GetSalary" FunctionName="DMPModels.Store.GetSalary">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="DMPModels.GetSalary_Result">
-                <ScalarProperty Name="Month" ColumnName="Month" />
-                <ScalarProperty Name="AccumulatedMark" ColumnName="AccumulatedMark" />
-                <ScalarProperty Name="ImmediateMark" ColumnName="ImmediateMark" />
-                <ScalarProperty Name="MediateMark" ColumnName="MediateMark" />
-                <ScalarProperty Name="UsedMark" ColumnName="UsedMark" />
-                <ScalarProperty Name="TotalMark" ColumnName="TotalMark" />
-                <ScalarProperty Name="TotalMark1" ColumnName="TotalMark1" />
-                <ScalarProperty Name="Column1" ColumnName="Column1" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="InsertOrderDetail" FunctionName="DMPModels.Store.InsertOrderDetail" />
-          <FunctionImportMapping FunctionImportName="InsertOrderDetails" FunctionName="DMPModels.Store.InsertOrderDetails" />
-          <FunctionImportMapping FunctionImportName="InsertSalePoint" FunctionName="DMPModels.Store.InsertSalePoint" />
-          <FunctionImportMapping FunctionImportName="UpdateOrrderDetail" FunctionName="DMPModels.Store.UpdateOrrderDetail" />
-          <FunctionImportMapping FunctionImportName="UpdateSalePoint" FunctionName="DMPModels.Store.UpdateSalePoint" />
-          <FunctionImportMapping FunctionImportName="DeleteOrderDetail" FunctionName="DMPModels.Store.DeleteOrderDetail" />
-          <FunctionImportMapping FunctionImportName="DeleteOrderdetails" FunctionName="DMPModels.Store.DeleteOrderdetails" />
-          <FunctionImportMapping FunctionImportName="GetOrderDetail" FunctionName="DMPModels.Store.GetOrderDetail">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="DMPModels.GetOrderDetail_Result">
-                <ScalarProperty Name="OrderDetailID" ColumnName="OrderDetailID" />
-                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
-                <ScalarProperty Name="Discount" ColumnName="Discount" />
-                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="ReportGenaral" FunctionName="DMPModels.Store.ReportGenaral">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="DMPModels.ReportGenaral_Result">
-                <ScalarProperty Name="CountLowerMembers" ColumnName="CountLowerMembers" />
-                <ScalarProperty Name="CountOrders" ColumnName="CountOrders" />
-                <ScalarProperty Name="Accmulation" ColumnName="Accmulation" />
-                <ScalarProperty Name="Salary" ColumnName="Salary" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

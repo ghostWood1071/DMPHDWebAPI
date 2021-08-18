@@ -10,7 +10,7 @@ namespace DMPHDWebAPI.Models
         public string OrderID { get; set; }
         public string ProductID { get; set; }
         public string ProductName { get; set; }
-        public double Discount { get; set; }
+      
         public int Quantity { get; set; }
         public double UnitPrice { get; set; }
     }

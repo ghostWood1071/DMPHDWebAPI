@@ -5,39 +5,39 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="aeedaf06f5bf472c82e7d0806859c878" Name="Diagram1">
-        <EntityTypeShape EntityType="DMPModels.Config" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DMPModels.MemberPoint" Width="1.5" PointX="5.25" PointY="6" IsExpanded="true" />
-        <EntityTypeShape EntityType="DMPModels.Member" Width="1.5" PointX="3" PointY="6.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="DMPModels.OrderDetail" Width="1.5" PointX="7.5" PointY="9.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="DMPModels.Order" Width="1.5" PointX="5.25" PointY="9.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="DMPModels.Position" Width="1.5" PointX="0.75" PointY="4.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="DMPModels.Price" Width="1.5" PointX="5.25" PointY="12.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DMPModels.ProductDetail" Width="1.5" PointX="5.25" PointY="2.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DMPModels.Product" Width="1.5" PointX="3" PointY="2.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DMPModels.Role" Width="1.5" PointX="0.75" PointY="8" IsExpanded="true" />
-        <EntityTypeShape EntityType="DMPModels.SalePoint" Width="1.5" PointX="7.5" PointY="5.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DMPModels.UserFunction" Width="1.5" PointX="3" PointY="14.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DMPModels.UserRequest" Width="1.5" PointX="9.75" PointY="0.75" IsExpanded="true" />
-        <AssociationConnector Association="DMPModels.FK_MemberPoints_Members" ManuallyRouted="false" />
-        <AssociationConnector Association="DMPModels.FK_Members_Positions" ManuallyRouted="false" />
-        <AssociationConnector Association="DMPModels.FK_Members_Roles" ManuallyRouted="false" />
-        <AssociationConnector Association="DMPModels.FK_Orders_Members" ManuallyRouted="false" />
-        <AssociationConnector Association="DMPModels.FK_ProductDetails_Members" ManuallyRouted="false" />
-        <AssociationConnector Association="DMPModels.FK_SalePoints_Members" ManuallyRouted="false" />
-        <AssociationConnector Association="DMPModels.FK_OrderDetails_Orders" ManuallyRouted="false" />
-        <AssociationConnector Association="DMPModels.FK_OrderDetails_Products" ManuallyRouted="false" />
-        <AssociationConnector Association="DMPModels.FK_SalePoints_Orders" ManuallyRouted="false" />
-        <AssociationConnector Association="DMPModels.FK_Prices_Products" ManuallyRouted="false" />
-        <AssociationConnector Association="DMPModels.FK_ProductDetails_Products" ManuallyRouted="false" />
-        <AssociationConnector Association="DMPModels.UserPermissions" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="DMPModels.District" Width="1.5" PointX="3" PointY="11.125" />
-        <EntityTypeShape EntityType="DMPModels.Province" Width="1.5" PointX="0.75" PointY="8.625" />
+        <EntityTypeShape EntityType="DMPModels.Config" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="DMPModels.District" Width="1.5" PointX="5.625" PointY="8.25" />
+        <EntityTypeShape EntityType="DMPModels.MemberPoint" Width="1.5" PointX="10.125" PointY="14.25" />
+        <EntityTypeShape EntityType="DMPModels.Member" Width="1.5" PointX="7.875" PointY="6.25" />
+        <EntityTypeShape EntityType="DMPModels.Notify" Width="1.5" PointX="10.125" PointY="10.75" />
+        <EntityTypeShape EntityType="DMPModels.OrderDetail" Width="1.5" PointX="12.375" PointY="4.75" />
+        <EntityTypeShape EntityType="DMPModels.Order" Width="1.5" PointX="10.125" PointY="4.75" />
+        <EntityTypeShape EntityType="DMPModels.Position" Width="1.5" PointX="5.625" PointY="5.125" />
+        <EntityTypeShape EntityType="DMPModels.Price" Width="1.5" PointX="12.375" PointY="1.25" />
+        <EntityTypeShape EntityType="DMPModels.ProductDetail" Width="1.5" PointX="13.125" PointY="12.375" />
+        <EntityTypeShape EntityType="DMPModels.Product" Width="1.5" PointX="10.125" PointY="0.875" />
+        <EntityTypeShape EntityType="DMPModels.Province" Width="1.5" PointX="3.375" PointY="8.125" />
+        <EntityTypeShape EntityType="DMPModels.Role" Width="1.5" PointX="5.625" PointY="11.875" />
+        <EntityTypeShape EntityType="DMPModels.SalePoint" Width="1.5" PointX="12.375" PointY="8.375" />
+        <EntityTypeShape EntityType="DMPModels.UserFunction" Width="1.5" PointX="7.875" PointY="14" />
+        <EntityTypeShape EntityType="DMPModels.UserRequest" Width="1.5" PointX="3.375" PointY="0.75" />
         <AssociationConnector Association="DMPModels.FK_District_Province" />
         <AssociationConnector Association="DMPModels.FK_Members_District" />
+        <AssociationConnector Association="DMPModels.FK_MemberPoints_Members" />
+        <AssociationConnector Association="DMPModels.FK_Members_Positions" />
         <AssociationConnector Association="DMPModels.FK_Members_Province" />
-        <EntityTypeShape EntityType="DMPModels.Notify" Width="1.5" PointX="5.25" PointY="16.125" />
+        <AssociationConnector Association="DMPModels.FK_Members_Roles" />
         <AssociationConnector Association="DMPModels.FK_Notifies_Members" />
         <AssociationConnector Association="DMPModels.FK_Notifies_Members1" />
+        <AssociationConnector Association="DMPModels.FK_Orders_Members" />
+        <AssociationConnector Association="DMPModels.FK_ProductDetails_Members" />
+        <AssociationConnector Association="DMPModels.FK_SalePoints_Members" />
+        <AssociationConnector Association="DMPModels.FK_OrderDetails_Orders" />
+        <AssociationConnector Association="DMPModels.FK_OrderDetails_Products" />
+        <AssociationConnector Association="DMPModels.FK_SalePoints_Orders" />
+        <AssociationConnector Association="DMPModels.FK_Prices_Products" />
+        <AssociationConnector Association="DMPModels.FK_ProductDetails_Products" />
+        <AssociationConnector Association="DMPModels.UserPermissions" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

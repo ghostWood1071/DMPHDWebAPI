@@ -29,21 +29,21 @@ namespace DMPHDWebAPI.Models
         }
     
         public DbSet<Config> Configs { get; set; }
+        public DbSet<District> Districts { get; set; }
         public DbSet<MemberPoint> MemberPoints { get; set; }
         public DbSet<Member> Members { get; set; }
+        public DbSet<Notify> Notifies { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Position> Positions { get; set; }
         public DbSet<Price> Prices { get; set; }
         public DbSet<ProductDetail> ProductDetails { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<Province> Provinces { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<SalePoint> SalePoints { get; set; }
         public DbSet<UserFunction> UserFunctions { get; set; }
         public DbSet<UserRequest> UserRequests { get; set; }
-        public DbSet<District> Districts { get; set; }
-        public DbSet<Province> Provinces { get; set; }
-        public DbSet<Notify> Notifies { get; set; }
     
         [EdmFunction("DMPContext", "AccumulationMark")]
         public virtual IQueryable<AccumulationMark_Result> AccumulationMark(string memberID, Nullable<int> month, Nullable<int> year)
@@ -99,6 +99,15 @@ namespace DMPHDWebAPI.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DeleteNotify", notifyIDParameter);
         }
     
+        public virtual int DeleteOrder(string orderID)
+        {
+            var orderIDParameter = orderID != null ?
+                new ObjectParameter("OrderID", orderID) :
+                new ObjectParameter("OrderID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DeleteOrder", orderIDParameter);
+        }
+    
         public virtual int DeletePosition(Nullable<int> positionID)
         {
             var positionIDParameter = positionID.HasValue ?
@@ -126,6 +135,15 @@ namespace DMPHDWebAPI.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DeleteProduct", productIDParameter);
         }
     
+        public virtual int DeleteSalePoint(string orderID)
+        {
+            var orderIDParameter = orderID != null ?
+                new ObjectParameter("OrderID", orderID) :
+                new ObjectParameter("OrderID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DeleteSalePoint", orderIDParameter);
+        }
+    
         public virtual int DeleteUserRequest(Nullable<int> requestID)
         {
             var requestIDParameter = requestID.HasValue ?
@@ -133,6 +151,15 @@ namespace DMPHDWebAPI.Models
                 new ObjectParameter("RequestID", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DeleteUserRequest", requestIDParameter);
+        }
+    
+        public virtual ObjectResult<GetLowerMembers_Result> GetLowerMembers(string memberID)
+        {
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLowerMembers_Result>("GetLowerMembers", memberIDParameter);
         }
     
         public virtual ObjectResult<GetMemberByID_Result> GetMemberByID(string memberID)
@@ -165,6 +192,15 @@ namespace DMPHDWebAPI.Models
                 new ObjectParameter("NotifyID", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetNotifyByID_Result>("GetNotifyByID", notifyIDParameter);
+        }
+    
+        public virtual ObjectResult<GetOrderDetail_Result> GetOrderDetail(Nullable<int> orderDetailID)
+        {
+            var orderDetailIDParameter = orderDetailID.HasValue ?
+                new ObjectParameter("OrderDetailID", orderDetailID) :
+                new ObjectParameter("OrderDetailID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetOrderDetail_Result>("GetOrderDetail", orderDetailIDParameter);
         }
     
         public virtual ObjectResult<GetPositionByID_Result> GetPositionByID(Nullable<int> positionID)
@@ -215,6 +251,19 @@ namespace DMPHDWebAPI.Models
                 new ObjectParameter("ProductID", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetProductsByID_Result>("GetProductsByID", memberIDParameter, productIDParameter);
+        }
+    
+        public virtual ObjectResult<GetSalary_Result> GetSalary(string memberID, Nullable<int> year)
+        {
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            var yearParameter = year.HasValue ?
+                new ObjectParameter("Year", year) :
+                new ObjectParameter("Year", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetSalary_Result>("GetSalary", memberIDParameter, yearParameter);
         }
     
         public virtual ObjectResult<GetUserRequestByID_Result> GetUserRequestByID(Nullable<int> requestID)
@@ -358,6 +407,53 @@ namespace DMPHDWebAPI.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertNotify", titleParameter, contentParameter, senderParameter, receiverParameter, statusParameter);
         }
     
+        public virtual int InsertOrder(string memberID, Nullable<System.DateTime> orderDate, Nullable<double> discount)
+        {
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            var orderDateParameter = orderDate.HasValue ?
+                new ObjectParameter("OrderDate", orderDate) :
+                new ObjectParameter("OrderDate", typeof(System.DateTime));
+    
+            var discountParameter = discount.HasValue ?
+                new ObjectParameter("Discount", discount) :
+                new ObjectParameter("Discount", typeof(double));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertOrder", memberIDParameter, orderDateParameter, discountParameter);
+        }
+    
+        public virtual int InsertOrderDetail(string orderID, Nullable<int> quantity, Nullable<double> unitPrice, string productID)
+        {
+            var orderIDParameter = orderID != null ?
+                new ObjectParameter("OrderID", orderID) :
+                new ObjectParameter("OrderID", typeof(string));
+    
+            var quantityParameter = quantity.HasValue ?
+                new ObjectParameter("Quantity", quantity) :
+                new ObjectParameter("Quantity", typeof(int));
+    
+            var unitPriceParameter = unitPrice.HasValue ?
+                new ObjectParameter("UnitPrice", unitPrice) :
+                new ObjectParameter("UnitPrice", typeof(double));
+    
+            var productIDParameter = productID != null ?
+                new ObjectParameter("ProductID", productID) :
+                new ObjectParameter("ProductID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertOrderDetail", orderIDParameter, quantityParameter, unitPriceParameter, productIDParameter);
+        }
+    
+        public virtual int InsertOrderDetails(string details)
+        {
+            var detailsParameter = details != null ?
+                new ObjectParameter("Details", details) :
+                new ObjectParameter("Details", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertOrderDetails", detailsParameter);
+        }
+    
         public virtual int InsertPosition(string positionName, Nullable<double> discount, string description)
         {
             var positionNameParameter = positionName != null ?
@@ -404,6 +500,23 @@ namespace DMPHDWebAPI.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertPrice", productIDParameter, endDateParameter, beginDateParameter, basePriceParameter, originPriceParameter, saleProintParameter);
         }
     
+        public virtual int InsertSalePoint(string orderID, string memberID, Nullable<double> mark)
+        {
+            var orderIDParameter = orderID != null ?
+                new ObjectParameter("OrderID", orderID) :
+                new ObjectParameter("OrderID", typeof(string));
+    
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            var markParameter = mark.HasValue ?
+                new ObjectParameter("Mark", mark) :
+                new ObjectParameter("Mark", typeof(double));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertSalePoint", orderIDParameter, memberIDParameter, markParameter);
+        }
+    
         public virtual int InsertUserRequest(string email)
         {
             var emailParameter = email != null ?
@@ -411,6 +524,23 @@ namespace DMPHDWebAPI.Models
                 new ObjectParameter("Email", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertUserRequest", emailParameter);
+        }
+    
+        public virtual ObjectResult<ReportGenaral_Result> ReportGenaral(string memberID, Nullable<int> year, Nullable<int> month)
+        {
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            var yearParameter = year.HasValue ?
+                new ObjectParameter("Year", year) :
+                new ObjectParameter("Year", typeof(int));
+    
+            var monthParameter = month.HasValue ?
+                new ObjectParameter("Month", month) :
+                new ObjectParameter("Month", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ReportGenaral_Result>("ReportGenaral", memberIDParameter, yearParameter, monthParameter);
         }
     
         public virtual ObjectResult<ReportMemberQuantityByLevel_Result> ReportMemberQuantityByLevel(string memberID)
@@ -542,6 +672,44 @@ namespace DMPHDWebAPI.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdateNotify", notifyIDParameter, titleParameter, contentParameter, senderParameter, receiverParameter, statusParameter);
         }
     
+        public virtual int UpdateOrder(string orderID, string memberID, Nullable<System.DateTime> orderDate)
+        {
+            var orderIDParameter = orderID != null ?
+                new ObjectParameter("OrderID", orderID) :
+                new ObjectParameter("OrderID", typeof(string));
+    
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            var orderDateParameter = orderDate.HasValue ?
+                new ObjectParameter("OrderDate", orderDate) :
+                new ObjectParameter("OrderDate", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdateOrder", orderIDParameter, memberIDParameter, orderDateParameter);
+        }
+    
+        public virtual int UpdateOrrderDetail(Nullable<int> orderDetailID, string productID, Nullable<int> quantity, Nullable<double> unitPrice)
+        {
+            var orderDetailIDParameter = orderDetailID.HasValue ?
+                new ObjectParameter("OrderDetailID", orderDetailID) :
+                new ObjectParameter("OrderDetailID", typeof(int));
+    
+            var productIDParameter = productID != null ?
+                new ObjectParameter("ProductID", productID) :
+                new ObjectParameter("ProductID", typeof(string));
+    
+            var quantityParameter = quantity.HasValue ?
+                new ObjectParameter("Quantity", quantity) :
+                new ObjectParameter("Quantity", typeof(int));
+    
+            var unitPriceParameter = unitPrice.HasValue ?
+                new ObjectParameter("UnitPrice", unitPrice) :
+                new ObjectParameter("UnitPrice", typeof(double));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdateOrrderDetail", orderDetailIDParameter, productIDParameter, quantityParameter, unitPriceParameter);
+        }
+    
         public virtual int UpdatePosition(Nullable<int> positionID, string positionName, Nullable<double> discount, string description)
         {
             var positionIDParameter = positionID.HasValue ?
@@ -629,200 +797,6 @@ namespace DMPHDWebAPI.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdateProduct", productIDParameter, memberIDParameter, productNameParameter, originPriceParameter, basePriceParameter, salePointParameter, quantityParameter, descriptionParameter);
         }
     
-        public virtual int UpdateUserRequest(Nullable<int> requestID, Nullable<System.Guid> code, string email, Nullable<System.DateTime> requestTime, Nullable<bool> isHandled)
-        {
-            var requestIDParameter = requestID.HasValue ?
-                new ObjectParameter("RequestID", requestID) :
-                new ObjectParameter("RequestID", typeof(int));
-    
-            var codeParameter = code.HasValue ?
-                new ObjectParameter("Code", code) :
-                new ObjectParameter("Code", typeof(System.Guid));
-    
-            var emailParameter = email != null ?
-                new ObjectParameter("Email", email) :
-                new ObjectParameter("Email", typeof(string));
-    
-            var requestTimeParameter = requestTime.HasValue ?
-                new ObjectParameter("RequestTime", requestTime) :
-                new ObjectParameter("RequestTime", typeof(System.DateTime));
-    
-            var isHandledParameter = isHandled.HasValue ?
-                new ObjectParameter("IsHandled", isHandled) :
-                new ObjectParameter("IsHandled", typeof(bool));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdateUserRequest", requestIDParameter, codeParameter, emailParameter, requestTimeParameter, isHandledParameter);
-        }
-    
-        public virtual int DeleteOrder(string orderID)
-        {
-            var orderIDParameter = orderID != null ?
-                new ObjectParameter("OrderID", orderID) :
-                new ObjectParameter("OrderID", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DeleteOrder", orderIDParameter);
-        }
-    
-        public virtual ObjectResult<GetOrderByID_Result> GetOrderByID(string orderID)
-        {
-            var orderIDParameter = orderID != null ?
-                new ObjectParameter("OrderID", orderID) :
-                new ObjectParameter("OrderID", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetOrderByID_Result>("GetOrderByID", orderIDParameter);
-        }
-    
-        public virtual ObjectResult<GetOrders_Result> GetOrders()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetOrders_Result>("GetOrders");
-        }
-    
-        public virtual int InsertOrder(string memberID, Nullable<System.DateTime> orderDate)
-        {
-            var memberIDParameter = memberID != null ?
-                new ObjectParameter("MemberID", memberID) :
-                new ObjectParameter("MemberID", typeof(string));
-    
-            var orderDateParameter = orderDate.HasValue ?
-                new ObjectParameter("OrderDate", orderDate) :
-                new ObjectParameter("OrderDate", typeof(System.DateTime));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertOrder", memberIDParameter, orderDateParameter);
-        }
-    
-        public virtual int UpdateOrder(string orderID, string memberID, Nullable<System.DateTime> orderDate)
-        {
-            var orderIDParameter = orderID != null ?
-                new ObjectParameter("OrderID", orderID) :
-                new ObjectParameter("OrderID", typeof(string));
-    
-            var memberIDParameter = memberID != null ?
-                new ObjectParameter("MemberID", memberID) :
-                new ObjectParameter("MemberID", typeof(string));
-    
-            var orderDateParameter = orderDate.HasValue ?
-                new ObjectParameter("OrderDate", orderDate) :
-                new ObjectParameter("OrderDate", typeof(System.DateTime));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdateOrder", orderIDParameter, memberIDParameter, orderDateParameter);
-        }
-    
-        public virtual ObjectResult<GetLowerMembers_Result> GetLowerMembers(string memberID)
-        {
-            var memberIDParameter = memberID != null ?
-                new ObjectParameter("MemberID", memberID) :
-                new ObjectParameter("MemberID", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLowerMembers_Result>("GetLowerMembers", memberIDParameter);
-        }
-    
-        public virtual int DeleteSalePoint(string orderID)
-        {
-            var orderIDParameter = orderID != null ?
-                new ObjectParameter("OrderID", orderID) :
-                new ObjectParameter("OrderID", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DeleteSalePoint", orderIDParameter);
-        }
-    
-        public virtual ObjectResult<GetOrderDetails_Result> GetOrderDetails(string orderID)
-        {
-            var orderIDParameter = orderID != null ?
-                new ObjectParameter("OrderID", orderID) :
-                new ObjectParameter("OrderID", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetOrderDetails_Result>("GetOrderDetails", orderIDParameter);
-        }
-    
-        public virtual ObjectResult<GetSalary_Result> GetSalary(string memberID, Nullable<int> year)
-        {
-            var memberIDParameter = memberID != null ?
-                new ObjectParameter("MemberID", memberID) :
-                new ObjectParameter("MemberID", typeof(string));
-    
-            var yearParameter = year.HasValue ?
-                new ObjectParameter("Year", year) :
-                new ObjectParameter("Year", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetSalary_Result>("GetSalary", memberIDParameter, yearParameter);
-        }
-    
-        public virtual int InsertOrderDetail(string orderID, Nullable<int> quantity, Nullable<double> unitPrice, Nullable<double> discount, string productID)
-        {
-            var orderIDParameter = orderID != null ?
-                new ObjectParameter("OrderID", orderID) :
-                new ObjectParameter("OrderID", typeof(string));
-    
-            var quantityParameter = quantity.HasValue ?
-                new ObjectParameter("Quantity", quantity) :
-                new ObjectParameter("Quantity", typeof(int));
-    
-            var unitPriceParameter = unitPrice.HasValue ?
-                new ObjectParameter("UnitPrice", unitPrice) :
-                new ObjectParameter("UnitPrice", typeof(double));
-    
-            var discountParameter = discount.HasValue ?
-                new ObjectParameter("Discount", discount) :
-                new ObjectParameter("Discount", typeof(double));
-    
-            var productIDParameter = productID != null ?
-                new ObjectParameter("ProductID", productID) :
-                new ObjectParameter("ProductID", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertOrderDetail", orderIDParameter, quantityParameter, unitPriceParameter, discountParameter, productIDParameter);
-        }
-    
-        public virtual int InsertOrderDetails(string details)
-        {
-            var detailsParameter = details != null ?
-                new ObjectParameter("Details", details) :
-                new ObjectParameter("Details", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertOrderDetails", detailsParameter);
-        }
-    
-        public virtual int InsertSalePoint(string orderID, string memberID, Nullable<double> mark)
-        {
-            var orderIDParameter = orderID != null ?
-                new ObjectParameter("OrderID", orderID) :
-                new ObjectParameter("OrderID", typeof(string));
-    
-            var memberIDParameter = memberID != null ?
-                new ObjectParameter("MemberID", memberID) :
-                new ObjectParameter("MemberID", typeof(string));
-    
-            var markParameter = mark.HasValue ?
-                new ObjectParameter("Mark", mark) :
-                new ObjectParameter("Mark", typeof(double));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertSalePoint", orderIDParameter, memberIDParameter, markParameter);
-        }
-    
-        public virtual int UpdateOrrderDetail(Nullable<int> orderDetailID, string productID, Nullable<int> quantity, Nullable<double> discount, Nullable<double> unitPrice)
-        {
-            var orderDetailIDParameter = orderDetailID.HasValue ?
-                new ObjectParameter("OrderDetailID", orderDetailID) :
-                new ObjectParameter("OrderDetailID", typeof(int));
-    
-            var productIDParameter = productID != null ?
-                new ObjectParameter("ProductID", productID) :
-                new ObjectParameter("ProductID", typeof(string));
-    
-            var quantityParameter = quantity.HasValue ?
-                new ObjectParameter("Quantity", quantity) :
-                new ObjectParameter("Quantity", typeof(int));
-    
-            var discountParameter = discount.HasValue ?
-                new ObjectParameter("Discount", discount) :
-                new ObjectParameter("Discount", typeof(double));
-    
-            var unitPriceParameter = unitPrice.HasValue ?
-                new ObjectParameter("UnitPrice", unitPrice) :
-                new ObjectParameter("UnitPrice", typeof(double));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdateOrrderDetail", orderDetailIDParameter, productIDParameter, quantityParameter, discountParameter, unitPriceParameter);
-        }
-    
         public virtual int UpdateSalePoint(string orderID, string memberID, Nullable<double> mark, Nullable<int> saleMonth, Nullable<int> saleYear)
         {
             var orderIDParameter = orderID != null ?
@@ -848,6 +822,40 @@ namespace DMPHDWebAPI.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdateSalePoint", orderIDParameter, memberIDParameter, markParameter, saleMonthParameter, saleYearParameter);
         }
     
+        public virtual int UpdateUserRequest(Nullable<int> requestID, Nullable<System.Guid> code, string email, Nullable<System.DateTime> requestTime, Nullable<bool> isHandled)
+        {
+            var requestIDParameter = requestID.HasValue ?
+                new ObjectParameter("RequestID", requestID) :
+                new ObjectParameter("RequestID", typeof(int));
+    
+            var codeParameter = code.HasValue ?
+                new ObjectParameter("Code", code) :
+                new ObjectParameter("Code", typeof(System.Guid));
+    
+            var emailParameter = email != null ?
+                new ObjectParameter("Email", email) :
+                new ObjectParameter("Email", typeof(string));
+    
+            var requestTimeParameter = requestTime.HasValue ?
+                new ObjectParameter("RequestTime", requestTime) :
+                new ObjectParameter("RequestTime", typeof(System.DateTime));
+    
+            var isHandledParameter = isHandled.HasValue ?
+                new ObjectParameter("IsHandled", isHandled) :
+                new ObjectParameter("IsHandled", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdateUserRequest", requestIDParameter, codeParameter, emailParameter, requestTimeParameter, isHandledParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> CountLowerMembers(string memberID)
+        {
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("CountLowerMembers", memberIDParameter);
+        }
+    
         public virtual int DeleteOrderDetail(Nullable<int> orderDetailID)
         {
             var orderDetailIDParameter = orderDetailID.HasValue ?
@@ -866,30 +874,27 @@ namespace DMPHDWebAPI.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DeleteOrderdetails", orderIDParameter);
         }
     
-        public virtual ObjectResult<GetOrderDetail_Result> GetOrderDetail(Nullable<int> orderDetailID)
+        public virtual ObjectResult<GetOrderByID_Result> GetOrderByID(string orderID)
         {
-            var orderDetailIDParameter = orderDetailID.HasValue ?
-                new ObjectParameter("OrderDetailID", orderDetailID) :
-                new ObjectParameter("OrderDetailID", typeof(int));
+            var orderIDParameter = orderID != null ?
+                new ObjectParameter("OrderID", orderID) :
+                new ObjectParameter("OrderID", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetOrderDetail_Result>("GetOrderDetail", orderDetailIDParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetOrderByID_Result>("GetOrderByID", orderIDParameter);
         }
     
-        public virtual ObjectResult<ReportGenaral_Result> ReportGenaral(string memberID, Nullable<int> year, Nullable<int> month)
+        public virtual ObjectResult<GetOrders_Result> GetOrders()
         {
-            var memberIDParameter = memberID != null ?
-                new ObjectParameter("MemberID", memberID) :
-                new ObjectParameter("MemberID", typeof(string));
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetOrders_Result>("GetOrders");
+        }
     
-            var yearParameter = year.HasValue ?
-                new ObjectParameter("Year", year) :
-                new ObjectParameter("Year", typeof(int));
+        public virtual ObjectResult<GetOrderDetails_Result> GetOrderDetails(string orderID)
+        {
+            var orderIDParameter = orderID != null ?
+                new ObjectParameter("OrderID", orderID) :
+                new ObjectParameter("OrderID", typeof(string));
     
-            var monthParameter = month.HasValue ?
-                new ObjectParameter("Month", month) :
-                new ObjectParameter("Month", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ReportGenaral_Result>("ReportGenaral", memberIDParameter, yearParameter, monthParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetOrderDetails_Result>("GetOrderDetails", orderIDParameter);
         }
     }
 }

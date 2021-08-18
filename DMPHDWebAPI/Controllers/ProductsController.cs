@@ -1,76 +1,116 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using DMPHDWebAPI.Models;
 using System.Web.Http.Cors;
+using DMPHDWebAPI.App_Start;
+using System.Diagnostics;
 
 namespace DMPHDWebAPI.Controllers
 {
-    [EnableCors(origins:"http://localhost:52278", headers: "*", methods: "*")]
+    
     public class ProductsController : ApiController
     {
         [HttpGet]
         [Route("GetProducts")]
         public IEnumerable<GetProducts_Result> GetProducts(string memberID)
         {
-            using(DMPContext context = new DMPContext())
+            try
             {
-                return context.GetProducts(memberID).ToList();
+                using (DMPContext context = new DMPContext())
+                {
+                    return context.GetProducts(memberID).ToList();
+                }
+            } catch(Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                return null;
             }
         }
-
-        
 
         [HttpGet]
         [Route("GetProduct")]
         public GetProductsByID_Result GetProduct(string memberID, string productID)
         {
-            using(DMPContext context = new DMPContext())
+            try
             {
-               return context.GetProductsByID(memberID, productID).ToList().FirstOrDefault();
+                using (DMPContext context = new DMPContext())
+                {
+                    return context.GetProductsByID(memberID, productID).ToList().FirstOrDefault();
+                }
+            } catch(Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                return null;
             }
         }
 
         // POST: api/Products //add new product
-        public void Post([FromBody] ProductResult productInfo)
+        [HttpPost]
+        [Route("InsertProduct")]
+        public string Post([FromBody] ProductResult productInfo)
         {
-            using (DMPContext context = new DMPContext())
+            try
             {
-                context.InserProduct(productInfo.MemberID,
-                                     productInfo.ProductName,
-                                     productInfo.SellPrices,
-                                     productInfo.BasePrice,
-                                     productInfo.SalesPoints,
-                                     productInfo.Quantity,
-                                     productInfo.Description);
-            };
+                using (DMPContext context = new DMPContext())
+                {
+                    context.InserProduct(productInfo.MemberID,
+                                         productInfo.ProductName,
+                                         productInfo.OriginPrice,
+                                         productInfo.BasePrice,
+                                         productInfo.SalePoint,
+                                         productInfo.Quantity,
+                                         productInfo.Description);
+                    return context.GetProducts(productInfo.MemberID).LastOrDefault().ProductID;
+                };
+            } catch(Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                return null;
+            }
+
         }
 
         // PUT: api/Products/5
+        [HttpPut]
+        [Route("UpdateProduct")]
         public void Put([FromBody]ProductResult product)
         {
-           using(DMPContext context = new DMPContext())
+            try
             {
-                context.UpdateProduct(product.ProductID, 
-                                      product.MemberID,
-                                      product.ProductName,
-                                      product.SellPrices, 
-                                      product.BasePrice, 
-                                      product.SalesPoints, 
-                                      product.Quantity, 
-                                      product.Description);
+                using (DMPContext context = new DMPContext())
+                {
+                    context.UpdateProduct(product.ProductID,
+                                          product.MemberID,
+                                          product.ProductName,
+                                          product.OriginPrice,
+                                          product.BasePrice,
+                                          product.SalePoint,
+                                          product.Quantity,
+                                          product.Description);
+                }
+            } catch(Exception e)
+            {
+                Debug.WriteLine(e);
             }
         }
 
         // DELETE: api/Products/5
+        [HttpDelete]
+        [Route("DeleteProduct")]
         public void Delete(string productID)
         {
-            using(DMPContext context = new DMPContext())
+            try
             {
-                context.DeleteProduct(productID);
+                using (DMPContext context = new DMPContext())
+                {
+                    context.DeleteProduct(productID);
+                    
+                }
+            } catch(Exception e)
+            {
+                Debug.WriteLine(e);
             }
         }
     }

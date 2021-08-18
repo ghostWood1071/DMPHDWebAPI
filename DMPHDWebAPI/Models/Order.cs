@@ -23,7 +23,7 @@ namespace DMPHDWebAPI.Models
         public string OrderID { get; set; }
         public string MemberID { get; set; }
         public Nullable<System.DateTime> OrderDate { get; set; }
-        public Nullable<double> UsedMark { get; set; }
+        public Nullable<double> Discount { get; set; }
     
         public virtual Member Member { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
