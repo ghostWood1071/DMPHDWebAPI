@@ -1103,7 +1103,7 @@
           </FunctionImport>
           <FunctionImport Name="GetMembers" ReturnType="Collection(DMPModels.GetMembers_Result)" />
           <FunctionImport Name="GetProducts" ReturnType="Collection(DMPModels.GetProducts_Result)">
-            <Parameter Name="MemberID" Mode="In" Type="String" />
+          <Parameter Name="MemberID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetProductsByID" ReturnType="Collection(DMPModels.GetProductsByID_Result)">
             <Parameter Name="MemberID" Mode="In" Type="String" />
