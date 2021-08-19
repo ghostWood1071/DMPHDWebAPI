@@ -208,28 +208,6 @@ namespace DMPHDWebAPI.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPrices_Result>("GetPrices");
         }
     
-        public virtual ObjectResult<GetProducts_Result> GetProducts(string memberID)
-        {
-            var memberIDParameter = memberID != null ?
-                new ObjectParameter("MemberID", memberID) :
-                new ObjectParameter("MemberID", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetProducts_Result>("GetProducts", memberIDParameter);
-        }
-    
-        public virtual ObjectResult<GetProductsByID_Result> GetProductsByID(string memberID, string productID)
-        {
-            var memberIDParameter = memberID != null ?
-                new ObjectParameter("MemberID", memberID) :
-                new ObjectParameter("MemberID", typeof(string));
-    
-            var productIDParameter = productID != null ?
-                new ObjectParameter("ProductID", productID) :
-                new ObjectParameter("ProductID", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetProductsByID_Result>("GetProductsByID", memberIDParameter, productIDParameter);
-        }
-    
         public virtual ObjectResult<GetSalary_Result> GetSalary(string memberID, Nullable<int> year)
         {
             var memberIDParameter = memberID != null ?
@@ -895,6 +873,28 @@ namespace DMPHDWebAPI.Models
                 new ObjectParameter("MemberID", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetMemberByID_Result>("GetMemberByID", memberIDParameter);
+        }
+    
+        public virtual ObjectResult<GetProducts_Result> GetProducts(string memberID)
+        {
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetProducts_Result>("GetProducts", memberIDParameter);
+        }
+    
+        public virtual ObjectResult<GetProductsByID_Result> GetProductsByID(string memberID, string productID)
+        {
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            var productIDParameter = productID != null ?
+                new ObjectParameter("ProductID", productID) :
+                new ObjectParameter("ProductID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetProductsByID_Result>("GetProductsByID", memberIDParameter, productIDParameter);
         }
     }
 }

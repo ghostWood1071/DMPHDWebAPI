@@ -19,5 +19,6 @@ namespace DMPHDWebAPI.Models
         public Nullable<double> BasePrice { get; set; }
         public Nullable<double> SalePoint { get; set; }
         public Nullable<int> Quantity { get; set; }
+        public string Description { get; set; }
     }
 }

@@ -912,13 +912,6 @@
           <Parameter Name="ProductID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetPrices" ReturnType="Collection(DMPModels.GetPrices_Result)" />
-          <FunctionImport Name="GetProducts" ReturnType="Collection(DMPModels.GetProducts_Result)">
-          <Parameter Name="MemberID" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="GetProductsByID" ReturnType="Collection(DMPModels.GetProductsByID_Result)">
-            <Parameter Name="MemberID" Mode="In" Type="String" />
-            <Parameter Name="ProductID" Mode="In" Type="String" />
-          </FunctionImport>
           <FunctionImport Name="GetSalary" ReturnType="Collection(DMPModels.GetSalary_Result)">
             <Parameter Name="MemberID" Mode="In" Type="String" />
             <Parameter Name="Year" Mode="In" Type="Int32" />
@@ -1107,7 +1100,15 @@
           <Parameter Name="MemberID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetMemberByID" ReturnType="Collection(DMPModels.GetMemberByID_Result)">
+          <Parameter Name="MemberID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetMembers" ReturnType="Collection(DMPModels.GetMembers_Result)" />
+          <FunctionImport Name="GetProducts" ReturnType="Collection(DMPModels.GetProducts_Result)">
             <Parameter Name="MemberID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetProductsByID" ReturnType="Collection(DMPModels.GetProductsByID_Result)">
+            <Parameter Name="MemberID" Mode="In" Type="String" />
+            <Parameter Name="ProductID" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="Config">
@@ -1581,22 +1582,6 @@
           <Property Type="Double" Name="OriginPrice" Nullable="true" />
           <Property Type="Double" Name="SalePoint" Nullable="true" />
         </ComplexType>
-        <ComplexType Name="GetProducts_Result">
-          <Property Type="String" Name="ProductID" Nullable="false" MaxLength="10" />
-          <Property Type="String" Name="ProductName" Nullable="true" MaxLength="50" />
-          <Property Type="Double" Name="OriginPrice" Nullable="true" />
-          <Property Type="Double" Name="BasePrice" Nullable="true" />
-          <Property Type="Double" Name="SalePoint" Nullable="true" />
-          <Property Type="Int32" Name="Quantity" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="GetProductsByID_Result">
-          <Property Type="String" Name="ProductID" Nullable="false" MaxLength="10" />
-          <Property Type="String" Name="ProductName" Nullable="true" MaxLength="50" />
-          <Property Type="Double" Name="OriginPrice" Nullable="true" />
-          <Property Type="Double" Name="BasePrice" Nullable="true" />
-          <Property Type="Double" Name="SalePoint" Nullable="true" />
-          <Property Type="Int32" Name="Quantity" Nullable="true" />
-        </ComplexType>
         <ComplexType Name="GetSalary_Result">
           <Property Type="Int32" Name="Month" Nullable="false" />
           <Property Type="Double" Name="AccumulatedMark" Nullable="true" />
@@ -1721,6 +1706,24 @@
           <Property Type="Int32" Name="RoleID" Nullable="false" />
           <Property Type="String" Name="IsActive" Nullable="false" MaxLength="11" />
           <Property Type="String" Name="Avatar" Nullable="true" MaxLength="200" />
+        </ComplexType>
+        <ComplexType Name="GetProducts_Result">
+          <Property Type="String" Name="ProductID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="ProductName" Nullable="true" MaxLength="50" />
+          <Property Type="Double" Name="OriginPrice" Nullable="true" />
+          <Property Type="Double" Name="BasePrice" Nullable="true" />
+          <Property Type="Double" Name="SalePoint" Nullable="true" />
+          <Property Type="Int32" Name="Quantity" Nullable="true" />
+          <Property Type="String" Name="Description" Nullable="true" MaxLength="500" />
+        </ComplexType>
+        <ComplexType Name="GetProductsByID_Result">
+          <Property Type="String" Name="ProductID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="ProductName" Nullable="true" MaxLength="50" />
+          <Property Type="Double" Name="OriginPrice" Nullable="true" />
+          <Property Type="Double" Name="BasePrice" Nullable="true" />
+          <Property Type="Double" Name="SalePoint" Nullable="true" />
+          <Property Type="Int32" Name="Quantity" Nullable="true" />
+          <Property Type="String" Name="Description" Nullable="true" MaxLength="500" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -2033,30 +2036,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="GetProducts" FunctionName="DMPModels.Store.GetProducts">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="DMPModels.GetProducts_Result">
-                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
-                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
-                <ScalarProperty Name="OriginPrice" ColumnName="OriginPrice" />
-                <ScalarProperty Name="BasePrice" ColumnName="BasePrice" />
-                <ScalarProperty Name="SalePoint" ColumnName="SalePoint" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="GetProductsByID" FunctionName="DMPModels.Store.GetProductsByID">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="DMPModels.GetProductsByID_Result">
-                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
-                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
-                <ScalarProperty Name="OriginPrice" ColumnName="OriginPrice" />
-                <ScalarProperty Name="BasePrice" ColumnName="BasePrice" />
-                <ScalarProperty Name="SalePoint" ColumnName="SalePoint" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="GetSalary" FunctionName="DMPModels.Store.GetSalary">
             <ResultMapping>
               <ComplexTypeMapping TypeName="DMPModels.GetSalary_Result">
@@ -2250,6 +2229,32 @@
                 <ScalarProperty Name="RoleID" ColumnName="RoleID" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="Avatar" ColumnName="Avatar" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetProducts" FunctionName="DMPModels.Store.GetProducts">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.GetProducts_Result">
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="OriginPrice" ColumnName="OriginPrice" />
+                <ScalarProperty Name="BasePrice" ColumnName="BasePrice" />
+                <ScalarProperty Name="SalePoint" ColumnName="SalePoint" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetProductsByID" FunctionName="DMPModels.Store.GetProductsByID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.GetProductsByID_Result">
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="OriginPrice" ColumnName="OriginPrice" />
+                <ScalarProperty Name="BasePrice" ColumnName="BasePrice" />
+                <ScalarProperty Name="SalePoint" ColumnName="SalePoint" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
