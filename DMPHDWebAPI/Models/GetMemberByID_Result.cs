@@ -27,7 +27,7 @@ namespace DMPHDWebAPI.Models
         public string Password { get; set; }
         public string PositionID { get; set; }
         public int RoleID { get; set; }
-        public Nullable<bool> IsActive { get; set; }
+        public string IsActive { get; set; }
         public string Avatar { get; set; }
     }
 }
