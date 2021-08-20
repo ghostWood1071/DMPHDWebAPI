@@ -24,7 +24,7 @@ namespace DMPHDWebAPI.Controllers
             }
             catch (Exception e)
             {
-                throw new ArgumentException("My message", e);
+                //throw new ArgumentException("My message", e);
             }
             return result;
         }

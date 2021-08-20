@@ -22,9 +22,11 @@ namespace DMPHDWebAPI
 
         protected void Application_BeginRequest()
         {
-            if (Request.Headers.AllKeys.Contains("Origin") && Request.HttpMethod == "OPTIONS")
+            if (Request.Headers.AllKeys.Contains("Origin", StringComparer.OrdinalIgnoreCase) && Request.HttpMethod == "OPTIONS")
             {
-                Response.Flush();
+                //Response.Flush();
+                Response.End();
+                
             }
         }
     }
