@@ -852,11 +852,6 @@ namespace DMPHDWebAPI.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetOrderDetails_Result>("GetOrderDetails", orderIDParameter);
         }
     
-        public virtual ObjectResult<GetMembers_Result> GetMembers()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetMembers_Result>("GetMembers");
-        }
-    
         public virtual ObjectResult<GetLowerMembers_Result> GetLowerMembers(string memberID)
         {
             var memberIDParameter = memberID != null ?
@@ -895,6 +890,11 @@ namespace DMPHDWebAPI.Models
                 new ObjectParameter("ProductID", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetProductsByID_Result>("GetProductsByID", memberIDParameter, productIDParameter);
+        }
+    
+        public virtual ObjectResult<GetMembers_Result> GetMembers()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetMembers_Result>("GetMembers");
         }
     }
 }

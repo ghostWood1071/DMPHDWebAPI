@@ -1095,21 +1095,20 @@
           <FunctionImport Name="GetOrderDetails" ReturnType="Collection(DMPModels.GetOrderDetails_Result)">
           <Parameter Name="OrderID" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="GetMembers" ReturnType="Collection(DMPModels.GetMembers_Result)" />
           <FunctionImport Name="GetLowerMembers" ReturnType="Collection(DMPModels.GetLowerMembers_Result)">
           <Parameter Name="MemberID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetMemberByID" ReturnType="Collection(DMPModels.GetMemberByID_Result)">
           <Parameter Name="MemberID" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="GetMembers" ReturnType="Collection(DMPModels.GetMembers_Result)" />
           <FunctionImport Name="GetProducts" ReturnType="Collection(DMPModels.GetProducts_Result)">
-            <Parameter Name="MemberID" Mode="In" Type="String" />
+          <Parameter Name="MemberID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetProductsByID" ReturnType="Collection(DMPModels.GetProductsByID_Result)">
             <Parameter Name="MemberID" Mode="In" Type="String" />
             <Parameter Name="ProductID" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="GetMembers" ReturnType="Collection(DMPModels.GetMembers_Result)" />
         </EntityContainer>
         <EntityType Name="Config">
           <Key>
@@ -1658,24 +1657,6 @@
           <Property Type="String" Name="ProductID" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="ProductName" Nullable="true" MaxLength="50" />
         </ComplexType>
-        <ComplexType Name="GetMembers_Result">
-          <Property Type="String" Name="MemberID" Nullable="false" MaxLength="8" />
-          <Property Type="String" Name="FullName" Nullable="false" MaxLength="255" />
-          <Property Type="String" Name="ReferralID" Nullable="true" MaxLength="8" />
-          <Property Type="String" Name="Gender" Nullable="false" MaxLength="3" />
-          <Property Type="String" Name="Birthday" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="Address" Nullable="true" MaxLength="100" />
-          <Property Type="String" Name="Email" Nullable="false" MaxLength="50" />
-          <Property Type="String" Name="Phone" Nullable="false" MaxLength="10" />
-          <Property Type="String" Name="IDCard" Nullable="false" MaxLength="13" />
-          <Property Type="String" Name="IDCard_PlaceIssue" Nullable="false" MaxLength="100" />
-          <Property Type="String" Name="IDCard_DateIssue" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="Password" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="PositionID" Nullable="true" MaxLength="18" />
-          <Property Type="Int32" Name="RoleID" Nullable="false" />
-          <Property Type="Boolean" Name="IsActive" Nullable="true" />
-          <Property Type="String" Name="Avatar" Nullable="true" MaxLength="200" />
-        </ComplexType>
         <ComplexType Name="GetLowerMembers_Result">
           <Property Type="String" Name="MemberID" Nullable="true" MaxLength="8" />
           <Property Type="String" Name="FullName" Nullable="true" MaxLength="255" />
@@ -1724,6 +1705,24 @@
           <Property Type="Double" Name="SalePoint" Nullable="true" />
           <Property Type="Int32" Name="Quantity" Nullable="true" />
           <Property Type="String" Name="Description" Nullable="true" MaxLength="500" />
+        </ComplexType>
+        <ComplexType Name="GetMembers_Result">
+          <Property Type="String" Name="MemberID" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="FullName" Nullable="false" MaxLength="255" />
+          <Property Type="String" Name="ReferralID" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="Gender" Nullable="false" MaxLength="3" />
+          <Property Type="String" Name="Birthday" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Address" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Phone" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="IDCard" Nullable="false" MaxLength="13" />
+          <Property Type="String" Name="IDCard_PlaceIssue" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="IDCard_DateIssue" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Password" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="PositionID" Nullable="true" MaxLength="20" />
+          <Property Type="Int32" Name="RoleID" Nullable="false" />
+          <Property Type="Boolean" Name="IsActive" Nullable="true" />
+          <Property Type="String" Name="Avatar" Nullable="true" MaxLength="200" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -2171,28 +2170,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="GetMembers" FunctionName="DMPModels.Store.GetMembers">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="DMPModels.GetMembers_Result">
-                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
-                <ScalarProperty Name="FullName" ColumnName="FullName" />
-                <ScalarProperty Name="ReferralID" ColumnName="ReferralID" />
-                <ScalarProperty Name="Gender" ColumnName="Gender" />
-                <ScalarProperty Name="Birthday" ColumnName="Birthday" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Phone" ColumnName="Phone" />
-                <ScalarProperty Name="IDCard" ColumnName="IDCard" />
-                <ScalarProperty Name="IDCard_PlaceIssue" ColumnName="IDCard_PlaceIssue" />
-                <ScalarProperty Name="IDCard_DateIssue" ColumnName="IDCard_DateIssue" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="PositionID" ColumnName="PositionID" />
-                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="Avatar" ColumnName="Avatar" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="GetLowerMembers" FunctionName="DMPModels.Store.GetLowerMembers">
             <ResultMapping>
               <ComplexTypeMapping TypeName="DMPModels.GetLowerMembers_Result">
@@ -2255,6 +2232,28 @@
                 <ScalarProperty Name="SalePoint" ColumnName="SalePoint" />
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetMembers" FunctionName="DMPModels.Store.GetMembers">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.GetMembers_Result">
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="ReferralID" ColumnName="ReferralID" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Birthday" ColumnName="Birthday" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="IDCard" ColumnName="IDCard" />
+                <ScalarProperty Name="IDCard_PlaceIssue" ColumnName="IDCard_PlaceIssue" />
+                <ScalarProperty Name="IDCard_DateIssue" ColumnName="IDCard_DateIssue" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="PositionID" ColumnName="PositionID" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Avatar" ColumnName="Avatar" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
