@@ -912,10 +912,6 @@
           <Parameter Name="ProductID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetPrices" ReturnType="Collection(DMPModels.GetPrices_Result)" />
-          <FunctionImport Name="GetSalary" ReturnType="Collection(DMPModels.GetSalary_Result)">
-            <Parameter Name="MemberID" Mode="In" Type="String" />
-            <Parameter Name="Year" Mode="In" Type="Int32" />
-          </FunctionImport>
           <FunctionImport Name="GetUserRequestByID" ReturnType="Collection(DMPModels.GetUserRequestByID_Result)">
           <Parameter Name="RequestID" Mode="In" Type="Int32" />
           </FunctionImport>
@@ -1109,6 +1105,10 @@
             <Parameter Name="ProductID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetMembers" ReturnType="Collection(DMPModels.GetMembers_Result)" />
+          <FunctionImport Name="GetSalary" ReturnType="Collection(DMPModels.GetSalary_Result)">
+            <Parameter Name="MemberID" Mode="In" Type="String" />
+            <Parameter Name="Year" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="Config">
           <Key>
@@ -1581,16 +1581,6 @@
           <Property Type="Double" Name="OriginPrice" Nullable="true" />
           <Property Type="Double" Name="SalePoint" Nullable="true" />
         </ComplexType>
-        <ComplexType Name="GetSalary_Result">
-          <Property Type="Int32" Name="Month" Nullable="false" />
-          <Property Type="Double" Name="AccumulatedMark" Nullable="true" />
-          <Property Type="Double" Name="ImmediateMark" Nullable="true" />
-          <Property Type="Double" Name="MediateMark" Nullable="true" />
-          <Property Type="Double" Name="UsedMark" Nullable="true" />
-          <Property Type="Double" Name="TotalMark" Nullable="true" />
-          <Property Type="Double" Name="TotalMark1" Nullable="true" />
-          <Property Type="Double" Name="Column1" Nullable="true" />
-        </ComplexType>
         <ComplexType Name="GetUserRequestByID_Result">
           <Property Type="Int32" Name="RequestID" Nullable="false" />
           <Property Type="Guid" Name="Code" Nullable="false" />
@@ -1723,6 +1713,15 @@
           <Property Type="Int32" Name="RoleID" Nullable="false" />
           <Property Type="Boolean" Name="IsActive" Nullable="true" />
           <Property Type="String" Name="Avatar" Nullable="true" MaxLength="200" />
+        </ComplexType>
+        <ComplexType Name="GetSalary_Result">
+          <Property Type="Int32" Name="Month" Nullable="false" />
+          <Property Type="Double" Name="AccumulatedMark" Nullable="true" />
+          <Property Type="Double" Name="ImmediateMark" Nullable="true" />
+          <Property Type="Double" Name="MediateMark" Nullable="true" />
+          <Property Type="Double" Name="UsedMark" Nullable="true" />
+          <Property Type="Double" Name="TotalMark" Nullable="true" />
+          <Property Type="Double" Name="Salary" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -2035,20 +2034,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="GetSalary" FunctionName="DMPModels.Store.GetSalary">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="DMPModels.GetSalary_Result">
-                <ScalarProperty Name="Month" ColumnName="Month" />
-                <ScalarProperty Name="AccumulatedMark" ColumnName="AccumulatedMark" />
-                <ScalarProperty Name="ImmediateMark" ColumnName="ImmediateMark" />
-                <ScalarProperty Name="MediateMark" ColumnName="MediateMark" />
-                <ScalarProperty Name="UsedMark" ColumnName="UsedMark" />
-                <ScalarProperty Name="TotalMark" ColumnName="TotalMark" />
-                <ScalarProperty Name="TotalMark1" ColumnName="TotalMark1" />
-                <ScalarProperty Name="Column1" ColumnName="Column1" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="GetUserRequestByID" FunctionName="DMPModels.Store.GetUserRequestByID">
             <ResultMapping>
               <ComplexTypeMapping TypeName="DMPModels.GetUserRequestByID_Result">
@@ -2254,6 +2239,19 @@
                 <ScalarProperty Name="RoleID" ColumnName="RoleID" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="Avatar" ColumnName="Avatar" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetSalary" FunctionName="DMPModels.Store.GetSalary">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.GetSalary_Result">
+                <ScalarProperty Name="Month" ColumnName="Month" />
+                <ScalarProperty Name="AccumulatedMark" ColumnName="AccumulatedMark" />
+                <ScalarProperty Name="ImmediateMark" ColumnName="ImmediateMark" />
+                <ScalarProperty Name="MediateMark" ColumnName="MediateMark" />
+                <ScalarProperty Name="UsedMark" ColumnName="UsedMark" />
+                <ScalarProperty Name="TotalMark" ColumnName="TotalMark" />
+                <ScalarProperty Name="Salary" ColumnName="Salary" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

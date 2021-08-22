@@ -19,7 +19,6 @@ namespace DMPHDWebAPI.Models
         public Nullable<double> MediateMark { get; set; }
         public Nullable<double> UsedMark { get; set; }
         public Nullable<double> TotalMark { get; set; }
-        public Nullable<double> TotalMark1 { get; set; }
-        public Nullable<double> Column1 { get; set; }
+        public Nullable<double> Salary { get; set; }
     }
 }
