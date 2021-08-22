@@ -1,6 +1,7 @@
 ﻿using DMPHDWebAPI.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -24,7 +25,7 @@ namespace DMPHDWebAPI.Controllers
             }
             catch (Exception e)
             {
-                //throw new ArgumentException("My message", e);
+                throw new ArgumentException("My message", e);
             }
             return result;
         }
@@ -197,5 +198,23 @@ namespace DMPHDWebAPI.Controllers
                 context.DeleteMember(id);
             }
         }
+
+        [HttpGet]
+        [Route("GetOrg")]
+        public IEnumerable<GetMembersOrg_Result> GetOrg(string memberID)
+        {
+            try
+            {
+                using(DMPContext context = new DMPContext())
+                {
+                    return context.GetMembersOrg(memberID).ToList();
+                }
+            }
+            catch(Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                return null;
+            }
+        } 
     }
 }

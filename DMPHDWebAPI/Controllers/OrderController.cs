@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -29,11 +30,18 @@ namespace DMPHDWebAPI.Controllers
         }
 
         // POST: api/Order
-        public void Post([FromBody] OrderPost order)
+        public GetOrders_Result Post([FromBody] OrderPost order)
         {
-            using(DMPContext context = new DMPContext())
+            try
             {
-                context.InsertOrder(order.MemberID, order.OrderDate, order.Discount);
+                using (DMPContext context = new DMPContext())
+                {
+                    context.InsertOrder(order.MemberID, order.OrderDate, order.Discount);
+                    return context.GetOrders().LastOrDefault();
+                }
+            } catch
+            {
+                return null;
             }
         }
 
@@ -52,6 +60,48 @@ namespace DMPHDWebAPI.Controllers
             using(DMPContext context = new DMPContext())
             {
                 context.DeleteOrder(orderID);
+            }
+        }
+
+        [HttpGet]
+        [Route("GetYears")]
+        public IEnumerable<int> GetYears(string memberID)
+        {
+            try
+            {
+                using (DMPContext context = new DMPContext())
+                {
+                   return context.Orders.Where(x => x.MemberID == memberID).Select(x => x.OrderDate.Value.Year).Distinct().ToList();
+                }
+            } catch(Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                return null;
+            }
+        }
+
+        [HttpGet]
+        [Route("GetOrders")]
+        public IEnumerable<OrderResults> GetOrders(string memberID)
+        {
+            try
+            {
+                using(DMPContext context = new DMPContext())
+                {
+                    return context.Orders.Where(x => x.MemberID == memberID).Select(x => new OrderResults()
+                    {
+                       OrderID = x.OrderID,
+                       Discount = x.Discount,
+                       FullName = x.Member.FullName,
+                       MemberID = x.MemberID,
+                       OrderDate = x.OrderDate
+                    }).ToList();
+                }
+
+            } catch(Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                return null;
             }
         }
     }

@@ -7,172 +7,76 @@ using System.Web.Http;
 using DMPHDWebAPI.Models;
 using DMPHDWebAPI.App_Start;
 using System.Web.Http.Cors;
+using System.Diagnostics;
 
 namespace DMPHDWebAPI.Controllers
 {
-    [EnableCors(origins: SystemConfig.CLIENT_DOMAIN, headers: "*", methods: "*")]
     public class ConfigController : ApiController
     {
-
         [HttpGet]
-        [Route("StandardMember")]
-        public float GetStandardMemberScore()
+        [Route("GetConfigs")]
+        public IEnumerable<Config> GetConfigs()
         {
-            using(DMPContext context = new DMPContext())
+            try
             {
-               return float.Parse(context.Configs.FirstOrDefault(x => x.ParameterID == SystemConfig.STANDARD_MEMBER).Value);
+                using(DMPContext context = new DMPContext())
+                {
+                    return context.Configs.ToList();
+                }
+            } catch(Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                return null;
             }
         }
 
-        [HttpGet]
-        [Route("StandardTCMember")]
-        public float GetStandardTCMemberScore()
+        [HttpPut]
+        [Route("SetConfig")]
+        public void SetConfig([FromBody] ConfigPost value)
         {
-            using(DMPContext context = new DMPContext())
+            try
             {
-               return float.Parse(context.Configs.FirstOrDefault(x => x.ParameterID == SystemConfig.STANDARD_TC_MEMBER).Value);
-            }
-        }
-
-        [HttpGet]
-        [Route("StandardDCMember")]
-        public float GetStandardDCMemberScore()
-        {
-            using (DMPContext context = new DMPContext())
+                using(DMPContext context = new DMPContext())
+                {
+                    context.Configs.FirstOrDefault(x => x.ParameterID.Trim() == value.ID).Value = value.Value;
+                    context.SaveChanges();
+                }
+            } catch(Exception e)
             {
-                return float.Parse(context.Configs.FirstOrDefault(x => x.ParameterID == SystemConfig.STANDARD_DC_MEMBER).Value);
-            }
-        }
-
-        [HttpGet]
-        [Route("StandardBeginMember")]
-        public float GetStandardBeginMemberScore()
-        {
-            using (DMPContext context = new DMPContext())
-            {
-                return float.Parse(context.Configs.FirstOrDefault(x => x.ParameterID == SystemConfig.STANDARD_BEGIN_MEMBER).Value);
-            }
-        }
-
-        [HttpGet]
-        [Route("ExchangeRate")]
-        public float GetExchangeRate()
-        {
-            using(DMPContext context = new DMPContext())
-            {
-                return float.Parse(context.Configs.FirstOrDefault(x => x.ParameterID == SystemConfig.EXCHANGE_RATE).Value);
-            }
-        }
-
-        [HttpGet]
-        [Route("GetLeaderScore")]
-        public float GetLeaderScore()
-        {
-            using(DMPContext context = new DMPContext())
-            {
-                return float.Parse(context.Configs.FirstOrDefault(x => x.ParameterID == SystemConfig.STANDARD_LEADER).Value);
-            }
-        }
-
-        [HttpGet]
-        [Route("GetManagerScore")]
-        public float GetManagerScore()
-        {
-            using (DMPContext context = new DMPContext())
-            {
-                return float.Parse(context.Configs.FirstOrDefault(x => x.ParameterID == SystemConfig.STANDARD_MANAGER).Value);
-            }
-        }
-
-        [HttpGet]
-        [Route("GetReserveManagerScore")]
-        public float GetReserveManagerScore()
-        {
-            using (DMPContext context = new DMPContext())
-            {
-                return float.Parse(context.Configs.FirstOrDefault(x => x.ParameterID == SystemConfig.STANDARD_RESERVE_MANAGER).Value);
+                Debug.WriteLine(e.Message);
             }
         }
         
-
-
-        [HttpPut]
-        [Route("SetMemberScore")]
-        public void SetStandardMemberScore(float val)
+        [HttpGet]
+        [Route("GetDiscounts")]
+        public IEnumerable<GetPositions_Result> GetPositions()
         {
-            using (DMPContext context = new DMPContext())
+            try
             {
-                context.Configs.FirstOrDefault(x => x.ParameterID == SystemConfig.STANDARD_MEMBER).Value = val.ToString();
-            }
+                using(DMPContext context = new DMPContext())
+                {
+                    return context.GetPositions().ToList();
+                }
+            } catch(Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                return null;
+            } 
         }
 
         [HttpPut]
-        [Route("SetTCMemberScore")]
-        public void SetStandardTCMemberScore(float val)
+        [Route("SetDiscount")]
+        public void SetDiscount([FromBody] DiscountPut value)
         {
-            using (DMPContext context = new DMPContext())
+            try
             {
-                context.Configs.FirstOrDefault(x => x.ParameterID == SystemConfig.STANDARD_TC_MEMBER).Value = val.ToString();
-            }
-        }
-
-        [HttpPut]
-        [Route("SetMemberDCScore")]
-        public void SetStandardDCMemberScore( float val)
-        {
-            using (DMPContext context = new DMPContext())
+                using(DMPContext context = new DMPContext())
+                {
+                    context.Positions.FirstOrDefault(x => x.PositionID == value.ID).Discount = value.Discount;
+                };
+            } catch(Exception e)
             {
-                context.Configs.FirstOrDefault(x => x.ParameterID == SystemConfig.STANDARD_DC_MEMBER).Value = val.ToString();
-            }
-        }
-
-        [HttpPut]
-        [Route("SetBeginMemberScore")]
-        public void SetStandardBeginMemberScore(float val)
-        {
-            using (DMPContext context = new DMPContext())
-            {
-                context.Configs.FirstOrDefault(x => x.ParameterID == SystemConfig.STANDARD_BEGIN_MEMBER).Value = val.ToString();
-            }
-        }
-
-        [HttpPut]
-        [Route("SetExchangeRate")]
-        public void SetExchangeRate(float val)
-        {
-            using (DMPContext context = new DMPContext())
-            {
-                context.Configs.FirstOrDefault(x => x.ParameterID == SystemConfig.EXCHANGE_RATE).Value = val.ToString();
-            }
-        }
-
-        [HttpPut]
-        [Route("SetLeaderScore")]
-        public void SetLeaderScore( float val)
-        {
-            using (DMPContext context = new DMPContext())
-            {
-                context.Configs.FirstOrDefault(x => x.ParameterID == SystemConfig.STANDARD_LEADER).Value = val.ToString();
-            }
-        }
-
-        [HttpPut]
-        [Route("SetManagerScore")]
-        public void SetManagerScore(float val)
-        {
-            using (DMPContext context = new DMPContext())
-            {
-                context.Configs.FirstOrDefault(x => x.ParameterID == SystemConfig.STANDARD_MANAGER).Value = val.ToString();
-            }
-        }
-
-        [HttpPut]
-        [Route("SetReserveManagerScore")]
-        public void SetReserveManagerScore(float val)
-        {
-            using (DMPContext context = new DMPContext())
-            {
-                context.Configs.FirstOrDefault(x => x.ParameterID == SystemConfig.STANDARD_RESERVE_MANAGER).Value = val.ToString();
+                Debug.WriteLine(e.Message);
             }
         }
     }

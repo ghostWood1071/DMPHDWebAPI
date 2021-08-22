@@ -34,17 +34,17 @@ namespace DMPHDWebAPI.Controllers
         // POST: api/OrderDetail
         [HttpPost]
         [Route("InsertOrderDetails")]
-        public void PostDetails(string memberID, [FromBody]List<OrderDetailPost> details)
+        public void PostDetails(string memberID, [FromBody]OrderDetailsPost details)
         {
              using(DMPContext context = new DMPContext())
              {
-                foreach(var item in details)
+                foreach(var item in details.Details)
                 {
                     ProductDetail productDetail =  context.ProductDetails.Where(x => x.ProductID == item.ProductID && x.MemberID == memberID).FirstOrDefault();
                     productDetail.Quantity -= item.Quantity;
                 }
                 context.SaveChanges();
-                string jsonString = JsonConvert.SerializeObject(details);
+                string jsonString = JsonConvert.SerializeObject(details.Details);
                 context.InsertOrderDetails(jsonString);
               
              }

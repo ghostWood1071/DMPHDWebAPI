@@ -179,18 +179,29 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MembersController.cs" />
+    <Compile Include="Controllers\NotifyController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\OrderDetailController.cs" />
     <Compile Include="Controllers\ProductsController.cs" />
     <Compile Include="Controllers\SalePointController.cs" />
     <Compile Include="Models\AccountPost.cs" />
+    <Compile Include="Models\ConfigPost.cs" />
+    <Compile Include="Models\DiscountPut.cs" />
+    <Compile Include="Models\GetMembersOrg_Result.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\GetOrderByID_Result.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GetOrders_Result.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\NotifyDetailResult.cs" />
+    <Compile Include="Models\NotifyPost.cs" />
+    <Compile Include="Models\NotifyResult.cs" />
     <Compile Include="Models\OrderDetailPut.cs" />
+    <Compile Include="Models\OrderDetailsPost.cs" />
+    <Compile Include="Models\OrderResults.cs" />
     <Compile Include="Models\ReportGenaral_Result.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>

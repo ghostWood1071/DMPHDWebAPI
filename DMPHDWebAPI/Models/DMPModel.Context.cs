@@ -896,5 +896,14 @@ namespace DMPHDWebAPI.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetProductsByID_Result>("GetProductsByID", memberIDParameter, productIDParameter);
         }
+    
+        public virtual ObjectResult<GetMembersOrg_Result> GetMembersOrg(string memberID)
+        {
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetMembersOrg_Result>("GetMembersOrg", memberIDParameter);
+        }
     }
 }
