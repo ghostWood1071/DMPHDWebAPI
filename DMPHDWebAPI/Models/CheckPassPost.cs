@@ -5,8 +5,9 @@ using System.Web;
 
 namespace DMPHDWebAPI.Models
 {
-    public class OrderPut: OrderPost
+    public class CheckPassPost
     {
-        public string OrderID { get; set; }
+        public string uid { get; set; }
+        public string pass { get; set; }
     }
 }

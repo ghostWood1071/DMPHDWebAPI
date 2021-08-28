@@ -60,6 +60,7 @@
           <Property Name="RoleID" Type="int" Nullable="false" />
           <Property Name="DistrictID" Type="int" />
           <Property Name="ProvinceID" Type="int" />
+          <Property Name="TimeJoin" Type="datetime" />
         </EntityType>
         <EntityType Name="Notifies">
           <Key>
@@ -433,6 +434,26 @@
             </CollectionType>
           </ReturnType>
         </Function>
+        <Function Name="CalReportGenaral" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MemberID" Type="char" Mode="In" />
+          <Parameter Name="Year" Type="int" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="Month" Type="int" />
+                <Property Name="CountLowerMembers" Type="int" />
+                <Property Name="CountOrders" Type="int" />
+                <Property Name="Accmulation" Type="float" />
+                <Property Name="Salary" Type="float" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
+        <Function Name="CountLowerMember" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MemberID" Type="char" Mode="In" />
+          <Parameter Name="Month" Type="int" Mode="In" />
+          <Parameter Name="Year" Type="int" Mode="In" />
+        </Function>
         <Function Name="DeleteMember" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="MemberID" Type="char" Mode="In" />
         </Function>
@@ -501,6 +522,21 @@
         <Function Name="GetSalary" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="MemberID" Type="char" Mode="In" />
           <Parameter Name="Year" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetSalaryMember" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MemberID" Type="char" Mode="In" />
+          <Parameter Name="Year" Type="int" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="Month" Type="int" />
+                <Property Name="SalaryByLower" Type="float" />
+                <Property Name="SalaryByImmediate" Type="float" />
+                <Property Name="SalaryByManager" Type="float" />
+                <Property Name="SumSalary" Type="float" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
         </Function>
         <Function Name="GetUserRequestByID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="RequestID" Type="int" Mode="In" />
@@ -583,7 +619,6 @@
         <Function Name="ReportGenaral" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="MemberID" Type="char" Mode="In" />
           <Parameter Name="Year" Type="int" Mode="In" />
-          <Parameter Name="Month" Type="int" Mode="In" />
         </Function>
         <Function Name="ReportMemberQuantityByLevel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="MemberID" Type="char" Mode="In" />
@@ -683,6 +718,18 @@
         </Function>
         <Function Name="DeleteOrderdetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="vip12641_dmphd_user">
           <Parameter Name="OrderID" Type="char" Mode="In" />
+        </Function>
+        <Function Name="GetDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="vip12641_dmphd_user">
+          <Parameter Name="memberID" Type="char" Mode="In" />
+          <Parameter Name="OrderID" Type="char" Mode="In" />
+        </Function>
+        <Function Name="GetListDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="vip12641_dmphd_user">
+          <Parameter Name="memberID" Type="char" Mode="In" />
+          <Parameter Name="OrderID" Type="char" Mode="In" />
+        </Function>
+        <Function Name="GetMemberPoints" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="vip12641_dmphd_user">
+          <Parameter Name="MemberID" Type="char" Mode="In" />
+          <Parameter Name="Year" Type="int" Mode="In" />
         </Function>
         <EntityContainer Name="DMPModelsStoreContainer">
           <EntitySet Name="Configs" EntityType="Self.Configs" Schema="dbo" store:Type="Tables" />
@@ -991,7 +1038,6 @@
           <FunctionImport Name="ReportGenaral" ReturnType="Collection(DMPModels.ReportGenaral_Result)">
             <Parameter Name="MemberID" Mode="In" Type="String" />
             <Parameter Name="Year" Mode="In" Type="Int32" />
-            <Parameter Name="Month" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="ReportMemberQuantityByLevel" ReturnType="Collection(DMPModels.ReportMemberQuantityByLevel_Result)">
           <Parameter Name="MemberID" Mode="In" Type="String" />
@@ -1108,12 +1154,37 @@
             <Parameter Name="ProductID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetMembersOrg" ReturnType="Collection(DMPModels.GetMembersOrg_Result)">
-            <Parameter Name="MemberID" Mode="In" Type="String" />
+          <Parameter Name="MemberID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetMembers" ReturnType="Collection(DMPModels.GetMembers_Result)" />
           <FunctionImport Name="GetSalary" ReturnType="Collection(DMPModels.GetSalary_Result)">
             <Parameter Name="MemberID" Mode="In" Type="String" />
             <Parameter Name="Year" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="CalReportGenaral" IsComposable="true" ReturnType="Collection(DMPModels.CalReportGenaral_Result)">
+            <Parameter Name="MemberID" Mode="In" Type="String" />
+            <Parameter Name="Year" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="CountLowerMember" ReturnType="Collection(Int32)">
+            <Parameter Name="MemberID" Mode="In" Type="String" />
+            <Parameter Name="Month" Mode="In" Type="Int32" />
+            <Parameter Name="Year" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetSalaryMember" IsComposable="true" ReturnType="Collection(DMPModels.GetSalaryMember_Result)">
+            <Parameter Name="MemberID" Mode="In" Type="String" />
+            <Parameter Name="Year" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetDetails" ReturnType="Collection(DMPModels.GetDetails_Result)">
+            <Parameter Name="memberID" Mode="In" Type="String" />
+            <Parameter Name="OrderID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetMemberPoints" ReturnType="Collection(DMPModels.GetMemberPoints_Result)">
+            <Parameter Name="MemberID" Mode="In" Type="String" />
+            <Parameter Name="Year" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetListDetails" ReturnType="Collection(DMPModels.GetListDetails_Result)">
+            <Parameter Name="memberID" Mode="In" Type="String" />
+            <Parameter Name="OrderID" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="Config">
@@ -1184,6 +1255,7 @@
           <NavigationProperty Name="Orders" Relationship="DMPModels.FK_Orders_Members" FromRole="Member" ToRole="Order" />
           <NavigationProperty Name="ProductDetails" Relationship="DMPModels.FK_ProductDetails_Members" FromRole="Member" ToRole="ProductDetail" />
           <NavigationProperty Name="SalePoints" Relationship="DMPModels.FK_SalePoints_Members" FromRole="Member" ToRole="SalePoint" />
+          <Property Name="TimeJoin" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="Notify">
           <Key>
@@ -1743,6 +1815,50 @@
           <Property Type="String" Name="PositionID" Nullable="true" MaxLength="20" />
           <Property Type="String" Name="ReferralID" Nullable="true" MaxLength="8" />
         </ComplexType>
+        <ComplexType Name="CalReportGenaral_Result">
+          <Property Type="Int32" Name="Month" Nullable="true" />
+          <Property Type="Int32" Name="CountLowerMembers" Nullable="true" />
+          <Property Type="Int32" Name="CountOrders" Nullable="true" />
+          <Property Type="Double" Name="Accmulation" Nullable="true" />
+          <Property Type="Double" Name="Salary" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="GetSalaryMember_Result">
+          <Property Type="Int32" Name="Month" Nullable="true" />
+          <Property Type="Double" Name="SalaryByLower" Nullable="true" />
+          <Property Type="Double" Name="SalaryByImmediate" Nullable="true" />
+          <Property Type="Double" Name="SalaryByManager" Nullable="true" />
+          <Property Type="Double" Name="SumSalary" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="GetDetails_Result">
+          <Property Type="String" Name="ProductID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="ProductName" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="Quantity" Nullable="false" />
+          <Property Type="Double" Name="BasePrice" Nullable="true" />
+          <Property Type="Double" Name="OriginPrice" Nullable="true" />
+          <Property Type="Double" Name="SalePoint" Nullable="true" />
+          <Property Type="Int32" Name="OrderDetailID" Nullable="true" />
+          <Property Type="String" Name="OrderID" Nullable="true" MaxLength="10" />
+          <Property Type="Int32" Name="Quantity1" Nullable="true" />
+          <Property Type="Double" Name="UnitPrice" Nullable="true" />
+          <Property Type="String" Name="ProductID1" Nullable="true" MaxLength="10" />
+        </ComplexType>
+        <ComplexType Name="GetMemberPoints_Result">
+          <Property Type="Int32" Name="Month" Nullable="false" />
+          <Property Type="Double" Name="AccumulatedMark" Nullable="true" />
+          <Property Type="Double" Name="ImmediateMark" Nullable="true" />
+          <Property Type="Double" Name="MediateMark" Nullable="true" />
+          <Property Type="Double" Name="UsedMark" Nullable="true" />
+          <Property Type="Double" Name="TotalMark" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="GetListDetails_Result">
+          <Property Type="String" Name="ProductID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="ProductName" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="Quantity" Nullable="false" />
+          <Property Type="Double" Name="BasePrice" Nullable="true" />
+          <Property Type="Double" Name="OriginPrice" Nullable="true" />
+          <Property Type="Double" Name="SalePoint" Nullable="true" />
+          <Property Type="Int32" Name="BuyQuantity" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1786,6 +1902,7 @@
           <EntitySetMapping Name="Members">
             <EntityTypeMapping TypeName="DMPModels.Member">
               <MappingFragment StoreEntitySet="Members">
+                <ScalarProperty Name="TimeJoin" ColumnName="TimeJoin" />
                 <ScalarProperty Name="ProvinceID" ColumnName="ProvinceID" />
                 <ScalarProperty Name="DistrictID" ColumnName="DistrictID" />
                 <ScalarProperty Name="RoleID" ColumnName="RoleID" />
@@ -2290,6 +2407,71 @@
                 <ScalarProperty Name="UsedMark" ColumnName="UsedMark" />
                 <ScalarProperty Name="TotalMark" ColumnName="TotalMark" />
                 <ScalarProperty Name="Salary" ColumnName="Salary" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CalReportGenaral" FunctionName="DMPModels.Store.CalReportGenaral">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.CalReportGenaral_Result">
+                <ScalarProperty Name="Month" ColumnName="Month" />
+                <ScalarProperty Name="CountLowerMembers" ColumnName="CountLowerMembers" />
+                <ScalarProperty Name="CountOrders" ColumnName="CountOrders" />
+                <ScalarProperty Name="Accmulation" ColumnName="Accmulation" />
+                <ScalarProperty Name="Salary" ColumnName="Salary" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CountLowerMember" FunctionName="DMPModels.Store.CountLowerMember" />
+          <FunctionImportMapping FunctionImportName="GetSalaryMember" FunctionName="DMPModels.Store.GetSalaryMember">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.GetSalaryMember_Result">
+                <ScalarProperty Name="Month" ColumnName="Month" />
+                <ScalarProperty Name="SalaryByLower" ColumnName="SalaryByLower" />
+                <ScalarProperty Name="SalaryByImmediate" ColumnName="SalaryByImmediate" />
+                <ScalarProperty Name="SalaryByManager" ColumnName="SalaryByManager" />
+                <ScalarProperty Name="SumSalary" ColumnName="SumSalary" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetDetails" FunctionName="DMPModels.Store.GetDetails">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.GetDetails_Result">
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="BasePrice" ColumnName="BasePrice" />
+                <ScalarProperty Name="OriginPrice" ColumnName="OriginPrice" />
+                <ScalarProperty Name="SalePoint" ColumnName="SalePoint" />
+                <ScalarProperty Name="OrderDetailID" ColumnName="OrderDetailID" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="Quantity1" ColumnName="Quantity1" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="ProductID1" ColumnName="ProductID1" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetMemberPoints" FunctionName="DMPModels.Store.GetMemberPoints">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.GetMemberPoints_Result">
+                <ScalarProperty Name="Month" ColumnName="Month" />
+                <ScalarProperty Name="AccumulatedMark" ColumnName="AccumulatedMark" />
+                <ScalarProperty Name="ImmediateMark" ColumnName="ImmediateMark" />
+                <ScalarProperty Name="MediateMark" ColumnName="MediateMark" />
+                <ScalarProperty Name="UsedMark" ColumnName="UsedMark" />
+                <ScalarProperty Name="TotalMark" ColumnName="TotalMark" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetListDetails" FunctionName="DMPModels.Store.GetListDetails">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.GetListDetails_Result">
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="BasePrice" ColumnName="BasePrice" />
+                <ScalarProperty Name="OriginPrice" ColumnName="OriginPrice" />
+                <ScalarProperty Name="SalePoint" ColumnName="SalePoint" />
+                <ScalarProperty Name="BuyQuantity" ColumnName="BuyQuantity" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

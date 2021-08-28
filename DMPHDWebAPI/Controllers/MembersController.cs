@@ -50,6 +50,7 @@ namespace DMPHDWebAPI.Controllers
             }
             return result;
         }
+
         [HttpGet]
         [Route("GetLowerMembers")]
         public IEnumerable<GetLowerMembers_Result> GetLowerMembers(string id)
@@ -95,7 +96,7 @@ namespace DMPHDWebAPI.Controllers
             {
                 using (DMPContext context = new DMPContext())
                 {
-                    result = context.ReportGenaral(id, year,month).ToList();
+                   // result = context.ReportGenaral(id, year,month).ToList();
                 }
             }
             catch (Exception e)
@@ -216,5 +217,32 @@ namespace DMPHDWebAPI.Controllers
                 return null;
             }
         } 
+
+        [HttpPut]
+        [Route("UpdateProfile")]
+        public void UpdateProfile([FromBody] ProfilePut value)
+        {
+            try
+            {
+                using(DMPContext context = new DMPContext())
+                {
+                    var profile = context.Members.FirstOrDefault(x => x.MemberID == value.ID);
+                    profile.FullName = value.FullName;
+                    profile.Gender = value.Gender;
+                    profile.Email = value.Email;
+                    profile.Birthday = value.BirthDay;
+                    profile.Phone = value.Phone;
+                    profile.Address = value.Address;
+                    profile.IDCard = value.IDCard;
+                    profile.IDCard_DateIssue = value.IDDate;
+                    profile.IDCard_PlaceIssue = value.IDPlace;
+                    profile.Avatar = value.Avatar;
+                    context.SaveChanges();
+                }
+            } catch(Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
+        }
     }
 }

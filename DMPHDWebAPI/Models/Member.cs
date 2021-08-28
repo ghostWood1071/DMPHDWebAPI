@@ -42,6 +42,7 @@ namespace DMPHDWebAPI.Models
         public int RoleID { get; set; }
         public Nullable<int> DistrictID { get; set; }
         public Nullable<int> ProvinceID { get; set; }
+        public Nullable<System.DateTime> TimeJoin { get; set; }
     
         public virtual District District { get; set; }
         public virtual ICollection<MemberPoint> MemberPoints { get; set; }

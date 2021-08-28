@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -19,6 +21,33 @@ namespace DMPHDWebAPI.Controllers
             using(DMPContext context = new DMPContext())
             {
                return  context.GetOrderDetails(orderID).ToList();
+            }
+        }
+
+        [HttpGet]
+        [Route("GetDetails")]
+        public IEnumerable<DetailsGet> GetDetails(string memberID, string orderID)
+        {
+            try
+            {
+                using (DMPContext context = new DMPContext())
+                {
+                   return context.GetListDetails(memberID, orderID).Select(x => new DetailsGet()
+                    {
+                        BasePrice = x.BasePrice,
+                        OriginPrice = x.OriginPrice,
+                        BuyQuantity = x.BuyQuantity,
+                        Quantity = x.Quantity,
+                        ProductID = x.ProductID,
+                        ProductName = x.ProductName,
+                        SalePoint = x.SalePoint,
+                        IsBought = x.BuyQuantity.HasValue
+                    }).ToList();
+                }
+            } catch(Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                return null;
             }
         }
 
@@ -90,27 +119,49 @@ namespace DMPHDWebAPI.Controllers
         }
 
         // PUT: api/OrderDetail/5
-        public void Put(string memberID, [FromBody] OrderDetailPut value)
+        public void Put([FromBody] DetailsPut value)
         {
-            using(DMPContext context = new DMPContext())
+            try
             {
-                OrderDetail detail =   context.OrderDetails.FirstOrDefault(x => x.OrderDetailID == value.OrderDetailID);
-                if(detail.ProductID != value.ProductID)
+                using (DMPContext context = new DMPContext())
                 {
-                    ProductDetail productDetail = detail.Product.ProductDetails.FirstOrDefault(x => x.MemberID == memberID);
-                    productDetail.Quantity += detail.Quantity.Value;
-                    ProductDetail productDetailNew = context.ProductDetails.FirstOrDefault(x => x.ProductID == value.ProductID && x.MemberID == memberID);
-                    productDetailNew.Quantity -= value.Quantity;
+                    List<OrderDetailPut> detailPuts = value.Details.ToList();
+                    foreach (var detail in detailPuts)
+                    {
+                        var old = context.OrderDetails.FirstOrDefault(x => x.OrderID == detail.OrderID && x.ProductID == detail.ProductID);
+                        var product = context.ProductDetails.FirstOrDefault(x => x.ProductID == detail.ProductID && x.MemberID == value.MemberID);
+                        if (detail.IsBought)
+                        {
+                            if (old != null)
+                            {
+                                product.Quantity -= (detail.Quantity - old.Quantity.Value);
+                                old.Quantity = detail.Quantity;
+                                old.UnitPrice = detail.UnitPrice;
+                            }
+                            else
+                            {
+                                context.OrderDetails.Add(new OrderDetail()
+                                {
+                                    OrderID = detail.OrderID,
+                                    ProductID = detail.ProductID,
+                                    Quantity = detail.Quantity,
+                                    UnitPrice = detail.UnitPrice,
+                                });
+                                product.Quantity -= detail.Quantity;
+                            }
+                        }
+                        else if (old != null)
+                        {
+                            product.Quantity += old.Quantity.Value;
+                            context.OrderDetails.Remove(old);
+                        }
+                    }
+                    context.SalePoints.FirstOrDefault(x => x.OrderID == value.OrderID).Mark = value.Mark;
+                    context.SaveChanges();
                 }
-
-                if(detail.Quantity != value.Quantity)
-                {
-                    detail.Product.ProductDetails.FirstOrDefault(x => x.MemberID == memberID)
-                                                 .Quantity += (value.Quantity - detail.Quantity.Value);
-
-                }
-                context.SaveChanges();
-                context.UpdateOrrderDetail(value.OrderDetailID, value.ProductID, value.Quantity, value.UnitPrice);
+            } catch(Exception e)
+            {
+                Debug.WriteLine(e.Message);
             }
         }
 
@@ -120,6 +171,20 @@ namespace DMPHDWebAPI.Controllers
             using(DMPContext context = new DMPContext())
             {
                 context.DeleteOrderDetail(id);
+            }
+        }
+
+        public void DeleteOrderDetails(string orderID)
+        {
+            try
+            {
+                using(DMPContext context = new DMPContext())
+                {
+                    context.DeleteOrderdetails(orderID);
+                }
+            } catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
             }
         }
     }

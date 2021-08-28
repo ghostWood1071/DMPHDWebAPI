@@ -8,5 +8,6 @@ namespace DMPHDWebAPI.Models
     public class OrderDetailPut: OrderDetailPost
     {
         public int OrderDetailID { get; set; }
+        public bool IsBought { get; set; }
     }
 }

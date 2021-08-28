@@ -1,4 +1,5 @@
-﻿using DMPHDWebAPI.Models;
+﻿using DMPHDWebAPI.Extensions;
+using DMPHDWebAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -74,6 +75,27 @@ namespace DMPHDWebAPI.Controllers
                         LastUpdated = value.CreateDate
                     });
                     context.SaveChanges();
+
+
+                    Mailer mailer = new Mailer
+                    {
+                        Content = value.Content,
+                        HostName = null,
+                        Password = null,
+                        Sender = null,
+                        Title = value.Title
+                    };
+                    
+
+                    if (value.IsSendAll)
+                    {
+                        var emails = context.Members.Select(x => x.Email.Trim()).ToList();
+                        mailer.Send(emails, true);
+                        return;
+                    }
+                    var receiver = context.Members.FirstOrDefault(x => x.MemberID == value.Receiver);
+                    mailer.Receiver = receiver.Email.Trim();
+                    mailer.Send(true);
                 };
             }
             catch (Exception e)

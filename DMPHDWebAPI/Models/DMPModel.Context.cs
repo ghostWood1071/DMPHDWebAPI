@@ -468,7 +468,7 @@ namespace DMPHDWebAPI.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertUserRequest", emailParameter);
         }
     
-        public virtual ObjectResult<ReportGenaral_Result> ReportGenaral(string memberID, Nullable<int> year, Nullable<int> month)
+        public virtual ObjectResult<ReportGenaral_Result> ReportGenaral(string memberID, Nullable<int> year)
         {
             var memberIDParameter = memberID != null ?
                 new ObjectParameter("MemberID", memberID) :
@@ -478,11 +478,7 @@ namespace DMPHDWebAPI.Models
                 new ObjectParameter("Year", year) :
                 new ObjectParameter("Year", typeof(int));
     
-            var monthParameter = month.HasValue ?
-                new ObjectParameter("Month", month) :
-                new ObjectParameter("Month", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ReportGenaral_Result>("ReportGenaral", memberIDParameter, yearParameter, monthParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ReportGenaral_Result>("ReportGenaral", memberIDParameter, yearParameter);
         }
     
         public virtual ObjectResult<ReportMemberQuantityByLevel_Result> ReportMemberQuantityByLevel(string memberID)
@@ -879,6 +875,15 @@ namespace DMPHDWebAPI.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetProductsByID_Result>("GetProductsByID", memberIDParameter, productIDParameter);
         }
     
+        public virtual ObjectResult<GetMembersOrg_Result> GetMembersOrg(string memberID)
+        {
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetMembersOrg_Result>("GetMembersOrg", memberIDParameter);
+        }
+    
         public virtual ObjectResult<GetMembers_Result> GetMembers()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetMembers_Result>("GetMembers");
@@ -897,13 +902,88 @@ namespace DMPHDWebAPI.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetSalary_Result>("GetSalary", memberIDParameter, yearParameter);
         }
     
-        public virtual ObjectResult<GetMembersOrg_Result> GetMembersOrg(string memberID)
+        [EdmFunction("DMPContext", "CalReportGenaral")]
+        public virtual IQueryable<CalReportGenaral_Result> CalReportGenaral(string memberID, Nullable<int> year)
         {
             var memberIDParameter = memberID != null ?
                 new ObjectParameter("MemberID", memberID) :
                 new ObjectParameter("MemberID", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetMembersOrg_Result>("GetMembersOrg", memberIDParameter);
+            var yearParameter = year.HasValue ?
+                new ObjectParameter("Year", year) :
+                new ObjectParameter("Year", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<CalReportGenaral_Result>("[DMPContext].[CalReportGenaral](@MemberID, @Year)", memberIDParameter, yearParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> CountLowerMember(string memberID, Nullable<int> month, Nullable<int> year)
+        {
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            var monthParameter = month.HasValue ?
+                new ObjectParameter("Month", month) :
+                new ObjectParameter("Month", typeof(int));
+    
+            var yearParameter = year.HasValue ?
+                new ObjectParameter("Year", year) :
+                new ObjectParameter("Year", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("CountLowerMember", memberIDParameter, monthParameter, yearParameter);
+        }
+    
+        [EdmFunction("DMPContext", "GetSalaryMember")]
+        public virtual IQueryable<GetSalaryMember_Result> GetSalaryMember(string memberID, Nullable<int> year)
+        {
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            var yearParameter = year.HasValue ?
+                new ObjectParameter("Year", year) :
+                new ObjectParameter("Year", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<GetSalaryMember_Result>("[DMPContext].[GetSalaryMember](@MemberID, @Year)", memberIDParameter, yearParameter);
+        }
+    
+        public virtual ObjectResult<GetDetails_Result> GetDetails(string memberID, string orderID)
+        {
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("memberID", memberID) :
+                new ObjectParameter("memberID", typeof(string));
+    
+            var orderIDParameter = orderID != null ?
+                new ObjectParameter("OrderID", orderID) :
+                new ObjectParameter("OrderID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetDetails_Result>("GetDetails", memberIDParameter, orderIDParameter);
+        }
+    
+        public virtual ObjectResult<GetMemberPoints_Result> GetMemberPoints(string memberID, Nullable<int> year)
+        {
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            var yearParameter = year.HasValue ?
+                new ObjectParameter("Year", year) :
+                new ObjectParameter("Year", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetMemberPoints_Result>("GetMemberPoints", memberIDParameter, yearParameter);
+        }
+    
+        public virtual ObjectResult<GetListDetails_Result> GetListDetails(string memberID, string orderID)
+        {
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("memberID", memberID) :
+                new ObjectParameter("memberID", typeof(string));
+    
+            var orderIDParameter = orderID != null ?
+                new ObjectParameter("OrderID", orderID) :
+                new ObjectParameter("OrderID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetListDetails_Result>("GetListDetails", memberIDParameter, orderIDParameter);
         }
     }
 }

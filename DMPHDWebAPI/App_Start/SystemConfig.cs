@@ -16,5 +16,8 @@ namespace DMPHDWebAPI.App_Start
         public static string STANDARD_MANAGER = "STANDARD_MANAGER";
         public static string STANDARD_RESERVE_MANAGER = "STANDARD_RESERVE_MANAGER";
         public const string CLIENT_DOMAIN = "http://localhost:52278";
+        public const string MAIL_HOST = "profilecreator.pro@gmail.com";
+        public const string MAIL_PASS = "kamenrider";
+        public const string MAIL_NAME = "Công ty TNHH Dược Mỹ Phẩm Hải Dương";
     }
 }

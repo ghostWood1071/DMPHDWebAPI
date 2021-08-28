@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using DMPHDWebAPI.Models;
+using DMPHDWebAPI.Extensions;
 
 namespace DMPHDWebAPI.Controllers
 {
@@ -37,7 +38,21 @@ namespace DMPHDWebAPI.Controllers
                 using (DMPContext context = new DMPContext())
                 {
                     context.InsertOrder(order.MemberID, order.OrderDate, order.Discount);
-                    return context.GetOrders().LastOrDefault();
+                    var result = context.GetOrders().LastOrDefault();
+                    var receiver = context.Members.FirstOrDefault(x => x.MemberID == order.MemberID);
+
+                    Mailer mailer = new Mailer
+                    {
+                        Content = $"Đơn hàng {result.OrderID} đã được thêm thành công",
+                        HostName = null,
+                        Password = null,
+                        Sender = null,
+                        Receiver = receiver.Email.Trim(),
+                        Title = "CTY TNHH DMP HẢI DƯƠNG - ĐẶT HÀNG",
+                        
+                    };
+                    mailer.Send();
+                    return result;
                 }
             } catch
             {
@@ -46,11 +61,30 @@ namespace DMPHDWebAPI.Controllers
         }
 
         // PUT: api/Order/5
+        [HttpPut]
+        [Route("PutOrder")]
         public void Put([FromBody] OrderPut order)
         {
-            using (DMPContext context = new DMPContext())
+            try
             {
-                context.UpdateOrder(order.OrderID , order.MemberID, order.OrderDate);
+                using (DMPContext context = new DMPContext())
+                {
+                    var member =  context.Members.FirstOrDefault(x => x.MemberID == order.MemberID);
+                    if (member == null)
+                        throw new ArgumentNullException("member not found");
+
+                    double discount = member.Position.Discount.Value;
+                    var orderOld = context.Orders.FirstOrDefault(x => x.OrderID == order.OrderID);
+                    if (orderOld == null)
+                        throw new ArgumentNullException("order not found");
+
+                    orderOld.MemberID = member.MemberID;
+                    orderOld.Discount = discount;
+                    context.SaveChanges();
+                }
+            }catch(Exception e)
+            {
+                Debug.WriteLine(e.Message);
             }
         }
 
@@ -104,5 +138,7 @@ namespace DMPHDWebAPI.Controllers
                 return null;
             }
         }
+
+        
     }
 }
