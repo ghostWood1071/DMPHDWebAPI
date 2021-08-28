@@ -13,6 +13,7 @@ namespace DMPHDWebAPI.Models
     
     public partial class ReportGenaral_Result
     {
+        public Nullable<int> Month { get; set; }
         public Nullable<int> CountLowerMembers { get; set; }
         public Nullable<int> CountOrders { get; set; }
         public Nullable<double> Accmulation { get; set; }

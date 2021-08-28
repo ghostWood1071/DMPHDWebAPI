@@ -52,6 +52,26 @@ namespace DMPHDWebAPI.Controllers
         }
 
         [HttpGet]
+        [Route("GetReportGenaral")]
+        public IEnumerable<ReportGenaral_Result> GetReportGenaral(string id,int year,string key)
+        {
+
+            List<ReportGenaral_Result> result = null;
+            try
+            {
+                using (DMPContext context = new DMPContext())
+                {
+                    result = context.ReportGenaral(id,year,key).ToList();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException("My message", e);
+            }
+            return result;
+        }
+
+        [HttpGet]
         [Route("GetLowerMembers")]
         public IEnumerable<GetLowerMembers_Result> GetLowerMembers(string id)
         {
@@ -88,15 +108,15 @@ namespace DMPHDWebAPI.Controllers
             return result;
         }
         [HttpGet]
-        [Route("ReportGenaral")]
-        public IEnumerable<ReportGenaral_Result> ReportGenaral(string id, int year,int month)
+        [Route("GetMemberPoint")]
+        public IEnumerable<GetMemberPoints_Result> GetMemberPoints(string id, int year)
         {
-            List<ReportGenaral_Result> result = null;
+            List<GetMemberPoints_Result> result = null;
             try
             {
                 using (DMPContext context = new DMPContext())
                 {
-                   // result = context.ReportGenaral(id, year,month).ToList();
+                    result = context.GetMemberPoints(id, year).ToList();
                 }
             }
             catch (Exception e)
