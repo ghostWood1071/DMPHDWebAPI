@@ -39,19 +39,19 @@ namespace DMPHDWebAPI.Controllers
                 {
                     context.InsertOrder(order.MemberID, order.OrderDate, order.Discount);
                     var result = context.GetOrders().LastOrDefault();
-                    var receiver = context.Members.FirstOrDefault(x => x.MemberID == order.MemberID);
+                    //var receiver = context.Members.FirstOrDefault(x => x.MemberID == order.MemberID);
 
-                    Mailer mailer = new Mailer
-                    {
-                        Content = $"Đơn hàng {result.OrderID} đã được thêm thành công",
-                        HostName = null,
-                        Password = null,
-                        Sender = null,
-                        Receiver = receiver.Email.Trim(),
-                        Title = "CTY TNHH DMP HẢI DƯƠNG - ĐẶT HÀNG",
+                    //Mailer mailer = new Mailer
+                    //{
+                    //    Content = $"Đơn hàng {result.OrderID} đã được thêm thành công",
+                    //    HostName = null,
+                    //    Password = null,
+                    //    Sender = null,
+                    //    Receiver = receiver.Email.Trim(),
+                    //    Title = "CTY TNHH DMP HẢI DƯƠNG - ĐẶT HÀNG",
                         
-                    };
-                    mailer.Send();
+                    //};
+                    //mailer.Send();
                     return result;
                 }
             } catch

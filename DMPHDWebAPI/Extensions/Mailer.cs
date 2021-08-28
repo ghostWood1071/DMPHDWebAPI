@@ -46,7 +46,7 @@ namespace DMPHDWebAPI.Extensions
                 mess.Subject = Title;
                 mess.IsBodyHtml = isHTML;
                 mess.Body = Content;
-                smtp.Send(mess);
+                smtp.SendMailAsync(mess);
             }
 
         }
@@ -85,7 +85,7 @@ namespace DMPHDWebAPI.Extensions
                 mess.Subject = Title;
                 mess.Body = Content;
                 mess.IsBodyHtml = isHTML;
-                smtp.Send(mess);
+                smtp.SendMailAsync(mess);
             }
         }
     }

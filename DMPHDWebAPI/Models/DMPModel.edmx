@@ -449,22 +449,7 @@
             </CollectionType>
           </ReturnType>
         </Function>
-        <Function Name="CalReportGenaral" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="MemberID" Type="char" Mode="In" />
-          <Parameter Name="Year" Type="int" Mode="In" />
-          <Parameter Name="Key" Type="char" Mode="In" />
-          <ReturnType>
-            <CollectionType>
-              <RowType>
-                <Property Name="Month" Type="int" />
-                <Property Name="CountLowerMembers" Type="int" />
-                <Property Name="CountOrders" Type="int" />
-                <Property Name="Accmulation" Type="float" />
-                <Property Name="Salary" Type="float" />
-              </RowType>
-            </CollectionType>
-          </ReturnType>
-        </Function>
+        
         <Function Name="DeleteMember" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="MemberID" Type="char" Mode="In" />
         </Function>
@@ -2429,17 +2414,7 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="CalReportGenaral" FunctionName="DMPModels.Store.CalReportGenaral">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="DMPModels.CalReportGenaral_Result">
-                <ScalarProperty Name="Month" ColumnName="Month" />
-                <ScalarProperty Name="CountLowerMembers" ColumnName="CountLowerMembers" />
-                <ScalarProperty Name="CountOrders" ColumnName="CountOrders" />
-                <ScalarProperty Name="Accmulation" ColumnName="Accmulation" />
-                <ScalarProperty Name="Salary" ColumnName="Salary" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
+          
           <FunctionImportMapping FunctionImportName="ReportGenaral" FunctionName="DMPModels.Store.ReportGenaral">
             <ResultMapping>
               <ComplexTypeMapping TypeName="DMPModels.ReportGenaral_Result">
