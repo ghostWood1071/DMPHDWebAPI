@@ -11,12 +11,14 @@ namespace DMPHDWebAPI.Models
 {
     using System;
     
-    public partial class ReportGenaral_Result
+    public partial class GetListDetails_Result
     {
-        public Nullable<int> Month { get; set; }
-        public Nullable<int> CountLowerMembers { get; set; }
-        public Nullable<int> CountOrders { get; set; }
-        public Nullable<double> Accmulation { get; set; }
-        public Nullable<double> Salary { get; set; }
+        public string ProductID { get; set; }
+        public string ProductName { get; set; }
+        public int Quantity { get; set; }
+        public Nullable<double> BasePrice { get; set; }
+        public Nullable<double> OriginPrice { get; set; }
+        public Nullable<double> SalePoint { get; set; }
+        public Nullable<int> BuyQuantity { get; set; }
     }
 }

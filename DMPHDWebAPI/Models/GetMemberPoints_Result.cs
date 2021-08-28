@@ -11,12 +11,13 @@ namespace DMPHDWebAPI.Models
 {
     using System;
     
-    public partial class ReportGenaral_Result
+    public partial class GetMemberPoints_Result
     {
-        public Nullable<int> Month { get; set; }
-        public Nullable<int> CountLowerMembers { get; set; }
-        public Nullable<int> CountOrders { get; set; }
-        public Nullable<double> Accmulation { get; set; }
-        public Nullable<double> Salary { get; set; }
+        public int Month { get; set; }
+        public Nullable<double> AccumulatedMark { get; set; }
+        public Nullable<double> ImmediateMark { get; set; }
+        public Nullable<double> MediateMark { get; set; }
+        public Nullable<double> UsedMark { get; set; }
+        public Nullable<double> TotalMark { get; set; }
     }
 }

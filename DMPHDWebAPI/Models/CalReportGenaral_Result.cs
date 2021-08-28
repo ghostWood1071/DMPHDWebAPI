@@ -11,7 +11,7 @@ namespace DMPHDWebAPI.Models
 {
     using System;
     
-    public partial class ReportGenaral_Result
+    public partial class CalReportGenaral_Result
     {
         public Nullable<int> Month { get; set; }
         public Nullable<int> CountLowerMembers { get; set; }

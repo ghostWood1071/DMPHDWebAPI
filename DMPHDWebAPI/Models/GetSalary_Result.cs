@@ -13,12 +13,10 @@ namespace DMPHDWebAPI.Models
     
     public partial class GetSalary_Result
     {
-        public int Month { get; set; }
-        public Nullable<double> AccumulatedMark { get; set; }
-        public Nullable<double> ImmediateMark { get; set; }
-        public Nullable<double> MediateMark { get; set; }
-        public Nullable<double> UsedMark { get; set; }
-        public Nullable<double> TotalMark { get; set; }
-        public Nullable<double> Salary { get; set; }
+        public Nullable<int> Month { get; set; }
+        public Nullable<double> SalaryByLower { get; set; }
+        public Nullable<double> SalaryByImmediate { get; set; }
+        public Nullable<double> SalaryByManager { get; set; }
+        public Nullable<double> SumSalary { get; set; }
     }
 }

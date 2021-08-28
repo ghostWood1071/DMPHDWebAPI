@@ -185,8 +185,20 @@
     <Compile Include="Controllers\ProductsController.cs" />
     <Compile Include="Controllers\SalePointController.cs" />
     <Compile Include="Models\AccountPost.cs" />
+    <Compile Include="Models\CalReportGenaral_Result.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ConfigPost.cs" />
     <Compile Include="Models\DiscountPut.cs" />
+    <Compile Include="Models\GetDetails_Result.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetListDetails_Result.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetMemberPoints_Result.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\GetMembersOrg_Result.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
@@ -194,6 +206,9 @@
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GetOrders_Result.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetSalaryMember_Result.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\NotifyDetailResult.cs" />
