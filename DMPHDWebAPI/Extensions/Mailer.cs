@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace DMPHDWebAPI.Extensions
@@ -46,7 +47,7 @@ namespace DMPHDWebAPI.Extensions
                 mess.Subject = Title;
                 mess.IsBodyHtml = isHTML;
                 mess.Body = Content;
-                smtp.SendMailAsync(mess);
+                smtp.Send(mess);
             }
 
         }
@@ -85,7 +86,7 @@ namespace DMPHDWebAPI.Extensions
                 mess.Subject = Title;
                 mess.Body = Content;
                 mess.IsBodyHtml = isHTML;
-                smtp.SendMailAsync(mess);
+                smtp.Send(mess);
             }
         }
     }
