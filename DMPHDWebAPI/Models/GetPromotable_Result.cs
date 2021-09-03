@@ -11,13 +11,9 @@ namespace DMPHDWebAPI.Models
 {
     using System;
     
-    public partial class GetMemberPoints_Result
+    public partial class GetPromotable_Result
     {
-        public int Month { get; set; }
-        public Nullable<double> AccumulatedMark { get; set; }
-        public Nullable<double> ImmediateMark { get; set; }
-        public Nullable<double> MediateMark { get; set; }
-        public Nullable<double> UsedMark { get; set; }
-        public Nullable<double> UnUsedMark { get; set; }
+        public Nullable<int> NewPos { get; set; }
+        public string Reason { get; set; }
     }
 }
