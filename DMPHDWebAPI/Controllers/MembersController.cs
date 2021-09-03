@@ -261,6 +261,17 @@ namespace DMPHDWebAPI.Controllers
                                     Member.Avatar);
             }
         }
+
+        [HttpPut]
+        [Route("UpdatePosPromote")]
+        public void UpdatePosPromote([FromBody] string id)
+        {
+            using (DMPContext context = new DMPContext())
+            {
+                context.UpdatePosPromote(id);
+            }
+        }
+
         // DELETE api/<controller>/5
         public void Delete(string id)
         {

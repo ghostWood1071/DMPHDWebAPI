@@ -22,6 +22,8 @@ namespace DMPHDWebAPI.Models
         public Nullable<double> AccumulatedMark { get; set; }
         public Nullable<double> UsedMark { get; set; }
         public Nullable<double> UnUsedMark { get; set; }
+        public Nullable<double> ExtraMark { get; set; }
+        public Nullable<bool> PromoteIsActive { get; set; }
     
         public virtual Member Member { get; set; }
     }

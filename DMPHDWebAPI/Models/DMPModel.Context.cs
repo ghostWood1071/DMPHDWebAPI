@@ -995,5 +995,14 @@ namespace DMPHDWebAPI.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetMemberPoints_Result>("GetMemberPoints", memberIDParameter, yearParameter);
         }
+    
+        public virtual int UpdatePosPromote(string memberID)
+        {
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdatePosPromote", memberIDParameter);
+        }
     }
 }

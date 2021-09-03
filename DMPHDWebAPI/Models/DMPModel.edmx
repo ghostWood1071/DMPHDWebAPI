@@ -37,6 +37,8 @@
           <Property Name="AccumulatedMark" Type="float" />
           <Property Name="UsedMark" Type="float" />
           <Property Name="UnUsedMark" Type="float" />
+          <Property Name="ExtraMark" Type="float" />
+          <Property Name="PromoteIsActive" Type="bit" />
         </EntityType>
         <EntityType Name="Members">
           <Key>
@@ -733,6 +735,9 @@
           <Parameter Name="MemberID" Type="char" Mode="In" />
         </Function>
         <Function Name="InsertJobMemberPoints" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="vip12641_dmphd_user" />
+        <Function Name="UpdatePosPromote" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="vip12641_dmphd_user">
+          <Parameter Name="MemberID" Type="char" Mode="In" />
+        </Function>
         <EntityContainer Name="DMPModelsStoreContainer">
           <EntitySet Name="Configs" EntityType="Self.Configs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="District" EntityType="Self.District" Schema="dbo" store:Type="Tables" />
@@ -1190,6 +1195,9 @@
             <Parameter Name="MemberID" Mode="In" Type="String" />
             <Parameter Name="Year" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="UpdatePosPromote">
+            <Parameter Name="MemberID" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="Config">
           <Key>
@@ -1226,6 +1234,8 @@
           <Property Name="UsedMark" Type="Double" />
           <Property Name="UnUsedMark" Type="Double" />
           <NavigationProperty Name="Member" Relationship="DMPModels.FK_MemberPoints_Members" FromRole="MemberPoint" ToRole="Member" />
+          <Property Name="ExtraMark" Type="Double" />
+          <Property Name="PromoteIsActive" Type="Boolean" />
         </EntityType>
         <EntityType Name="Member">
           <Key>
@@ -1895,6 +1905,8 @@
           <EntitySetMapping Name="MemberPoints">
             <EntityTypeMapping TypeName="DMPModels.MemberPoint">
               <MappingFragment StoreEntitySet="MemberPoints">
+                <ScalarProperty Name="PromoteIsActive" ColumnName="PromoteIsActive" />
+                <ScalarProperty Name="ExtraMark" ColumnName="ExtraMark" />
                 <ScalarProperty Name="UnUsedMark" ColumnName="UnUsedMark" />
                 <ScalarProperty Name="UsedMark" ColumnName="UsedMark" />
                 <ScalarProperty Name="AccumulatedMark" ColumnName="AccumulatedMark" />
@@ -2480,6 +2492,7 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="UpdatePosPromote" FunctionName="DMPModels.Store.UpdatePosPromote" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
