@@ -168,6 +168,26 @@ namespace DMPHDWebAPI.Controllers
         }
 
         [HttpGet]
+        [Route("GetStatus")]
+        public IEnumerable<GetStatusMember_Result> GetStatus(string id)
+        {
+            List<GetStatusMember_Result> result = null;
+            try
+            {
+                using (DMPContext context = new DMPContext())
+                {
+                    result = context.GetStatusMember(id).ToList();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException("My message", e);
+            }
+            return result;
+        }
+
+
+        [HttpGet]
         [Route("GetMemberPoint")]
         public IEnumerable<GetMemberPoints_Result> GetMemberPoints(string id, int year)
         {
@@ -289,6 +309,16 @@ namespace DMPHDWebAPI.Controllers
             using (DMPContext context = new DMPContext())
             {
                 context.UpdatePosPromote(id);
+            }
+        }
+
+        [HttpPut]
+        [Route("UpdateStatus")]
+        public void UpdateStatus([FromBody] string id)
+        {
+            using (DMPContext context = new DMPContext())
+            {
+                context.UpdateStatus(id);
             }
         }
 

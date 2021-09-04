@@ -226,6 +226,9 @@
     <Compile Include="Models\GetSalary_Result.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\GetStatusMember_Result.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\MailPost.cs" />
     <Compile Include="Models\NotifyDetailResult.cs" />
     <Compile Include="Models\NotifyPost.cs" />
