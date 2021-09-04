@@ -37,6 +37,8 @@
           <Property Name="AccumulatedMark" Type="float" />
           <Property Name="UsedMark" Type="float" />
           <Property Name="UnUsedMark" Type="float" />
+          <Property Name="ExtraMark" Type="float" />
+          <Property Name="PromoteIsActive" Type="bit" />
         </EntityType>
         <EntityType Name="Members">
           <Key>
@@ -450,22 +452,6 @@
             </CollectionType>
           </ReturnType>
         </Function>
-        <Function Name="CheckPromotable" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="MemberID" Type="char" Mode="In" />
-          <ReturnType>
-            <CollectionType>
-              <RowType>
-                <Property Name="NewPos" Type="int" />
-                <Property Name="Reason" Type="char" MaxLength="50" />
-              </RowType>
-            </CollectionType>
-          </ReturnType>
-        </Function>
-        <Function Name="CountLowerMember" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="MemberID" Type="char" Mode="In" />
-          <Parameter Name="Month" Type="int" Mode="In" />
-          <Parameter Name="Year" Type="int" Mode="In" />
-        </Function>
         <Function Name="DeleteMember" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="MemberID" Type="char" Mode="In" />
         </Function>
@@ -752,6 +738,9 @@
           <Parameter Name="MemberID" Type="char" Mode="In" />
         </Function>
         <Function Name="InsertJobMemberPoints" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="vip12641_dmphd_user" />
+        <Function Name="UpdatePosPromote" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="vip12641_dmphd_user">
+          <Parameter Name="MemberID" Type="char" Mode="In" />
+        </Function>
         <EntityContainer Name="DMPModelsStoreContainer">
           <EntitySet Name="Configs" EntityType="Self.Configs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="District" EntityType="Self.District" Schema="dbo" store:Type="Tables" />
@@ -1182,10 +1171,6 @@
             <Parameter Name="MemberID" Mode="In" Type="String" />
             <Parameter Name="Year" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="GetMemberPoints" ReturnType="Collection(DMPModels.GetMemberPoints_Result)">
-            <Parameter Name="MemberID" Mode="In" Type="String" />
-            <Parameter Name="Year" Mode="In" Type="Int32" />
-          </FunctionImport>
           <FunctionImport Name="CalReportGenaral" IsComposable="true" ReturnType="Collection(DMPModels.CalReportGenaral_Result)">
             <Parameter Name="MemberID" Mode="In" Type="String" />
             <Parameter Name="Year" Mode="In" Type="Int32" />
@@ -1204,22 +1189,18 @@
             <Parameter Name="memberID" Mode="In" Type="String" />
             <Parameter Name="OrderID" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="CheckPromotable" IsComposable="true" ReturnType="Collection(DMPModels.CheckPromotable_Result)">
-            <Parameter Name="MemberID" Mode="In" Type="String" />
+          <FunctionImport Name="GetNextMemberID" ReturnType="Collection(String)" />
+          <FunctionImport Name="InsertJobMemberPoints" />
+          <FunctionImport Name="GetPromotable" ReturnType="Collection(DMPModels.GetPromotable_Result)">
+          <Parameter Name="MemberID" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="CountLowerMember" ReturnType="Collection(Int32)">
+          <FunctionImport Name="GetMemberPoints" ReturnType="Collection(DMPModels.GetMemberPoints_Result)">
             <Parameter Name="MemberID" Mode="In" Type="String" />
-            <Parameter Name="Month" Mode="In" Type="Int32" />
             <Parameter Name="Year" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="GetFunctions" ReturnType="Collection(String)">
+          <FunctionImport Name="UpdatePosPromote">
             <Parameter Name="MemberID" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="GetNextMemberID" ReturnType="Collection(String)" />
-          <FunctionImport Name="GetPromotable" ReturnType="Collection(DMPModels.GetPromotable_Result)">
-            <Parameter Name="MemberID" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="InsertJobMemberPoints" />
         </EntityContainer>
         <EntityType Name="Config">
           <Key>
@@ -1254,9 +1235,10 @@
           <Property Name="ImmediateMark" Type="Double" />
           <Property Name="AccumulatedMark" Type="Double" />
           <Property Name="UsedMark" Type="Double" />
-          <Property Name="TotalMark" Type="Double" />
-          <NavigationProperty Name="Member" Relationship="DMPModels.FK_MemberPoints_Members" FromRole="MemberPoint" ToRole="Member" />
           <Property Name="UnUsedMark" Type="Double" />
+          <NavigationProperty Name="Member" Relationship="DMPModels.FK_MemberPoints_Members" FromRole="MemberPoint" ToRole="Member" />
+          <Property Name="ExtraMark" Type="Double" />
+          <Property Name="PromoteIsActive" Type="Boolean" />
         </EntityType>
         <EntityType Name="Member">
           <Key>
@@ -1849,14 +1831,6 @@
           <Property Type="Double" Name="SalaryByManager" Nullable="true" />
           <Property Type="Double" Name="SumSalary" Nullable="true" />
         </ComplexType>
-        <ComplexType Name="GetMemberPoints_Result">
-          <Property Type="Int32" Name="Month" Nullable="false" />
-          <Property Type="Double" Name="AccumulatedMark" Nullable="true" />
-          <Property Type="Double" Name="ImmediateMark" Nullable="true" />
-          <Property Type="Double" Name="MediateMark" Nullable="true" />
-          <Property Type="Double" Name="UsedMark" Nullable="true" />
-          <Property Type="Double" Name="TotalMark" Nullable="true" />
-        </ComplexType>
         <ComplexType Name="CalReportGenaral_Result">
           <Property Type="Int32" Name="Month" Nullable="true" />
           <Property Type="Int32" Name="CountLowerMembers" Nullable="true" />
@@ -1893,13 +1867,17 @@
           <Property Type="Double" Name="SalePoint" Nullable="true" />
           <Property Type="Int32" Name="BuyQuantity" Nullable="true" />
         </ComplexType>
-        <ComplexType Name="CheckPromotable_Result">
-          <Property Type="Int32" Name="NewPos" Nullable="true" />
-          <Property Type="String" Name="Reason" Nullable="true" MaxLength="50" />
-        </ComplexType>
         <ComplexType Name="GetPromotable_Result">
           <Property Type="Int32" Name="NewPos" Nullable="true" />
           <Property Type="String" Name="Reason" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="GetMemberPoints_Result">
+          <Property Type="Int32" Name="Month" Nullable="false" />
+          <Property Type="Double" Name="AccumulatedMark" Nullable="true" />
+          <Property Type="Double" Name="ImmediateMark" Nullable="true" />
+          <Property Type="Double" Name="MediateMark" Nullable="true" />
+          <Property Type="Double" Name="UsedMark" Nullable="true" />
+          <Property Type="Double" Name="UnUsedMark" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1930,6 +1908,8 @@
           <EntitySetMapping Name="MemberPoints">
             <EntityTypeMapping TypeName="DMPModels.MemberPoint">
               <MappingFragment StoreEntitySet="MemberPoints">
+                <ScalarProperty Name="PromoteIsActive" ColumnName="PromoteIsActive" />
+                <ScalarProperty Name="ExtraMark" ColumnName="ExtraMark" />
                 <ScalarProperty Name="UnUsedMark" ColumnName="UnUsedMark" />
                 <ScalarProperty Name="UsedMark" ColumnName="UsedMark" />
                 <ScalarProperty Name="AccumulatedMark" ColumnName="AccumulatedMark" />
@@ -2451,18 +2431,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="GetMemberPoints" FunctionName="DMPModels.Store.GetMemberPoints">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="DMPModels.GetMemberPoints_Result">
-                <ScalarProperty Name="Month" ColumnName="Month" />
-                <ScalarProperty Name="AccumulatedMark" ColumnName="AccumulatedMark" />
-                <ScalarProperty Name="ImmediateMark" ColumnName="ImmediateMark" />
-                <ScalarProperty Name="MediateMark" ColumnName="MediateMark" />
-                <ScalarProperty Name="UsedMark" ColumnName="UsedMark" />
-                <ScalarProperty Name="TotalMark" ColumnName="TotalMark" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           
           <FunctionImportMapping FunctionImportName="ReportGenaral" FunctionName="DMPModels.Store.ReportGenaral">
             <ResultMapping>
@@ -2505,17 +2473,8 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="CheckPromotable" FunctionName="DMPModels.Store.CheckPromotable">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="DMPModels.CheckPromotable_Result">
-                <ScalarProperty Name="NewPos" ColumnName="NewPos" />
-                <ScalarProperty Name="Reason" ColumnName="Reason" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="CountLowerMember" FunctionName="DMPModels.Store.CountLowerMember" />
-          <FunctionImportMapping FunctionImportName="GetFunctions" FunctionName="DMPModels.Store.GetFunctions" />
           <FunctionImportMapping FunctionImportName="GetNextMemberID" FunctionName="DMPModels.Store.GetNextMemberID" />
+          <FunctionImportMapping FunctionImportName="InsertJobMemberPoints" FunctionName="DMPModels.Store.InsertJobMemberPoints" />
           <FunctionImportMapping FunctionImportName="GetPromotable" FunctionName="DMPModels.Store.GetPromotable">
             <ResultMapping>
               <ComplexTypeMapping TypeName="DMPModels.GetPromotable_Result">
@@ -2524,7 +2483,19 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="InsertJobMemberPoints" FunctionName="DMPModels.Store.InsertJobMemberPoints" />
+          <FunctionImportMapping FunctionImportName="GetMemberPoints" FunctionName="DMPModels.Store.GetMemberPoints">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.GetMemberPoints_Result">
+                <ScalarProperty Name="Month" ColumnName="Month" />
+                <ScalarProperty Name="AccumulatedMark" ColumnName="AccumulatedMark" />
+                <ScalarProperty Name="ImmediateMark" ColumnName="ImmediateMark" />
+                <ScalarProperty Name="MediateMark" ColumnName="MediateMark" />
+                <ScalarProperty Name="UsedMark" ColumnName="UsedMark" />
+                <ScalarProperty Name="UnUsedMark" ColumnName="UnUsedMark" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="UpdatePosPromote" FunctionName="DMPModels.Store.UpdatePosPromote" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

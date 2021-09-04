@@ -18,6 +18,6 @@ namespace DMPHDWebAPI.Models
         public Nullable<double> ImmediateMark { get; set; }
         public Nullable<double> MediateMark { get; set; }
         public Nullable<double> UsedMark { get; set; }
-        public Nullable<double> TotalMark { get; set; }
+        public Nullable<double> UnUsedMark { get; set; }
     }
 }

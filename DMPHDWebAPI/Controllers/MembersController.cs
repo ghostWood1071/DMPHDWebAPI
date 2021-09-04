@@ -52,6 +52,26 @@ namespace DMPHDWebAPI.Controllers
         }
 
         [HttpGet]
+        [Route("GetPromotable")]
+        public GetPromotable_Result GetPromotable(string id)
+        {
+
+            GetPromotable_Result result;
+            try
+            {
+                using (DMPContext context = new DMPContext())
+                {
+                    result = context.GetPromotable(id).ToList().FirstOrDefault();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException("My message", e);
+            }
+            return result;
+        }
+
+        [HttpGet]
         [Route("GetReportGenaral")]
         public IEnumerable<ReportGenaral_Result> GetReportGenaral(string id,int year,string key)
         {
@@ -89,6 +109,26 @@ namespace DMPHDWebAPI.Controllers
             }
             return result;
         }
+
+        [HttpGet]
+        [Route("GetNextMemberID")]
+        public string GetNextMemberID()
+        {
+            string result = null;
+            try
+            {
+                using (DMPContext context = new DMPContext())
+                {
+                    result = context.GetNextMemberID().ToList().FirstOrDefault();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException("My message", e);
+            }
+            return result;
+        }
+
         [HttpGet]
         [Route("GetSalary")]
         public IEnumerable<GetSalary_Result> GetSalary(string id,int year)
@@ -116,7 +156,7 @@ namespace DMPHDWebAPI.Controllers
             {
                 using (DMPContext context = new DMPContext())
                 {
-                    result = context.GetMemberPoints(id, year).ToList();
+                    result = context.GetMemberPoints (id, year).ToList();
                 }
             }
             catch (Exception e)
@@ -186,6 +226,16 @@ namespace DMPHDWebAPI.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("InsertNewMemberPoints")]
+        public void InsertNewMemberPointsPoints()
+        {
+            using (DMPContext context = new DMPContext())
+            {
+                context.InsertJobMemberPoints();
+            }
+        }
+
         // PUT api/<controller>/5
         [HttpPut]
         [Route("UpdateMember")]
@@ -211,6 +261,17 @@ namespace DMPHDWebAPI.Controllers
                                     Member.Avatar);
             }
         }
+
+        [HttpPut]
+        [Route("UpdatePosPromote")]
+        public void UpdatePosPromote([FromBody] string id)
+        {
+            using (DMPContext context = new DMPContext())
+            {
+                context.UpdatePosPromote(id);
+            }
+        }
+
         // DELETE api/<controller>/5
         public void Delete(string id)
         {
