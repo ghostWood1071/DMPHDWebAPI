@@ -38,6 +38,8 @@
         <AssociationConnector Association="DMPModels.FK_Prices_Products" />
         <AssociationConnector Association="DMPModels.FK_ProductDetails_Products" />
         <AssociationConnector Association="DMPModels.UserPermissions" />
+        <EntityTypeShape EntityType="DMPModels.Salary" Width="1.5" PointX="10.125" PointY="18.375" />
+        <AssociationConnector Association="DMPModels.FK_Salary_Members" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -138,7 +138,7 @@ namespace DMPHDWebAPI.Controllers
             {
                 using (DMPContext context = new DMPContext())
                 {
-                    result = context.GetSalary(id, year).ToList();
+                    //result = context.GetSalary(id, year).ToList();
                 }
             }
             catch (Exception e)
