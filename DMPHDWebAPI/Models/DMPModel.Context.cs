@@ -1071,5 +1071,10 @@ namespace DMPHDWebAPI.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdateStatus", memberIDParameter);
         }
+    
+        public virtual ObjectResult<CheckSalaryUpdated_Result> CheckSalaryUpdated()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<CheckSalaryUpdated_Result>("CheckSalaryUpdated");
+        }
     }
 }

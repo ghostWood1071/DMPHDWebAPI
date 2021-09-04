@@ -490,6 +490,7 @@
             </CollectionType>
           </ReturnType>
         </Function>
+        <Function Name="CheckSalaryUpdated" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="CountLowerMember" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="MemberID" Type="char" Mode="In" />
           <Parameter Name="Month" Type="int" Mode="In" />
@@ -1282,8 +1283,9 @@
           <Parameter Name="MemberID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="UpdateStatus">
-            <Parameter Name="MemberID" Mode="In" Type="String" />
+          <Parameter Name="MemberID" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="CheckSalaryUpdated" ReturnType="Collection(DMPModels.CheckSalaryUpdated_Result)" />
         </EntityContainer>
         <EntityType Name="Config">
           <Key>
@@ -2006,6 +2008,10 @@
           <Property Type="String" Name="PositionName" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="Status" Nullable="true" MaxLength="50" />
         </ComplexType>
+        <ComplexType Name="CheckSalaryUpdated_Result">
+          <Property Type="Int32" Name="IsSalaryUpdated" Nullable="false" />
+          <Property Type="String" Name="Sample" Nullable="false" MaxLength="6" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2662,6 +2668,14 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="UpdateStatus" FunctionName="DMPModels.Store.UpdateStatus" />
+          <FunctionImportMapping FunctionImportName="CheckSalaryUpdated" FunctionName="DMPModels.Store.CheckSalaryUpdated">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.CheckSalaryUpdated_Result">
+                <ScalarProperty Name="IsSalaryUpdated" ColumnName="IsSalaryUpdated" />
+                <ScalarProperty Name="Sample" ColumnName="Sample" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

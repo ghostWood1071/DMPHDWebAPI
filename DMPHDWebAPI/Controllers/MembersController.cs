@@ -186,6 +186,24 @@ namespace DMPHDWebAPI.Controllers
             return result;
         }
 
+        [HttpGet]
+        [Route("CheckSalaryUpdated")]
+        public IEnumerable<CheckSalaryUpdated_Result> CheckSalaryUpdated()
+        {
+            List<CheckSalaryUpdated_Result> result = null;
+            try
+            {
+                using (DMPContext context = new DMPContext())
+                {
+                    result = context.CheckSalaryUpdated().ToList();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException("My message", e);
+            }
+            return result;
+        }
 
         [HttpGet]
         [Route("GetMemberPoint")]
@@ -273,6 +291,16 @@ namespace DMPHDWebAPI.Controllers
             using (DMPContext context = new DMPContext())
             {
                 context.InsertJobMemberPoints();
+            }
+        }
+
+        [HttpPost]
+        [Route("InsertNewSalary")]
+        public void InsertNewSalary()
+        {
+            using (DMPContext context = new DMPContext())
+            {
+                context.InsertJobSalary();
             }
         }
 
