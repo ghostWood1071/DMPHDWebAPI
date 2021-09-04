@@ -565,8 +565,22 @@
         </Function>
         <Function Name="GetSalaryForMember" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="MemberID" Type="char" Mode="In" />
+          <Parameter Name="Year" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetSalaryMember" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MemberID" Type="char" Mode="In" />
           <Parameter Name="Month" Type="int" Mode="In" />
           <Parameter Name="Year" Type="int" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="SalaryByLower" Type="float" />
+                <Property Name="SalaryByImmediate" Type="float" />
+                <Property Name="SalaryByManager" Type="float" />
+                <Property Name="SumSalary" Type="float" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
         </Function>
         <Function Name="GetUserRequestByID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="RequestID" Type="int" Mode="In" />
@@ -1245,20 +1259,18 @@
             <Parameter Name="MemberID" Mode="In" Type="String" />
             <Parameter Name="Year" Mode="In" Type="Int32" />
           </FunctionImport>
-          <EntitySet Name="Salaries" EntityType="DMPModels.Salary" />
-          <AssociationSet Name="FK_Salary_Members" Association="DMPModels.FK_Salary_Members">
-            <End Role="Member" EntitySet="Members" />
-            <End Role="Salary" EntitySet="Salaries" />
-          </AssociationSet>
-          <FunctionImport Name="CheckPromotable" IsComposable="true" ReturnType="Collection(DMPModels.CheckPromotable_Result)">
-          <Parameter Name="MemberID" Mode="In" Type="String" />
-          </FunctionImport>
+          
+          
           <FunctionImport Name="CountLowerMember" ReturnType="Collection(Int32)">
             <Parameter Name="MemberID" Mode="In" Type="String" />
             <Parameter Name="Month" Mode="In" Type="Int32" />
             <Parameter Name="Year" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="InsertJobSalary" />
+          <FunctionImport Name="GetSalaryMember" IsComposable="true" ReturnType="Collection(DMPModels.GetSalaryMember_Result)">
+            <Parameter Name="MemberID" Mode="In" Type="String" />
+            <Parameter Name="Month" Mode="In" Type="Int32" />
+            <Parameter Name="Year" Mode="In" Type="Int32" />
+          </FunctionImport>
           <FunctionImport Name="GetFunctions" ReturnType="Collection(String)">
             <Parameter Name="MemberID" Mode="In" Type="String" />
           </FunctionImport>
@@ -1972,6 +1984,12 @@
           <Property Type="Double" Name="SalaryByManager" Nullable="true" />
           <Property Type="Double" Name="SumSalary" Nullable="true" />
         </ComplexType>
+        <ComplexType Name="GetSalaryMember_Result">
+          <Property Type="Double" Name="SalaryByLower" Nullable="true" />
+          <Property Type="Double" Name="SalaryByImmediate" Nullable="true" />
+          <Property Type="Double" Name="SalaryByManager" Nullable="true" />
+          <Property Type="Double" Name="SumSalary" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2607,6 +2625,17 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetSalaryMember" FunctionName="DMPModels.Store.GetSalaryMember">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.GetSalaryMember_Result">
+                <ScalarProperty Name="SalaryByLower" ColumnName="SalaryByLower" />
+                <ScalarProperty Name="SalaryByImmediate" ColumnName="SalaryByImmediate" />
+                <ScalarProperty Name="SalaryByManager" ColumnName="SalaryByManager" />
+                <ScalarProperty Name="SumSalary" ColumnName="SumSalary" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetFunctions" FunctionName="DMPModels.Store.GetFunctions" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
