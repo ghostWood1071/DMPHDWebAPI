@@ -217,7 +217,10 @@
     <Compile Include="Models\GetPromotable_Result.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\GetSalaryMember_Result.cs">
+    <Compile Include="Models\GetSalaryForMember_Result.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetSalary_Result.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\MailPost.cs" />
@@ -229,6 +232,9 @@
     <Compile Include="Models\OrderResults.cs" />
     <Compile Include="Models\ProfilePut.cs" />
     <Compile Include="Models\ReportGenaral_Result.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Salary.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SalePointPost.cs" />
@@ -300,9 +306,6 @@
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GetProducts_Result.cs">
-      <DependentUpon>DMPModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\GetSalary_Result.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GetUserRequestByID_Result.cs">

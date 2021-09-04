@@ -131,14 +131,14 @@ namespace DMPHDWebAPI.Controllers
 
         [HttpGet]
         [Route("GetSalary")]
-        public IEnumerable<GetSalary_Result> GetSalary(string id,int year)
+        public IEnumerable<GetSalary_Result> GetSalary(int month,int year)
         {
             List<GetSalary_Result> result = null;
             try
             {
                 using (DMPContext context = new DMPContext())
                 {
-                    result = context.GetSalary(id, year).ToList();
+                    result = context.GetSalary(month, year).ToList();
                 }
             }
             catch (Exception e)
@@ -147,6 +147,26 @@ namespace DMPHDWebAPI.Controllers
             }
             return result;
         }
+
+        [HttpGet]
+        [Route("GetSalaryForMember")]
+        public IEnumerable<GetSalaryForMember_Result> GetSalaryForMember(string id, int year)
+        {
+            List<GetSalaryForMember_Result> result = null;
+            try
+            {
+                using (DMPContext context = new DMPContext())
+                {
+                    result = context.GetSalaryForMember(id, year).ToList();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException("My message", e);
+            }
+            return result;
+        }
+
         [HttpGet]
         [Route("GetMemberPoint")]
         public IEnumerable<GetMemberPoints_Result> GetMemberPoints(string id, int year)

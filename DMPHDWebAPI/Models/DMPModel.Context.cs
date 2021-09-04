@@ -44,6 +44,7 @@ namespace DMPHDWebAPI.Models
         public DbSet<SalePoint> SalePoints { get; set; }
         public DbSet<UserFunction> UserFunctions { get; set; }
         public DbSet<UserRequest> UserRequests { get; set; }
+        public DbSet<Salary> Salaries { get; set; }
     
         [EdmFunction("DMPContext", "AccumulationMark")]
         public virtual IQueryable<AccumulationMark_Result> AccumulationMark(string memberID, Nullable<int> month, Nullable<int> year)
@@ -876,33 +877,6 @@ namespace DMPHDWebAPI.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetMembers_Result>("GetMembers");
         }
     
-        [EdmFunction("DMPContext", "GetSalaryMember")]
-        public virtual IQueryable<GetSalaryMember_Result> GetSalaryMember(string memberID, Nullable<int> year)
-        {
-            var memberIDParameter = memberID != null ?
-                new ObjectParameter("MemberID", memberID) :
-                new ObjectParameter("MemberID", typeof(string));
-    
-            var yearParameter = year.HasValue ?
-                new ObjectParameter("Year", year) :
-                new ObjectParameter("Year", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<GetSalaryMember_Result>("[DMPContext].[GetSalaryMember](@MemberID, @Year)", memberIDParameter, yearParameter);
-        }
-    
-        public virtual ObjectResult<GetSalary_Result> GetSalary(string memberID, Nullable<int> year)
-        {
-            var memberIDParameter = memberID != null ?
-                new ObjectParameter("MemberID", memberID) :
-                new ObjectParameter("MemberID", typeof(string));
-    
-            var yearParameter = year.HasValue ?
-                new ObjectParameter("Year", year) :
-                new ObjectParameter("Year", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetSalary_Result>("GetSalary", memberIDParameter, yearParameter);
-        }
-    
         [EdmFunction("DMPContext", "CalReportGenaral")]
         public virtual IQueryable<CalReportGenaral_Result> CalReportGenaral(string memberID, Nullable<int> year, string key)
         {
@@ -1003,6 +977,37 @@ namespace DMPHDWebAPI.Models
                 new ObjectParameter("MemberID", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdatePosPromote", memberIDParameter);
+        }
+    
+        public virtual int InsertJobSalary()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertJobSalary");
+        }
+    
+        public virtual ObjectResult<GetSalary_Result> GetSalary(Nullable<int> month, Nullable<int> year)
+        {
+            var monthParameter = month.HasValue ?
+                new ObjectParameter("Month", month) :
+                new ObjectParameter("Month", typeof(int));
+    
+            var yearParameter = year.HasValue ?
+                new ObjectParameter("Year", year) :
+                new ObjectParameter("Year", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetSalary_Result>("GetSalary", monthParameter, yearParameter);
+        }
+    
+        public virtual ObjectResult<GetSalaryForMember_Result> GetSalaryForMember(string memberID, Nullable<int> year)
+        {
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            var yearParameter = year.HasValue ?
+                new ObjectParameter("Year", year) :
+                new ObjectParameter("Year", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetSalaryForMember_Result>("GetSalaryForMember", memberIDParameter, yearParameter);
         }
     }
 }

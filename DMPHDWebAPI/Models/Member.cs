@@ -22,6 +22,7 @@ namespace DMPHDWebAPI.Models
             this.Orders = new HashSet<Order>();
             this.ProductDetails = new HashSet<ProductDetail>();
             this.SalePoints = new HashSet<SalePoint>();
+            this.Salaries = new HashSet<Salary>();
         }
     
         public string MemberID { get; set; }
@@ -54,5 +55,6 @@ namespace DMPHDWebAPI.Models
         public virtual ICollection<Order> Orders { get; set; }
         public virtual ICollection<ProductDetail> ProductDetails { get; set; }
         public virtual ICollection<SalePoint> SalePoints { get; set; }
+        public virtual ICollection<Salary> Salaries { get; set; }
     }
 }

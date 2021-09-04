@@ -10,8 +10,9 @@
 namespace DMPHDWebAPI.Models
 {
     using System;
+    using System.Collections.Generic;
     
-    public partial class GetSalary_Result
+    public partial class Salary
     {
         public string MemberID { get; set; }
         public int Month { get; set; }
@@ -20,5 +21,7 @@ namespace DMPHDWebAPI.Models
         public Nullable<double> SalaryByImmediate { get; set; }
         public Nullable<double> SalaryByManager { get; set; }
         public Nullable<double> SumSalary { get; set; }
+    
+        public virtual Member Member { get; set; }
     }
 }
