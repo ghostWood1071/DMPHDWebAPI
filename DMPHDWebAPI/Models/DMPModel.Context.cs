@@ -877,37 +877,6 @@ namespace DMPHDWebAPI.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetMembers_Result>("GetMembers");
         }
     
-        [EdmFunction("DMPContext", "GetSalaryMember")]
-        public virtual IQueryable<GetSalaryMember_Result> GetSalaryMember(string memberID, Nullable<int> month, Nullable<int> year)
-        {
-            var memberIDParameter = memberID != null ?
-                new ObjectParameter("MemberID", memberID) :
-                new ObjectParameter("MemberID", typeof(string));
-    
-            var monthParameter = month.HasValue ?
-                new ObjectParameter("Month", month) :
-                new ObjectParameter("Month", typeof(int));
-    
-            var yearParameter = year.HasValue ?
-                new ObjectParameter("Year", year) :
-                new ObjectParameter("Year", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<GetSalaryMember_Result>("[DMPContext].[GetSalaryMember](@MemberID, @Month, @Year)", memberIDParameter, monthParameter, yearParameter);
-        }
-    
-        public virtual ObjectResult<GetSalary_Result> GetSalary(Nullable<int> month, Nullable<int> year)
-        {
-            var monthParameter = month.HasValue ?
-                new ObjectParameter("Month", month) :
-                new ObjectParameter("Month", typeof(int));
-    
-            var yearParameter = year.HasValue ?
-                new ObjectParameter("Year", year) :
-                new ObjectParameter("Year", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetSalary_Result>("GetSalary", monthParameter, yearParameter);
-        }
-    
         [EdmFunction("DMPContext", "CalReportGenaral")]
         public virtual IQueryable<CalReportGenaral_Result> CalReportGenaral(string memberID, Nullable<int> year, string key)
         {
@@ -1010,22 +979,13 @@ namespace DMPHDWebAPI.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdatePosPromote", memberIDParameter);
         }
     
-        [EdmFunction("DMPContext", "CheckPromotable")]
-        public virtual IQueryable<CheckPromotable_Result> CheckPromotable(string memberID)
+        public virtual int InsertJobSalary()
         {
-            var memberIDParameter = memberID != null ?
-                new ObjectParameter("MemberID", memberID) :
-                new ObjectParameter("MemberID", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<CheckPromotable_Result>("[DMPContext].[CheckPromotable](@MemberID)", memberIDParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertJobSalary");
         }
     
-        public virtual ObjectResult<Nullable<int>> CountLowerMember(string memberID, Nullable<int> month, Nullable<int> year)
+        public virtual ObjectResult<GetSalary_Result> GetSalary(Nullable<int> month, Nullable<int> year)
         {
-            var memberIDParameter = memberID != null ?
-                new ObjectParameter("MemberID", memberID) :
-                new ObjectParameter("MemberID", typeof(string));
-    
             var monthParameter = month.HasValue ?
                 new ObjectParameter("Month", month) :
                 new ObjectParameter("Month", typeof(int));
@@ -1034,21 +994,20 @@ namespace DMPHDWebAPI.Models
                 new ObjectParameter("Year", year) :
                 new ObjectParameter("Year", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("CountLowerMember", memberIDParameter, monthParameter, yearParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetSalary_Result>("GetSalary", monthParameter, yearParameter);
         }
     
-        public virtual int InsertJobSalary()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertJobSalary");
-        }
-    
-        public virtual ObjectResult<string> GetFunctions(string memberID)
+        public virtual ObjectResult<GetSalaryForMember_Result> GetSalaryForMember(string memberID, Nullable<int> year)
         {
             var memberIDParameter = memberID != null ?
                 new ObjectParameter("MemberID", memberID) :
                 new ObjectParameter("MemberID", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("GetFunctions", memberIDParameter);
+            var yearParameter = year.HasValue ?
+                new ObjectParameter("Year", year) :
+                new ObjectParameter("Year", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetSalaryForMember_Result>("GetSalaryForMember", memberIDParameter, yearParameter);
         }
     }
 }
