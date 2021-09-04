@@ -1,39 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-
+using DMPHDWebAPI.Models;
 namespace DMPHDWebAPI.Controllers
 {
     public class RoleController : ApiController
     {
         // GET: api/Role
-        public IEnumerable<string> Get()
+        public IEnumerable<string> Get(string memberID)
         {
-            return new string[] { "value1", "value2" };
+            try
+            {
+                using (DMPContext context = new DMPContext())
+                {
+                    return context.GetFunctions(memberID).ToList();
+                }
+            } catch(Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                return null;
+            }
         }
 
-        // GET: api/Role/5
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST: api/Role
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT: api/Role/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE: api/Role/5
-        public void Delete(int id)
-        {
-        }
+        
     }
 }

@@ -192,6 +192,9 @@
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CheckPassPost.cs" />
+    <Compile Include="Models\CheckPromotable_Result.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ConfigPost.cs" />
     <Compile Include="Models\DetailsGet.cs" />
     <Compile Include="Models\DetailsPut.cs" />
@@ -212,6 +215,9 @@
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GetOrders_Result.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetPromotable_Result.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GetSalaryMember_Result.cs">

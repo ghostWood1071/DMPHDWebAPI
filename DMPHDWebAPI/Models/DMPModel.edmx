@@ -36,7 +36,7 @@
           <Property Name="ImmediateMark" Type="float" />
           <Property Name="AccumulatedMark" Type="float" />
           <Property Name="UsedMark" Type="float" />
-          <Property Name="TotalMark" Type="float" />
+          <Property Name="UnUsedMark" Type="float" />
         </EntityType>
         <EntityType Name="Members">
           <Key>
@@ -174,7 +174,7 @@
             <PropertyRef Name="RoleID" />
             <PropertyRef Name="FunctionID" />
           </Key>
-          <Property Name="RoleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleID" Type="int" Nullable="false" />
           <Property Name="FunctionID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="UserRequests">
@@ -437,6 +437,7 @@
         <Function Name="CalReportGenaral" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="MemberID" Type="char" Mode="In" />
           <Parameter Name="Year" Type="int" Mode="In" />
+          <Parameter Name="Key" Type="char" Mode="In" />
           <ReturnType>
             <CollectionType>
               <RowType>
@@ -449,7 +450,22 @@
             </CollectionType>
           </ReturnType>
         </Function>
-        
+        <Function Name="CheckPromotable" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MemberID" Type="char" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="NewPos" Type="int" />
+                <Property Name="Reason" Type="char" MaxLength="50" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
+        <Function Name="CountLowerMember" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MemberID" Type="char" Mode="In" />
+          <Parameter Name="Month" Type="int" Mode="In" />
+          <Parameter Name="Year" Type="int" Mode="In" />
+        </Function>
         <Function Name="DeleteMember" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="MemberID" Type="char" Mode="In" />
         </Function>
@@ -720,6 +736,9 @@
           <Parameter Name="memberID" Type="char" Mode="In" />
           <Parameter Name="OrderID" Type="char" Mode="In" />
         </Function>
+        <Function Name="GetFunctions" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="vip12641_dmphd_user">
+          <Parameter Name="MemberID" Type="char" Mode="In" />
+        </Function>
         <Function Name="GetListDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="vip12641_dmphd_user">
           <Parameter Name="memberID" Type="char" Mode="In" />
           <Parameter Name="OrderID" Type="char" Mode="In" />
@@ -728,6 +747,11 @@
           <Parameter Name="MemberID" Type="char" Mode="In" />
           <Parameter Name="Year" Type="int" Mode="In" />
         </Function>
+        <Function Name="GetNextMemberID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="vip12641_dmphd_user" />
+        <Function Name="GetPromotable" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="vip12641_dmphd_user">
+          <Parameter Name="MemberID" Type="char" Mode="In" />
+        </Function>
+        <Function Name="InsertJobMemberPoints" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="vip12641_dmphd_user" />
         <EntityContainer Name="DMPModelsStoreContainer">
           <EntitySet Name="Configs" EntityType="Self.Configs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="District" EntityType="Self.District" Schema="dbo" store:Type="Tables" />
@@ -1180,6 +1204,22 @@
             <Parameter Name="memberID" Mode="In" Type="String" />
             <Parameter Name="OrderID" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="CheckPromotable" IsComposable="true" ReturnType="Collection(DMPModels.CheckPromotable_Result)">
+            <Parameter Name="MemberID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="CountLowerMember" ReturnType="Collection(Int32)">
+            <Parameter Name="MemberID" Mode="In" Type="String" />
+            <Parameter Name="Month" Mode="In" Type="Int32" />
+            <Parameter Name="Year" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetFunctions" ReturnType="Collection(String)">
+            <Parameter Name="MemberID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetNextMemberID" ReturnType="Collection(String)" />
+          <FunctionImport Name="GetPromotable" ReturnType="Collection(DMPModels.GetPromotable_Result)">
+            <Parameter Name="MemberID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="InsertJobMemberPoints" />
         </EntityContainer>
         <EntityType Name="Config">
           <Key>
@@ -1216,6 +1256,7 @@
           <Property Name="UsedMark" Type="Double" />
           <Property Name="TotalMark" Type="Double" />
           <NavigationProperty Name="Member" Relationship="DMPModels.FK_MemberPoints_Members" FromRole="MemberPoint" ToRole="Member" />
+          <Property Name="UnUsedMark" Type="Double" />
         </EntityType>
         <EntityType Name="Member">
           <Key>
@@ -1852,6 +1893,14 @@
           <Property Type="Double" Name="SalePoint" Nullable="true" />
           <Property Type="Int32" Name="BuyQuantity" Nullable="true" />
         </ComplexType>
+        <ComplexType Name="CheckPromotable_Result">
+          <Property Type="Int32" Name="NewPos" Nullable="true" />
+          <Property Type="String" Name="Reason" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="GetPromotable_Result">
+          <Property Type="Int32" Name="NewPos" Nullable="true" />
+          <Property Type="String" Name="Reason" Nullable="true" MaxLength="50" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1881,7 +1930,7 @@
           <EntitySetMapping Name="MemberPoints">
             <EntityTypeMapping TypeName="DMPModels.MemberPoint">
               <MappingFragment StoreEntitySet="MemberPoints">
-                <ScalarProperty Name="TotalMark" ColumnName="TotalMark" />
+                <ScalarProperty Name="UnUsedMark" ColumnName="UnUsedMark" />
                 <ScalarProperty Name="UsedMark" ColumnName="UsedMark" />
                 <ScalarProperty Name="AccumulatedMark" ColumnName="AccumulatedMark" />
                 <ScalarProperty Name="ImmediateMark" ColumnName="ImmediateMark" />
@@ -2456,6 +2505,26 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CheckPromotable" FunctionName="DMPModels.Store.CheckPromotable">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.CheckPromotable_Result">
+                <ScalarProperty Name="NewPos" ColumnName="NewPos" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CountLowerMember" FunctionName="DMPModels.Store.CountLowerMember" />
+          <FunctionImportMapping FunctionImportName="GetFunctions" FunctionName="DMPModels.Store.GetFunctions" />
+          <FunctionImportMapping FunctionImportName="GetNextMemberID" FunctionName="DMPModels.Store.GetNextMemberID" />
+          <FunctionImportMapping FunctionImportName="GetPromotable" FunctionName="DMPModels.Store.GetPromotable">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.GetPromotable_Result">
+                <ScalarProperty Name="NewPos" ColumnName="NewPos" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="InsertJobMemberPoints" FunctionName="DMPModels.Store.InsertJobMemberPoints" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

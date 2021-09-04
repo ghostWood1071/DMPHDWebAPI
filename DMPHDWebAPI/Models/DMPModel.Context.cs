@@ -976,5 +976,60 @@ namespace DMPHDWebAPI.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetListDetails_Result>("GetListDetails", memberIDParameter, orderIDParameter);
         }
+    
+        [EdmFunction("DMPContext", "CheckPromotable")]
+        public virtual IQueryable<CheckPromotable_Result> CheckPromotable(string memberID)
+        {
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<CheckPromotable_Result>("[DMPContext].[CheckPromotable](@MemberID)", memberIDParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> CountLowerMember(string memberID, Nullable<int> month, Nullable<int> year)
+        {
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            var monthParameter = month.HasValue ?
+                new ObjectParameter("Month", month) :
+                new ObjectParameter("Month", typeof(int));
+    
+            var yearParameter = year.HasValue ?
+                new ObjectParameter("Year", year) :
+                new ObjectParameter("Year", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("CountLowerMember", memberIDParameter, monthParameter, yearParameter);
+        }
+    
+        public virtual ObjectResult<string> GetFunctions(string memberID)
+        {
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("GetFunctions", memberIDParameter);
+        }
+    
+        public virtual ObjectResult<string> GetNextMemberID()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("GetNextMemberID");
+        }
+    
+        public virtual ObjectResult<GetPromotable_Result> GetPromotable(string memberID)
+        {
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPromotable_Result>("GetPromotable", memberIDParameter);
+        }
+    
+        public virtual int InsertJobMemberPoints()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertJobMemberPoints");
+        }
     }
 }
