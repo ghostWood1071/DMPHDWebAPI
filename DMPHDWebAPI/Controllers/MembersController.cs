@@ -168,6 +168,44 @@ namespace DMPHDWebAPI.Controllers
         }
 
         [HttpGet]
+        [Route("GetStatus")]
+        public IEnumerable<GetStatusMember_Result> GetStatus(string id)
+        {
+            List<GetStatusMember_Result> result = null;
+            try
+            {
+                using (DMPContext context = new DMPContext())
+                {
+                    result = context.GetStatusMember(id).ToList();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException("My message", e);
+            }
+            return result;
+        }
+
+        [HttpGet]
+        [Route("CheckSalaryUpdated")]
+        public IEnumerable<CheckSalaryUpdated_Result> CheckSalaryUpdated()
+        {
+            List<CheckSalaryUpdated_Result> result = null;
+            try
+            {
+                using (DMPContext context = new DMPContext())
+                {
+                    result = context.CheckSalaryUpdated().ToList();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException("My message", e);
+            }
+            return result;
+        }
+
+        [HttpGet]
         [Route("GetMemberPoint")]
         public IEnumerable<GetMemberPoints_Result> GetMemberPoints(string id, int year)
         {
@@ -256,6 +294,16 @@ namespace DMPHDWebAPI.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("InsertNewSalary")]
+        public void InsertNewSalary()
+        {
+            using (DMPContext context = new DMPContext())
+            {
+                context.InsertJobSalary();
+            }
+        }
+
         // PUT api/<controller>/5
         [HttpPut]
         [Route("UpdateMember")]
@@ -289,6 +337,16 @@ namespace DMPHDWebAPI.Controllers
             using (DMPContext context = new DMPContext())
             {
                 context.UpdatePosPromote(id);
+            }
+        }
+
+        [HttpPut]
+        [Route("UpdateStatus")]
+        public void UpdateStatus([FromBody] string id)
+        {
+            using (DMPContext context = new DMPContext())
+            {
+                context.UpdateStatus(id);
             }
         }
 
