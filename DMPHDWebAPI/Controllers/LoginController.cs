@@ -117,5 +117,35 @@ namespace DMPHDWebAPI.Controllers
             }
         }
 
+        [HttpPut]
+        [Route("Change")]
+        public string ChangeForcePassword(string id)
+        {
+            try
+            {
+                using (DMPContext context = new DMPContext())
+                {
+                    var member = context.Members.FirstOrDefault(x => x.MemberID == id);
+                    if (member == null)
+                        return null;
+
+                    MD5CryptoServiceProvider encoder = new MD5CryptoServiceProvider();
+                    byte[] bHash = encoder.ComputeHash(Encoding.UTF8.GetBytes((member.MemberID + member.Password.Trim())));
+
+                    StringBuilder sbHash = new StringBuilder();
+
+                    foreach (byte b in bHash)
+                        sbHash.Append(String.Format("{0:x2}", b));
+
+                    string newPass = sbHash.ToString();
+                    member.Password = newPass;
+                    context.SaveChanges();
+                    return newPass;
+                }
+            } catch(Exception e)
+            {
+                return null;
+            }
+        }
     }
 }

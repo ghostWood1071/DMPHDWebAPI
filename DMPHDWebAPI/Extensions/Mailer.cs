@@ -35,7 +35,7 @@ namespace DMPHDWebAPI.Extensions
             var smtp = new SmtpClient
             {
                 Host = "smtp.gmail.com",
-                Port = 587,
+                Port = 465,
                 EnableSsl = true,
                 DeliveryMethod = SmtpDeliveryMethod.Network,
                 UseDefaultCredentials = false,
@@ -69,7 +69,7 @@ namespace DMPHDWebAPI.Extensions
             var smtp = new SmtpClient
             {
                 Host = "smtp.gmail.com",
-                Port = 587,
+                Port = 465,
                 EnableSsl = true,
                 DeliveryMethod = SmtpDeliveryMethod.Network,
                 UseDefaultCredentials = false,
