@@ -46,7 +46,8 @@ namespace DMPHDWebAPI.Controllers
                 }
             } catch (Exception e)
             {
-                return InternalServerError(e);
+
+                return Json<Exception>(e);
             }
 
         }
