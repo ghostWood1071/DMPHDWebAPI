@@ -984,19 +984,6 @@ namespace DMPHDWebAPI.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertJobSalary");
         }
     
-        public virtual ObjectResult<GetSalary_Result> GetSalary(Nullable<int> month, Nullable<int> year)
-        {
-            var monthParameter = month.HasValue ?
-                new ObjectParameter("Month", month) :
-                new ObjectParameter("Month", typeof(int));
-    
-            var yearParameter = year.HasValue ?
-                new ObjectParameter("Year", year) :
-                new ObjectParameter("Year", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetSalary_Result>("GetSalary", monthParameter, yearParameter);
-        }
-    
         public virtual ObjectResult<GetSalaryForMember_Result> GetSalaryForMember(string memberID, Nullable<int> year)
         {
             var memberIDParameter = memberID != null ?
@@ -1075,6 +1062,19 @@ namespace DMPHDWebAPI.Models
         public virtual ObjectResult<CheckSalaryUpdated_Result> CheckSalaryUpdated()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<CheckSalaryUpdated_Result>("CheckSalaryUpdated");
+        }
+    
+        public virtual ObjectResult<GetSalary_Result> GetSalary(Nullable<int> month, Nullable<int> year)
+        {
+            var monthParameter = month.HasValue ?
+                new ObjectParameter("Month", month) :
+                new ObjectParameter("Month", typeof(int));
+    
+            var yearParameter = year.HasValue ?
+                new ObjectParameter("Year", year) :
+                new ObjectParameter("Year", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetSalary_Result>("GetSalary", monthParameter, yearParameter);
         }
     }
 }
