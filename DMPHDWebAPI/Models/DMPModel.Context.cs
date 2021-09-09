@@ -957,19 +957,6 @@ namespace DMPHDWebAPI.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPromotable_Result>("GetPromotable", memberIDParameter);
         }
     
-        public virtual ObjectResult<GetMemberPoints_Result> GetMemberPoints(string memberID, Nullable<int> year)
-        {
-            var memberIDParameter = memberID != null ?
-                new ObjectParameter("MemberID", memberID) :
-                new ObjectParameter("MemberID", typeof(string));
-    
-            var yearParameter = year.HasValue ?
-                new ObjectParameter("Year", year) :
-                new ObjectParameter("Year", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetMemberPoints_Result>("GetMemberPoints", memberIDParameter, yearParameter);
-        }
-    
         public virtual int UpdatePosPromote(string memberID)
         {
             var memberIDParameter = memberID != null ?
@@ -1075,6 +1062,19 @@ namespace DMPHDWebAPI.Models
                 new ObjectParameter("Year", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetSalary_Result>("GetSalary", monthParameter, yearParameter);
+        }
+    
+        public virtual ObjectResult<GetMemberPoints_Result> GetMemberPoints(string memberID, Nullable<int> year)
+        {
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            var yearParameter = year.HasValue ?
+                new ObjectParameter("Year", year) :
+                new ObjectParameter("Year", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetMemberPoints_Result>("GetMemberPoints", memberIDParameter, yearParameter);
         }
     }
 }
