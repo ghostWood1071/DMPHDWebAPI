@@ -14,8 +14,7 @@ namespace DMPHDWebAPI.Models
     public partial class GetSalary_Result
     {
         public string MemberID { get; set; }
-        public int Month { get; set; }
-        public int Year { get; set; }
+        public string FullName { get; set; }
         public Nullable<double> SalaryByLower { get; set; }
         public Nullable<double> SalaryByImmediate { get; set; }
         public Nullable<double> SalaryByManager { get; set; }
