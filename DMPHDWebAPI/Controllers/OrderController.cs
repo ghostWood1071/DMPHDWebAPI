@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Web.Http;
 using DMPHDWebAPI.Models;
 using DMPHDWebAPI.Extensions;
+using System.Threading.Tasks;
 
 namespace DMPHDWebAPI.Controllers
 {
@@ -37,24 +38,14 @@ namespace DMPHDWebAPI.Controllers
             {
                 using (DMPContext context = new DMPContext())
                 {
-                    context.InsertOrder(order.MemberID, order.OrderDate, order.Discount);
+                    var discount = context.Members.FirstOrDefault(x => x.MemberID == order.MemberID).Position.Discount;
+                    var points = context.SalePoints.Where(x => x.Member.MemberID == order.MemberID).Sum(x => x.Mark);
+                    discount = points >=100 ? discount : 0;
+                    context.InsertOrder(order.MemberID, order.OrderDate, discount);
                     var result = context.GetOrders().LastOrDefault();
-                    //var receiver = context.Members.FirstOrDefault(x => x.MemberID == order.MemberID);
-
-                    //Mailer mailer = new Mailer
-                    //{
-                    //    Content = $"Đơn hàng {result.OrderID} đã được thêm thành công",
-                    //    HostName = null,
-                    //    Password = null,
-                    //    Sender = null,
-                    //    Receiver = receiver.Email.Trim(),
-                    //    Title = "CTY TNHH DMP HẢI DƯƠNG - ĐẶT HÀNG",
-                        
-                    //};
-                    //mailer.Send();
                     return result;
                 }
-            } catch
+            } catch(Exception e)
             {
                 return null;
             }
