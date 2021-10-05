@@ -88,22 +88,6 @@ namespace DMPHDWebAPI.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("GetYears")]
-        public IEnumerable<int> GetYears(string memberID)
-        {
-            try
-            {
-                using (DMPContext context = new DMPContext())
-                {
-                   return context.Orders.Where(x => x.MemberID == memberID).Select(x => x.OrderDate.Value.Year).Distinct().ToList();
-                }
-            } catch(Exception e)
-            {
-                Debug.WriteLine(e.Message);
-                return null;
-            }
-        }
 
         [HttpGet]
         [Route("GetOrders")]

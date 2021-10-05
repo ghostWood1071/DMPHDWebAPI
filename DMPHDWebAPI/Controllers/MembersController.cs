@@ -11,6 +11,28 @@ namespace DMPHDWebAPI.Controllers
 {
     public class MembersController : ApiController
     {
+
+        [HttpGet]
+        [Route("GetYears")]
+        public IEnumerable<int> GetYears (string memberID)
+        {
+            try
+            {
+                using(DMPContext context = new DMPContext())
+                {
+                    int year = context.Members.FirstOrDefault(x => x.MemberID == memberID).TimeJoin.Value.Year;
+                    int currentYear = DateTime.Now.Year;
+                    List<int> years = new List<int>();
+                    for (var i = currentYear; i >= year; i--)
+                        years.Add(i);
+                    return years;
+                }
+            } catch(Exception e)
+            {
+                return new int[0];
+            }
+        }
+
         // GET api/<controller>
         [HttpGet]
         [Route("GetMembers")]

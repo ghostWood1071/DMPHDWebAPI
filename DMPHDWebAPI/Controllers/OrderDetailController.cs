@@ -75,7 +75,7 @@ namespace DMPHDWebAPI.Controllers
                 context.SaveChanges();
                 string jsonString = JsonConvert.SerializeObject(details.Details);
                 context.InsertOrderDetails(jsonString);
-              
+                
              }
         }
 

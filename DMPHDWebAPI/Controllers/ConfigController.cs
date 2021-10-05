@@ -8,7 +8,7 @@ using DMPHDWebAPI.Models;
 using DMPHDWebAPI.App_Start;
 using System.Web.Http.Cors;
 using System.Diagnostics;
-
+using System.Configuration;
 namespace DMPHDWebAPI.Controllers
 {
     public class ConfigController : ApiController
@@ -78,6 +78,18 @@ namespace DMPHDWebAPI.Controllers
             {
                 Debug.WriteLine(e.Message);
             }
+        }
+
+        [HttpGet]
+        [Route("GetCurentYears")]
+        public IEnumerable<int> GetYears()
+        {
+            int startYear =  int.Parse(ConfigurationManager.AppSettings.Get("StartYear"));
+            int currentYear = DateTime.Now.Year;
+            List<int> results = new List<int>();
+            for (int i = currentYear; i >= startYear; i--)
+                results.Add(i);
+            return results;
         }
     }
 }
