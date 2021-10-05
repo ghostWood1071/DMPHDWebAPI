@@ -308,21 +308,21 @@ namespace DMPHDWebAPI.Controllers
 
         [HttpPost]
         [Route("InsertNewMemberPoints")]
-        public void InsertNewMemberPointsPoints()
+        public void InsertNewMemberPointsPoints(int month,int year)
         {
             using (DMPContext context = new DMPContext())
             {
-                context.InsertJobMemberPoints();
+                context.InsertJobMemberPoints(month,year);
             }
         }
 
         [HttpPost]
         [Route("InsertNewSalary")]
-        public void InsertNewSalary()
+        public void InsertNewSalary(int month,int year)
         {
             using (DMPContext context = new DMPContext())
             {
-                context.InsertJobSalary();
+                context.InsertJobSalary(month,year);
             }
         }
 

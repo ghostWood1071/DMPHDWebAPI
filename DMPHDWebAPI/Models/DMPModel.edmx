@@ -175,6 +175,7 @@
           <Property Name="SalePointID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="MemberID" Type="char" MaxLength="8" Nullable="false" />
           <Property Name="Mark" Type="float" />
+          <Property Name="Discount" Type="float" />
           <Property Name="OrderID" Type="char" MaxLength="10" />
           <Property Name="SaleMonth" Type="int" />
           <Property Name="SaleYear" Type="int" />
@@ -785,8 +786,14 @@
         <Function Name="GetStatusMember" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="vip12641_dmphd_user">
           <Parameter Name="MemberID" Type="char" Mode="In" />
         </Function>
-        <Function Name="InsertJobMemberPoints" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="vip12641_dmphd_user" />
-        <Function Name="InsertJobSalary" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="vip12641_dmphd_user" />
+        <Function Name="InsertJobMemberPoints" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="vip12641_dmphd_user">
+          <Parameter Name="CurMonth" Type="int" Mode="In" />
+          <Parameter Name="CurYear" Type="int" Mode="In" />
+        </Function>
+        <Function Name="InsertJobSalary" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="vip12641_dmphd_user">
+          <Parameter Name="CurMonth" Type="int" Mode="In" />
+          <Parameter Name="CurYear" Type="int" Mode="In" />
+        </Function>
         <Function Name="UpdatePosPromote" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="vip12641_dmphd_user">
           <Parameter Name="MemberID" Type="char" Mode="In" />
         </Function>
@@ -1239,7 +1246,6 @@
             <Parameter Name="OrderID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetNextMemberID" ReturnType="Collection(String)" />
-          <FunctionImport Name="InsertJobMemberPoints" />
           <FunctionImport Name="GetPromotable" ReturnType="Collection(DMPModels.GetPromotable_Result)">
           <Parameter Name="MemberID" Mode="In" Type="String" />
           </FunctionImport>
@@ -1251,7 +1257,6 @@
             <End Role="Member" EntitySet="Members" />
             <End Role="Salary" EntitySet="Salaries" />
           </AssociationSet>
-          <FunctionImport Name="InsertJobSalary" />
           <FunctionImport Name="GetSalaryForMember" ReturnType="Collection(DMPModels.GetSalaryForMember_Result)">
             <Parameter Name="MemberID" Mode="In" Type="String" />
             <Parameter Name="Year" Mode="In" Type="Int32" />
@@ -1285,6 +1290,14 @@
           <FunctionImport Name="GetMemberPoints" ReturnType="Collection(DMPModels.GetMemberPoints_Result)">
             <Parameter Name="MemberID" Mode="In" Type="String" />
             <Parameter Name="Year" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="InsertJobMemberPoints">
+            <Parameter Name="CurMonth" Mode="In" Type="Int32" />
+            <Parameter Name="CurYear" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="InsertJobSalary">
+            <Parameter Name="CurMonth" Mode="In" Type="Int32" />
+            <Parameter Name="CurYear" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="Config">
@@ -1480,6 +1493,7 @@
           <Property Name="SaleYear" Type="Int32" />
           <NavigationProperty Name="Member" Relationship="DMPModels.FK_SalePoints_Members" FromRole="SalePoint" ToRole="Member" />
           <NavigationProperty Name="Order" Relationship="DMPModels.FK_SalePoints_Orders" FromRole="SalePoint" ToRole="Order" />
+          <Property Name="Discount" Type="Double" />
         </EntityType>
         <EntityType Name="UserFunction">
           <Key>
@@ -2180,6 +2194,7 @@
           <EntitySetMapping Name="SalePoints">
             <EntityTypeMapping TypeName="DMPModels.SalePoint">
               <MappingFragment StoreEntitySet="SalePoints">
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
                 <ScalarProperty Name="SaleYear" ColumnName="SaleYear" />
                 <ScalarProperty Name="SaleMonth" ColumnName="SaleMonth" />
                 <ScalarProperty Name="OrderID" ColumnName="OrderID" />
@@ -2586,7 +2601,6 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="GetNextMemberID" FunctionName="DMPModels.Store.GetNextMemberID" />
-          <FunctionImportMapping FunctionImportName="InsertJobMemberPoints" FunctionName="DMPModels.Store.InsertJobMemberPoints" />
           <FunctionImportMapping FunctionImportName="GetPromotable" FunctionName="DMPModels.Store.GetPromotable">
             <ResultMapping>
               <ComplexTypeMapping TypeName="DMPModels.GetPromotable_Result">
@@ -2609,7 +2623,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="InsertJobSalary" FunctionName="DMPModels.Store.InsertJobSalary" />
           <FunctionImportMapping FunctionImportName="GetSalaryForMember" FunctionName="DMPModels.Store.GetSalaryForMember">
             <ResultMapping>
               <ComplexTypeMapping TypeName="DMPModels.GetSalaryForMember_Result">
@@ -2678,6 +2691,8 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="InsertJobMemberPoints" FunctionName="DMPModels.Store.InsertJobMemberPoints" />
+          <FunctionImportMapping FunctionImportName="InsertJobSalary" FunctionName="DMPModels.Store.InsertJobSalary" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

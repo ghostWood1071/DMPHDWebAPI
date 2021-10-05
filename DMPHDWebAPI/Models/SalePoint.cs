@@ -20,6 +20,7 @@ namespace DMPHDWebAPI.Models
         public string OrderID { get; set; }
         public Nullable<int> SaleMonth { get; set; }
         public Nullable<int> SaleYear { get; set; }
+        public Nullable<double> Discount { get; set; }
     
         public virtual Member Member { get; set; }
         public virtual Order Order { get; set; }

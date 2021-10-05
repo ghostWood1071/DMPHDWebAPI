@@ -943,11 +943,6 @@ namespace DMPHDWebAPI.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("GetNextMemberID");
         }
     
-        public virtual int InsertJobMemberPoints()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertJobMemberPoints");
-        }
-    
         public virtual ObjectResult<GetPromotable_Result> GetPromotable(string memberID)
         {
             var memberIDParameter = memberID != null ?
@@ -964,11 +959,6 @@ namespace DMPHDWebAPI.Models
                 new ObjectParameter("MemberID", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdatePosPromote", memberIDParameter);
-        }
-    
-        public virtual int InsertJobSalary()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertJobSalary");
         }
     
         public virtual ObjectResult<GetSalaryForMember_Result> GetSalaryForMember(string memberID, Nullable<int> year)
@@ -1075,6 +1065,32 @@ namespace DMPHDWebAPI.Models
                 new ObjectParameter("Year", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetMemberPoints_Result>("GetMemberPoints", memberIDParameter, yearParameter);
+        }
+    
+        public virtual int InsertJobMemberPoints(Nullable<int> curMonth, Nullable<int> curYear)
+        {
+            var curMonthParameter = curMonth.HasValue ?
+                new ObjectParameter("CurMonth", curMonth) :
+                new ObjectParameter("CurMonth", typeof(int));
+    
+            var curYearParameter = curYear.HasValue ?
+                new ObjectParameter("CurYear", curYear) :
+                new ObjectParameter("CurYear", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertJobMemberPoints", curMonthParameter, curYearParameter);
+        }
+    
+        public virtual int InsertJobSalary(Nullable<int> curMonth, Nullable<int> curYear)
+        {
+            var curMonthParameter = curMonth.HasValue ?
+                new ObjectParameter("CurMonth", curMonth) :
+                new ObjectParameter("CurMonth", typeof(int));
+    
+            var curYearParameter = curYear.HasValue ?
+                new ObjectParameter("CurYear", curYear) :
+                new ObjectParameter("CurYear", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertJobSalary", curMonthParameter, curYearParameter);
         }
     }
 }
