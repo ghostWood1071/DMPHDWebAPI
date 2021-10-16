@@ -155,6 +155,8 @@ namespace DMPHDWebAPI.Controllers
             return result;
         }
 
+
+
         [HttpGet]
         [Route("GetSalary")]
         public IEnumerable<GetSalary_Result> GetSalary(int month,int year)
@@ -165,6 +167,25 @@ namespace DMPHDWebAPI.Controllers
                 using (DMPContext context = new DMPContext())
                 {
                     result = context.GetSalary(month, year).ToList();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException("My message", e);
+            }
+            return result;
+        }
+
+        [HttpGet]
+        [Route("GetPrepareSalaryInMonthYear")]
+        public IEnumerable<GetPrepareSalaryInMonthYear_Result> GetPrepareSalaryInMonthYear(int month, int year)
+        {
+            List<GetPrepareSalaryInMonthYear_Result> result = null;
+            try
+            {
+                using (DMPContext context = new DMPContext())
+                {
+                    result = context.GetPrepareSalaryInMonthYear(month, year).ToList();
                 }
             }
             catch (Exception e)

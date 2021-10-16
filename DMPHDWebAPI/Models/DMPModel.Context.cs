@@ -1054,19 +1054,6 @@ namespace DMPHDWebAPI.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetSalary_Result>("GetSalary", monthParameter, yearParameter);
         }
     
-        public virtual ObjectResult<GetMemberPoints_Result> GetMemberPoints(string memberID, Nullable<int> year)
-        {
-            var memberIDParameter = memberID != null ?
-                new ObjectParameter("MemberID", memberID) :
-                new ObjectParameter("MemberID", typeof(string));
-    
-            var yearParameter = year.HasValue ?
-                new ObjectParameter("Year", year) :
-                new ObjectParameter("Year", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetMemberPoints_Result>("GetMemberPoints", memberIDParameter, yearParameter);
-        }
-    
         public virtual int InsertJobMemberPoints(Nullable<int> curMonth, Nullable<int> curYear)
         {
             var curMonthParameter = curMonth.HasValue ?
@@ -1091,6 +1078,32 @@ namespace DMPHDWebAPI.Models
                 new ObjectParameter("CurYear", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertJobSalary", curMonthParameter, curYearParameter);
+        }
+    
+        public virtual ObjectResult<GetPrepareSalaryInMonthYear_Result> GetPrepareSalaryInMonthYear(Nullable<int> month, Nullable<int> year)
+        {
+            var monthParameter = month.HasValue ?
+                new ObjectParameter("Month", month) :
+                new ObjectParameter("Month", typeof(int));
+    
+            var yearParameter = year.HasValue ?
+                new ObjectParameter("Year", year) :
+                new ObjectParameter("Year", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPrepareSalaryInMonthYear_Result>("GetPrepareSalaryInMonthYear", monthParameter, yearParameter);
+        }
+    
+        public virtual ObjectResult<GetMemberPoints_Result> GetMemberPoints(string memberID, Nullable<int> year)
+        {
+            var memberIDParameter = memberID != null ?
+                new ObjectParameter("MemberID", memberID) :
+                new ObjectParameter("MemberID", typeof(string));
+    
+            var yearParameter = year.HasValue ?
+                new ObjectParameter("Year", year) :
+                new ObjectParameter("Year", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetMemberPoints_Result>("GetMemberPoints", memberIDParameter, yearParameter);
         }
     }
 }

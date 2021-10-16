@@ -37,6 +37,9 @@
           <Property Name="AccumulatedMark" Type="float" />
           <Property Name="UsedMark" Type="float" />
           <Property Name="UnUsedMark" Type="float" />
+          <Property Name="PersonalPoint" Type="float" />
+          <Property Name="TotalSales" Type="float" />
+          <Property Name="NetPoint" Type="float" />
           <Property Name="ExtraMark" Type="float" />
           <Property Name="PromoteIsActive" Type="bit" />
         </EntityType>
@@ -551,6 +554,10 @@
           <Parameter Name="PositionID" Type="int" Mode="In" />
         </Function>
         <Function Name="GetPositions" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetPrepareSalaryInMonthYear" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Month" Type="int" Mode="In" />
+          <Parameter Name="Year" Type="int" Mode="In" />
+        </Function>
         <Function Name="GetPriceByID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ProductID" Type="char" Mode="In" />
         </Function>
@@ -1287,10 +1294,6 @@
             <Parameter Name="Month" Mode="In" Type="Int32" />
             <Parameter Name="Year" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="GetMemberPoints" ReturnType="Collection(DMPModels.GetMemberPoints_Result)">
-            <Parameter Name="MemberID" Mode="In" Type="String" />
-            <Parameter Name="Year" Mode="In" Type="Int32" />
-          </FunctionImport>
           <FunctionImport Name="InsertJobMemberPoints">
             <Parameter Name="CurMonth" Mode="In" Type="Int32" />
             <Parameter Name="CurYear" Mode="In" Type="Int32" />
@@ -1298,6 +1301,14 @@
           <FunctionImport Name="InsertJobSalary">
             <Parameter Name="CurMonth" Mode="In" Type="Int32" />
             <Parameter Name="CurYear" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetPrepareSalaryInMonthYear" ReturnType="Collection(DMPModels.GetPrepareSalaryInMonthYear_Result)">
+            <Parameter Name="Month" Mode="In" Type="Int32" />
+            <Parameter Name="Year" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetMemberPoints" ReturnType="Collection(DMPModels.GetMemberPoints_Result)">
+            <Parameter Name="MemberID" Mode="In" Type="String" />
+            <Parameter Name="Year" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="Config">
@@ -1337,6 +1348,9 @@
           <NavigationProperty Name="Member" Relationship="DMPModels.FK_MemberPoints_Members" FromRole="MemberPoint" ToRole="Member" />
           <Property Name="ExtraMark" Type="Double" />
           <Property Name="PromoteIsActive" Type="Boolean" />
+          <Property Name="PersonalPoint" Type="Double" />
+          <Property Name="TotalSales" Type="Double" />
+          <Property Name="NetPoint" Type="Double" />
         </EntityType>
         <EntityType Name="Member">
           <Key>
@@ -2017,6 +2031,14 @@
           <Property Type="Double" Name="SalaryByManager" Nullable="true" />
           <Property Type="Double" Name="SumSalary" Nullable="true" />
         </ComplexType>
+        <ComplexType Name="GetPrepareSalaryInMonthYear_Result">
+          <Property Type="String" Name="MemberID" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="FullName" Nullable="false" MaxLength="255" />
+          <Property Type="Double" Name="SalaryByImmediate" Nullable="true" />
+          <Property Type="Double" Name="SalaryByLower" Nullable="true" />
+          <Property Type="Double" Name="SalaryByManager" Nullable="true" />
+          <Property Type="Double" Name="SumSalary" Nullable="true" />
+        </ComplexType>
         <ComplexType Name="GetMemberPoints_Result">
           <Property Type="Int32" Name="Month" Nullable="false" />
           <Property Type="Double" Name="AccumulatedMark" Nullable="true" />
@@ -2024,6 +2046,7 @@
           <Property Type="Double" Name="MediateMark" Nullable="true" />
           <Property Type="Double" Name="UsedMark" Nullable="true" />
           <Property Type="Double" Name="UnUsedMark" Nullable="true" />
+          <Property Type="Double" Name="PersonalPoint" Nullable="true" />
           <Property Type="Double" Name="TotalSales" Nullable="true" />
           <Property Type="Double" Name="NetPoint" Nullable="true" />
         </ComplexType>
@@ -2056,6 +2079,9 @@
           <EntitySetMapping Name="MemberPoints">
             <EntityTypeMapping TypeName="DMPModels.MemberPoint">
               <MappingFragment StoreEntitySet="MemberPoints">
+                <ScalarProperty Name="NetPoint" ColumnName="NetPoint" />
+                <ScalarProperty Name="TotalSales" ColumnName="TotalSales" />
+                <ScalarProperty Name="PersonalPoint" ColumnName="PersonalPoint" />
                 <ScalarProperty Name="PromoteIsActive" ColumnName="PromoteIsActive" />
                 <ScalarProperty Name="ExtraMark" ColumnName="ExtraMark" />
                 <ScalarProperty Name="UnUsedMark" ColumnName="UnUsedMark" />
@@ -2677,6 +2703,20 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="InsertJobMemberPoints" FunctionName="DMPModels.Store.InsertJobMemberPoints" />
+          <FunctionImportMapping FunctionImportName="InsertJobSalary" FunctionName="DMPModels.Store.InsertJobSalary" />
+          <FunctionImportMapping FunctionImportName="GetPrepareSalaryInMonthYear" FunctionName="DMPModels.Store.GetPrepareSalaryInMonthYear">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DMPModels.GetPrepareSalaryInMonthYear_Result">
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="SalaryByImmediate" ColumnName="SalaryByImmediate" />
+                <ScalarProperty Name="SalaryByLower" ColumnName="SalaryByLower" />
+                <ScalarProperty Name="SalaryByManager" ColumnName="SalaryByManager" />
+                <ScalarProperty Name="SumSalary" ColumnName="SumSalary" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="GetMemberPoints" FunctionName="DMPModels.Store.GetMemberPoints">
             <ResultMapping>
               <ComplexTypeMapping TypeName="DMPModels.GetMemberPoints_Result">
@@ -2686,13 +2726,12 @@
                 <ScalarProperty Name="MediateMark" ColumnName="MediateMark" />
                 <ScalarProperty Name="UsedMark" ColumnName="UsedMark" />
                 <ScalarProperty Name="UnUsedMark" ColumnName="UnUsedMark" />
+                <ScalarProperty Name="PersonalPoint" ColumnName="PersonalPoint" />
                 <ScalarProperty Name="TotalSales" ColumnName="TotalSales" />
                 <ScalarProperty Name="NetPoint" ColumnName="NetPoint" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="InsertJobMemberPoints" FunctionName="DMPModels.Store.InsertJobMemberPoints" />
-          <FunctionImportMapping FunctionImportName="InsertJobSalary" FunctionName="DMPModels.Store.InsertJobSalary" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
