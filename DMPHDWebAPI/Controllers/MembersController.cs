@@ -6,6 +6,10 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Hosting;
+using ClosedXML.Report;
+using System.IO;
+using System.Net.Http.Headers;
 
 namespace DMPHDWebAPI.Controllers
 {
@@ -168,6 +172,42 @@ namespace DMPHDWebAPI.Controllers
                 throw new ArgumentException("My message", e);
             }
             return result;
+        }
+
+        [HttpGet]
+        [Route("GetExcel")]
+        public HttpResponseMessage GetExcel(int month, int year)
+        {
+            using (DMPContext context = new DMPContext())
+            {
+                try
+                {
+                    string path = HostingEnvironment.MapPath("~/ExcelTemplate/template.xlsx");
+                    XLTemplate template = new XLTemplate(path);
+                    List<GetSalary_Result> salary = context.GetSalary(month, year).ToList();
+                    SummarySalary summary = new SummarySalary()
+                    {
+                        month = month,
+                        year = year,
+                        salarise = salary
+                    };
+                    template.AddVariable(summary);
+
+                    template.Generate();
+                    var stream = new MemoryStream();
+                    template.SaveAs(stream);
+                    HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.OK);
+                    message.Content = new ByteArrayContent(stream.ToArray());
+                    message.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment");
+                    message.Content.Headers.ContentDisposition.FileName = $"Bảng lương tháng {month} năm {year}.xlsx";
+                    message.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                    return message;
+                } catch(Exception e)
+                {
+                    return Request.CreateResponse(HttpStatusCode.BadRequest);
+                }
+            }
+            
         }
 
         [HttpGet]
