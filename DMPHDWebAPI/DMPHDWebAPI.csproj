@@ -217,6 +217,9 @@
     <Compile Include="Models\GetOrders_Result.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\GetPrepareSalaryInMonthYear_Result.cs">
+      <DependentUpon>DMPModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\GetPromotable_Result.cs">
       <DependentUpon>DMPModel.tt</DependentUpon>
     </Compile>
